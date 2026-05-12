@@ -1,24 +1,33 @@
-# README
+# spim-na-rabi-app
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Rails 8.1 aplikace (Ruby 3.4.9, SQLite, Tailwind, Hotwire, importmap).
 
-Things you may want to cover:
+## Lokální vývoj v Dockeru
 
-* Ruby version
+Předpoklady: Docker Desktop.
 
-* System dependencies
+```sh
+git clone <repo>
+cd spim-na-rabi-app
+docker compose up --build # První spuštění - build image
+docker compose up       # Následující spuštění - rychlejší, protože image je již vytvořená
+```
 
-* Configuration
+Aplikace poběží na <http://localhost:3000>. Při prvním spuštění proběhne `bundle install` a `db:prepare`, takže start chvíli trvá.
 
-* Database creation
+### Užitečné příkazy
 
-* Database initialization
+```sh
+docker compose run --rm web bin/rails console
+docker compose run --rm web bin/rails generate controller Pages home
+docker compose run --rm web bundle add <gem>
+docker compose down            # zastavit
+docker compose down -v         # zastavit a smazat DB i nainstalované gemy
+```
 
-* How to run the test suite
+### Lokální vývoj bez Dockeru
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```sh
+bundle install
+bin/dev
+```
