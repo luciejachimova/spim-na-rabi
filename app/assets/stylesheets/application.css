@@ -1,10 +1,29 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+/* app/assets/stylesheets/application.css */
+
+
+/* ─── Scroll-triggered fade-in ──────────────────────────────────────────────
+   Elements start invisible; the fade_in_controller.js adds .js-fade-in--visible
+   when they enter the viewport.
+*/
+.js-fade-in {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.js-fade-in.js-fade-in--visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ─── Hero animations (CSS-only, no JS needed) ──────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50%       { opacity: 0.7; transform: scaleY(0.8); }
+}
+
+/* ─── Smooth scroll ─────────────────────────────────────────────────────── */
+html { scroll-behavior: smooth; }

@@ -1,0 +1,25 @@
+<%# app/views/shared/_lightbox.html.erb
+  Rendered once in the layout. Opened/closed by Stimulus lightbox_controller.
+  Any image with data-action="click->lightbox#open" data-src="..." will trigger it.
+%>
+
+<div
+  id="lightbox"
+  class="hidden fixed inset-0 bg-dark/90 z-[200] items-center justify-center"
+  data-controller="lightbox"
+  data-action="keydown.esc@window->lightbox#close click->lightbox#closeOnBackdrop"
+>
+  <button
+    class="absolute top-6 right-8 text-cream text-4xl font-light leading-none opacity-70 hover:opacity-100 transition-opacity cursor-pointer"
+    data-action="click->lightbox#close"
+    aria-label="Zavřít"
+  >×</button>
+
+  <img
+    id="lightbox-img"
+    src=""
+    alt=""
+    class="max-w-[90vw] max-h-[88vh] object-contain"
+    data-lightbox-target="image"
+  >
+</div>

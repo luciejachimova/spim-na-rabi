@@ -1,0 +1,10 @@
+<%# app/views/components/_review_card.html.erb
+  locals: text, author
+%>
+
+<div class="bg-pale border border-mid/15 p-9 relative js-fade-in">
+  <span class="absolute top-5 left-6 font-serif text-[3.5rem] leading-none text-light italic">"</span>
+  <p class="font-serif text-[1.05rem] italic font-normal text-dark mt-6 leading-[1.7]"><%= text %></p>
+  <div class="text-accent text-[0.8rem] tracking-[0.1em] mt-5">★★★★★</div>
+  <p class="text-[0.72rem] tracking-[0.14em] uppercase text-mid mt-2"><%= author %></p>
+</div>

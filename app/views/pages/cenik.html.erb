@@ -1,0 +1,49 @@
+<%# app/views/pages/cenik.html.erb %>
+<% content_for :title, "Ceník — Spím na Rabí" %>
+
+<%= render "components/page_hero", label: "Transparentní ceny", title: "Ceník" %>
+
+<section class="py-24 md:py-[100px]">
+  <div class="max-w-[1100px] mx-auto px-8">
+
+    <div class="max-w-xl mb-16 js-fade-in">
+      <p class="text-mid text-[0.95rem] leading-relaxed">
+        Transparentní ceny bez překvapení. Cena zahrnuje ubytování, základní vybavení
+        a přístup ke všem společným prostorám.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+      <%# Apartmán 1 %>
+      <%= render "components/price_card",
+            badge:    "Apartmán 1",
+            name:     "Klidné zátiší",
+            subtitle: "Útulný apartmán · až 2 osoby",
+            seasons: [
+              { label: "Mimo sezónu (říjen–duben)", price: "1 800 Kč / noc" },
+              { label: "Sezóna (květen–září)",       price: "2 400 Kč / noc" },
+              { label: "Víkendy a svátky",            price: "2 700 Kč / noc" },
+            ] %>
+
+      <%# Apartmán 2 %>
+      <%= render "components/price_card",
+            badge:    "Apartmán 2",
+            name:     "Vzdušný loft",
+            subtitle: "Prostorný loft · až 4 osoby",
+            seasons: [
+              { label: "Mimo sezónu (říjen–duben)", price: "2 600 Kč / noc" },
+              { label: "Sezóna (květen–září)",       price: "3 400 Kč / noc" },
+              { label: "Víkendy a svátky",            price: "3 900 Kč / noc" },
+            ] %>
+
+    </div>
+
+    <%# Ornament + note %>
+    <div class="text-center text-light font-serif text-xl tracking-[0.4em] my-12 opacity-60">· · ·</div>
+    <p class="text-center text-[0.82rem] text-mid">
+      Minimální délka pobytu: 2 noci. Snídaně na vyžádání. Úklidový poplatek 350 Kč jednorázově.
+    </p>
+
+  </div>
+</section>

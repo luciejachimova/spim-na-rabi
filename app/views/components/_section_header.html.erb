@@ -1,0 +1,14 @@
+<%# app/views/components/_section_header.html.erb
+  locals: label (string), title (string), body (string, optional), align (:left | :center)
+%>
+<% align = local_assigns.fetch(:align, :left) %>
+<% align_class = align == :center ? "text-center" : "" %>
+
+<div class="<%= align_class %>">
+  <p class="text-[0.68rem] tracking-[0.3em] uppercase text-mid mb-2 font-normal"><%= label %></p>
+  <h2 class="font-serif text-[clamp(2rem,4vw,2.8rem)] font-normal leading-[1.2] mb-4"><%= title %></h2>
+  <div class="w-10 h-px bg-light mb-8 <%= align == :center ? 'mx-auto' : '' %>"></div>
+  <% if local_assigns[:body].present? %>
+    <p class="text-mid max-w-[540px] text-[0.95rem] leading-relaxed <%= align == :center ? 'mx-auto' : '' %>"><%= body %></p>
+  <% end %>
+</div>

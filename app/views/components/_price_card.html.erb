@@ -1,0 +1,26 @@
+<%# app/views/components/_price_card.html.erb
+  locals: badge, name, subtitle, seasons (array of { label:, price: })
+%>
+
+<div class="border border-mid/20 p-10 js-fade-in">
+  <p class="text-[0.65rem] tracking-[0.22em] uppercase text-accent font-medium mb-2"><%= badge %></p>
+  <h3 class="font-serif text-[1.5rem] font-normal mb-1"><%= name %></h3>
+  <p class="text-[0.82rem] text-mid mb-8"><%= subtitle %></p>
+
+  <div class="divide-y divide-mid/10">
+    <% seasons.each do |row| %>
+      <div class="flex justify-between items-baseline py-3">
+        <span class="text-mid text-[0.82rem]"><%= row[:label] %></span>
+        <span class="font-serif text-[1.3rem] font-normal"><%= row[:price] %></span>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-8">
+    <%= link_to "Rezervovat", rezervovat_path,
+          class: "inline-block border border-dark text-dark text-[0.72rem] font-medium
+                  tracking-[0.18em] uppercase px-[1.6rem] py-[0.65rem] rounded-[2px]
+                  transition-colors duration-200 hover:bg-dark hover:text-cream",
+          data: { action: "reservation#open" } %>
+  </div>
+</div>
