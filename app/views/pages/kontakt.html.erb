@@ -1,5 +1,5 @@
 <%# app/views/pages/kontakt.html.erb %>
-<% content_for :title, "Kontakt — Spím na Rabí" %>
+<% content_for :title, "Kontakt — Spim na Rabí" %>
 
 <%= render "components/page_hero", label: "Jsme tu pro vás", title: "Kontakt" %>
 
@@ -14,7 +14,7 @@
         <div>
           <p class="text-[0.65rem] tracking-[0.22em] uppercase text-mid mb-1">Email</p>
           <p class="font-serif text-xl text-dark">
-            <%= mail_to "info@spimnarabi.cz", "info@spimnarabi.cz", class: "hover:text-accent transition-colors" %>
+            <%= mail_to "spimnarabi@seznam.cz", "spimnarabi@seznam.cz", class: "hover:text-accent transition-colors" %>
           </p>
         </div>
 
@@ -36,7 +36,7 @@
 
       <%# Contact form — Turbo Stream for inline success message %>
       <div class="js-fade-in" id="contact-form-wrapper">
-        <%= render "contact_form", message: @message %>
+        <%= render "pages/contact_form", message: @message %>
       </div>
 
     </div>

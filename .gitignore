@@ -9,6 +9,7 @@
 
 # Ignore all environment files.
 /.env*
+!/.env.example
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -29,6 +30,11 @@
 !/tmp/storage/.keep
 
 /public/assets
+
+# Next.js / npm
+/node_modules
+/.next
+/.vercel
 
 # Ignore key files for decrypting credentials and more.
 /config/*.key

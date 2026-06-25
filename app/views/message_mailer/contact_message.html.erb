@@ -1,0 +1,11 @@
+<p>Dorazila nová zpráva z kontaktního formuláře Spim na Rabí.</p>
+
+<p><strong>Jméno:</strong> <%= @message.name %></p>
+<p><strong>Email:</strong> <%= @message.email %></p>
+
+<% if @message.phone.present? %>
+  <p><strong>Telefon:</strong> <%= @message.phone %></p>
+<% end %>
+
+<p><strong>Zpráva:</strong></p>
+<p><%= simple_format(@message.body) %></p>

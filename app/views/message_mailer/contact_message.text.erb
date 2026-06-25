@@ -1,0 +1,10 @@
+Dorazila nova zprava z kontaktniho formulare Spim na Rabi.
+
+Jmeno: <%= @message.name %>
+Email: <%= @message.email %>
+<% if @message.phone.present? %>
+Telefon: <%= @message.phone %>
+<% end %>
+
+Zprava:
+<%= @message.body %>

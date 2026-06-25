@@ -7,24 +7,40 @@
 
       <%# Brand column %>
       <div>
-        <span class="font-script text-[1.4rem] text-dark block mb-2">Spím na Rabí</span>
+        <span class="font-script text-[1.4rem] text-dark block mb-2">Spim na Rabí</span>
         <p class="text-mid text-sm leading-relaxed max-w-[220px]">
-          Ubytování pod hradem Rabí. Klid, příroda, pohodlí.
+          Ubytování pod hradem Rabí. <br> Klid, příroda, pohodlí.
         </p>
         <div class="flex gap-3 mt-5">
-          <%= link_to "f", "#", title: "Facebook",
-                class: "flex items-center justify-center w-9 h-9 border border-light rounded-[2px]
-                        text-mid text-sm font-medium transition-colors duration-200
-                        hover:border-dark hover:text-dark" %>
-          <%= link_to "in", "#", title: "Instagram",
-                class: "flex items-center justify-center w-9 h-9 border border-light rounded-[2px]
-                        text-mid text-sm font-medium transition-colors duration-200
-                        hover:border-dark hover:text-dark" %>
+          <a href="https://www.facebook.com/profile.php?id=61579506120985"
+             title="Facebook"
+             target="_blank"
+             rel="noopener"
+             aria-label="Facebook"
+             class="flex items-center justify-center w-9 h-9 border border-light rounded-[2px]
+                    text-mid transition-colors duration-200
+                    hover:border-dark hover:text-dark">
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="w-4 h-4 fill-current">
+              <path d="M13.36 22v-8.2h2.76l.41-3.2h-3.17V8.56c0-.93.26-1.56 1.59-1.56H16.8V4.14c-.32-.04-1.43-.14-2.72-.14-2.69 0-4.53 1.64-4.53 4.66v1.94H6.5v3.2h3.05V22h3.81Z"/>
+            </svg>
+          </a>
+          <a href="https://www.instagram.com/spimnarabi/"
+             title="Instagram"
+             target="_blank"
+             rel="noopener"
+             aria-label="Instagram"
+             class="flex items-center justify-center w-9 h-9 border border-light rounded-[2px]
+                    text-mid transition-colors duration-200
+                    hover:border-dark hover:text-dark">
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="w-4 h-4 fill-current">
+              <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.5A3.5 3.5 0 1 0 12 15.5 3.5 3.5 0 0 0 12 8.5Zm5.25-2.38a1.13 1.13 0 1 1 0 2.26 1.13 1.13 0 0 1 0-2.26Z"/>
+            </svg>
+          </a>
         </div>
       </div>
 
       <%# Stránky %>
-      <div>
+      <div class="hidden md:block">
         <h4 class="text-[0.68rem] tracking-[0.22em] uppercase text-dark font-medium mb-4">Stránky</h4>
         <ul class="space-y-2 list-none">
           <li><%= link_to "Hlavní stránka", root_path,    class: footer_link_class %></li>
@@ -49,8 +65,8 @@
       <div>
         <h4 class="text-[0.68rem] tracking-[0.22em] uppercase text-dark font-medium mb-4">Kontakt</h4>
         <ul class="space-y-2 list-none">
-          <li><%= link_to "info@spimnarabi.cz", "mailto:info@spimnarabi.cz", class: footer_link_class %></li>
-          <li><%= link_to "+420 777 000 111",   "tel:+420777000111",         class: footer_link_class %></li>
+          <li><%= link_to "spimnarabi@seznam.cz", "mailto:spimnarabi@seznam.cz", class: footer_link_class %></li>
+          <li><%= link_to "+420 723 936 426",   "tel:+420723936426",         class: footer_link_class %></li>
           <li><span class="text-mid text-sm">Rabí 175, 342 01</span></li>
         </ul>
       </div>
@@ -58,7 +74,7 @@
     </div>
 
     <div class="mt-14 pt-6 border-t border-mid/10 text-center text-[0.75rem] text-light tracking-wide">
-      © <%= Time.current.year %> Spím na Rabí - Rabí, Šumava
+      © <%= Time.current.year %> Spim na Rabí - Rabí, Šumava
     </div>
 
   </div>
