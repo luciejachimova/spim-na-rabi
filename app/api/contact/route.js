@@ -23,7 +23,7 @@ export async function POST(request) {
 
   try {
     await sendMail({
-      subject: "Nová zpráva z formuláře Spím na Rabí",
+      subject: "Nová zpráva z formuláře Spim na Rabí",
       replyTo: email,
       text: [
         `Jméno: ${name}`,

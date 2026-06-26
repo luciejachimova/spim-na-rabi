@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="mx-auto max-w-[1100px] px-8">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-[2fr_1fr_1fr_1fr]">
           <div>
-            <span className="mb-2 block font-script text-[1.4rem] text-dark">Spím na Rabí</span>
+            <span className="mb-2 block font-script text-[1.4rem] text-dark">Spim na Rabí</span>
             <p className="max-w-[220px] text-sm leading-relaxed text-mid">
               Ubytování pod hradem Rabí. <br /> Klid, příroda, pohodlí.
             </p>
@@ -53,7 +53,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-14 border-t border-mid/10 pt-6 text-center text-[0.75rem] tracking-wide text-light">
-          © {new Date().getFullYear()} Spím na Rabí - Rabí, Šumava
+          © {new Date().getFullYear()} Spim na Rabí - Rabí, Šumava
         </div>
       </div>
     </footer>

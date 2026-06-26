@@ -29,7 +29,7 @@ export default function AboutPage() {
               <div className="mb-8 h-px w-10 bg-light" />
 
               <div className="space-y-5 text-[0.95rem] leading-[1.8] text-mid">
-                <p>Spím na Rabí vzniklo z lásky k tomuto místu. Chtěli jsme vytvořit prostor, kde si lidé odpočinou, zpomalí a na chvíli vypnou.</p>
+                <p>Spim na Rabí vzniklo z lásky k tomuto místu. Chtěli jsme vytvořit prostor, kde si lidé odpočinou, zpomalí a na chvíli vypnou.</p>
                 <p>Věříme v jednoduchost, klid a atmosféru, kterou si odvezete s sebou. Každý detail v apartmánech je promyšlený tak, aby vás přivítal jako doma.</p>
                 <p>Hrad Rabí nás fascinuje od dětství. Rozhodli jsme se, že toto místo budeme sdílet s těmi, kteří to ocení stejně jako my.</p>
               </div>

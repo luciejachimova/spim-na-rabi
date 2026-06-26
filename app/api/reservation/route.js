@@ -27,7 +27,7 @@ export async function POST(request) {
 
   try {
     await sendMail({
-      subject: "Nová rezervace Spím na Rabí",
+      subject: "Nová rezervace Spim na Rabí",
       replyTo: email,
       text: [
         `Jméno: ${name}`,

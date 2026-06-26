@@ -24,7 +24,7 @@ export default function HomePage() {
             Ubytování v srdci Šumavy
           </p>
           <h1 className="mb-4 animate-fade-up font-script text-[clamp(3rem,8vw,6rem)] leading-[1.05] [animation-delay:550ms]">
-            Spím na Rabí
+            Spim na Rabí
           </h1>
           <p className="mb-11 animate-fade-up font-serif text-[clamp(1.1rem,2.5vw,1.45rem)] font-light italic text-mid [animation-delay:750ms]">
             Ubytování, kde se čas zpomalí

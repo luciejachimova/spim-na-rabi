@@ -24,8 +24,8 @@ export default function Navbar() {
   return (
     <nav className={`fixed inset-x-0 top-0 z-50 border-b border-mid/10 bg-cream transition-shadow duration-300 ${scrolled ? "shadow-[0_2px_24px_rgba(51,51,51,0.07)]" : ""}`}>
       <div className="mx-auto flex h-[68px] max-w-[1100px] items-center justify-between px-8">
-        <Link href="/" className="block shrink-0" aria-label="Spím na Rabí">
-          <img src="/images/spim-na-rabi-logo.png" alt="Spím na Rabí" className="h-12 w-auto max-w-[150px] object-contain md:h-14 md:max-w-[180px]" />
+        <Link href="/" className="block shrink-0" aria-label="Spim na Rabí">
+          <img src="/images/spim-na-rabi-logo.png" alt="Spim na Rabí" className="h-12 w-auto max-w-[150px] object-contain md:h-14 md:max-w-[180px]" />
         </Link>
 
         <ul className={`list-none items-center gap-8 md:flex ${open ? "fixed inset-x-0 top-[68px] z-40 flex h-[calc(100vh-68px)] flex-col justify-center gap-10 bg-cream" : "hidden"}`}>
