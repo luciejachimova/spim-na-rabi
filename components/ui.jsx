@@ -1,5 +1,24 @@
 import Link from "next/link"
 
+export function PhotoPlaceholder({ className = "", label = "Fotky připravujeme" }) {
+  return (
+    <div
+      className={`flex items-center justify-center border border-mid/20 bg-pale text-center ${className}`}
+      role="img"
+      aria-label={label}
+    >
+      <div className="px-6">
+        <div className="mx-auto mb-4 h-8 w-10 rounded-sm border border-accent/50">
+          <div className="mx-auto mt-[7px] h-3.5 w-3.5 rounded-full border border-accent/50" />
+        </div>
+        <p className="text-[0.68rem] font-medium uppercase tracking-[0.24em] text-mid">
+          {label}
+        </p>
+      </div>
+    </div>
+  )
+}
+
 export function SectionHeader({ label, title, body, align = "left" }) {
   const centered = align === "center"
 
@@ -38,12 +57,7 @@ export function ApartmentCard({ apartment }) {
   return (
     <div className="group overflow-hidden border border-mid/20 bg-cream transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(51,51,51,0.10)] js-fade-in">
       <div className="overflow-hidden">
-        <img
-          src={apartment.imageUrl}
-          alt={apartment.imageAlt}
-          className="block aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-          loading="lazy"
-        />
+        <PhotoPlaceholder className="aspect-[4/3] w-full transition-colors duration-300 group-hover:bg-cream" />
       </div>
       <div className="p-8 pb-9">
         <p className="mb-2 text-[0.65rem] font-medium uppercase tracking-[0.22em] text-accent">{apartment.badge}</p>

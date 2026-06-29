@@ -21,22 +21,22 @@ export const galleryImages = [
 export const priceCards = [
   {
     badge: "Apartmán 1",
-    name: "Klidné zátiší",
-    subtitle: "Útulný apartmán - až 2 osoby",
+    name: "Studio ³",
+    subtitle: "Útulné studio - až 4 osoby",
     seasons: [
       { label: "Mimo sezónu (říjen-duben)", price: "1 800 Kč / noc" },
       { label: "Sezóna (květen-září)", price: "2 400 Kč / noc" },
-      { label: "Víkendy a svátky", price: "2 700 Kč / noc" }
+      { label: "Víkendy a svátky", price: "2 600 Kč / noc" }
     ]
   },
   {
     badge: "Apartmán 2",
-    name: "Vzdušný loft",
-    subtitle: "Prostorný loft - až 4 osoby",
+    name: "Loft ¹⁰",
+    subtitle: "Prostorný loft - až 6 osob",
     seasons: [
       { label: "Mimo sezónu (říjen-duben)", price: "2 600 Kč / noc" },
-      { label: "Sezóna (květen-září)", price: "3 400 Kč / noc" },
-      { label: "Víkendy a svátky", price: "3 900 Kč / noc" }
+      { label: "Sezóna (květen-září)", price: "3 200 Kč / noc" },
+      { label: "Víkendy a svátky", price: "3 400 Kč / noc" }
     ]
   }
 ]
@@ -44,15 +44,15 @@ export const priceCards = [
 export const apartments = [
   {
     badge: "Apartmán 1",
-    name: "Apartmán 1",
-    desc: "Útulný apartmán pro klidný pobyt. Ideální pro páry nebo jednotlivce, kteří hledají jednoduchost, klid a pohodlí.",
+    name: "Studio ³",
+    desc: "Útulné studio až pro 4 osoby. Ideální pro hosty, kteří hledají jednoduchost, klid a pohodlí.",
     imageUrl: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=1000&q=80",
     imageAlt: "Apartmán 1"
   },
   {
     badge: "Apartmán 2",
-    name: "Apartmán 2",
-    desc: "Prostorný apartmánový loft s dostatkem místa pro rodinu nebo delší pobyt. Kombinace pohodlí a vzdušného prostoru.",
+    name: "Loft ¹⁰",
+    desc: "Prostorný loft až pro 6 osob s dostatkem místa pro rodinu nebo delší pobyt. Kombinace pohodlí a vzdušného prostoru.",
     imageUrl: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1000&q=80",
     imageAlt: "Apartmán 2"
   }

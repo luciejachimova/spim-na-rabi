@@ -113,8 +113,8 @@ export function ReservationForm({ onSuccess }) {
           <label htmlFor="reservation-apartment" className={labelClass}>Apartmán</label>
           <select id="reservation-apartment" name="apartment" className={inputClass} defaultValue="">
             <option value="">Vyberte apartmán</option>
-            <option>Apartmán 1 - Klidné zátiší</option>
-            <option>Apartmán 2 - Vzdušný loft</option>
+            <option>Apartmán 1 - Studio ³</option>
+            <option>Apartmán 2 - Loft ¹⁰</option>
             <option>Je mi to jedno</option>
           </select>
         </div>

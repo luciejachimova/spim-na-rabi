@@ -26,7 +26,7 @@ export default function PricingPage() {
 
           <div className="my-12 text-center font-serif text-xl tracking-[0.4em] text-light opacity-60">· · ·</div>
           <p className="text-center text-[0.82rem] text-mid">
-            Minimální délka pobytu: 2 noci. Snídaně na vyžádání. Úklidový poplatek 350 Kč jednorázově.
+            Minimální délka pobytu: 2 noci. Snídaně na vyžádání. Úklidový poplatek 350 Kč jednorázově. Domácí mazlíček 250 Kč / noc.
           </p>
         </div>
       </section>

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { PageHero } from "@/components/ui"
+import { PageHero, PhotoPlaceholder } from "@/components/ui"
 
 export const metadata = {
   title: "O nás"
@@ -14,11 +14,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-[1100px] px-8">
           <div className="grid grid-cols-1 items-center gap-20 md:grid-cols-2">
             <div className="js-fade-in">
-              <img
-                src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=85"
-                alt="Krajina kolem Rabí"
-                className="block aspect-[3/4] w-full object-cover"
-              />
+              <PhotoPlaceholder className="aspect-[3/4] w-full" />
             </div>
 
             <div className="js-fade-in">
