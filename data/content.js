@@ -24,7 +24,7 @@ export const priceCards = [
     name: "Studio ³",
     subtitle: "Útulné studio - až 4 osoby",
     seasons: [
-      { label: "Mimo sezónu (říjen-duben)", price: "1 800 Kč / noc" },
+      { label: "Mimo sezónu (říjen-duben)", price: "1 900 Kč / noc" },
       { label: "Sezóna (květen-září)", price: "2 400 Kč / noc" },
       { label: "Víkendy a svátky", price: "2 600 Kč / noc" }
     ]
@@ -34,7 +34,7 @@ export const priceCards = [
     name: "Loft ¹⁰",
     subtitle: "Prostorný loft - až 6 osob",
     seasons: [
-      { label: "Mimo sezónu (říjen-duben)", price: "2 600 Kč / noc" },
+      { label: "Mimo sezónu (říjen-duben)", price: "2 800 Kč / noc" },
       { label: "Sezóna (květen-září)", price: "3 200 Kč / noc" },
       { label: "Víkendy a svátky", price: "3 400 Kč / noc" }
     ]

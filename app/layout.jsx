@@ -81,7 +81,7 @@ export default function RootLayout({ children }) {
     url: "https://spimnarabi.cz",
     telephone: "+420723936426",
     email: "spimnarabi@seznam.cz",
-    priceRange: "1 800–3 400 Kč za noc",
+    priceRange: "1 900–3 400 Kč za noc",
     petsAllowed: true,
     address: {
       "@type": "PostalAddress",

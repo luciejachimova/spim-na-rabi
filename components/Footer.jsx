@@ -10,7 +10,7 @@ export default function Footer() {
           <div>
             <span className="mb-2 block font-script text-[1.4rem] text-dark">Spim na Rabí</span>
             <p className="max-w-[220px] text-sm leading-relaxed text-mid">
-              Ubytování pod hradem Rabí. <br /> Klid, příroda, pohodlí.
+              Ubytování pod hradem Rabí. <br /> Klid, příroda, odpočinek.
             </p>
             <div className="mt-5 flex gap-3">
               <a href="https://www.facebook.com/profile.php?id=61579506120985" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook" className="flex h-9 w-9 items-center justify-center rounded-[2px] border border-light text-mid transition-colors duration-200 hover:border-dark hover:text-dark">
@@ -23,7 +23,7 @@ export default function Footer() {
           </div>
 
           <div className="hidden md:block">
-            <h4 className="mb-4 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-dark">Stranky</h4>
+            <h4 className="mb-4 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-dark">Stránky</h4>
             <ul className="list-none space-y-2">
               <li><Link href="/" className={footerLinkClass}>Hlavní stránka</Link></li>
               <li><Link href="/o-nas" className={footerLinkClass}>O nás</Link></li>
@@ -34,11 +34,10 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="mb-4 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-dark">Ubytovani</h4>
+            <h4 className="mb-4 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-dark">Ubytování</h4>
             <ul className="list-none space-y-2">
-              <li><Link href="/cenik" className={footerLinkClass}>Apartmán 1</Link></li>
-              <li><Link href="/cenik" className={footerLinkClass}>Apartmán 2</Link></li>
-              <li><Link href="/cenik" className={footerLinkClass}>Ceník</Link></li>
+              <li><Link href="/cenik" className={footerLinkClass}>Studio ³</Link></li>
+              <li><Link href="/cenik" className={footerLinkClass}>Loft ¹⁰</Link></li>
             </ul>
           </div>
 
@@ -47,7 +46,7 @@ export default function Footer() {
             <ul className="list-none space-y-2">
               <li><a href="mailto:spimnarabi@seznam.cz" className={footerLinkClass}>spimnarabi@seznam.cz</a></li>
               <li><a href="tel:+420723936426" className={footerLinkClass}>+420 723 936 426</a></li>
-              <li><span className="text-sm text-mid">Rabi 175, 342 01</span></li>
+              <li><span className="text-sm text-mid">Rabí 175, 342 01</span></li>
             </ul>
           </div>
         </div>

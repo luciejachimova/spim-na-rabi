@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { cleanValue, readJsonBody, sendMail, validateRequired } from "@/lib/mail"
+import { cleanValue, logMailError, mailErrorMessage, readJsonBody, sendMail, validateRequired } from "@/lib/mail"
 
 export const runtime = "nodejs"
 
@@ -35,8 +35,8 @@ export async function POST(request) {
       ].join("\n")
     })
   } catch (mailError) {
-    console.error(mailError)
-    return NextResponse.json({ error: "Zprávu se nepodařilo odeslat. Zkontrolujte SMTP nastavení ve Vercelu." }, { status: 500 })
+    logMailError(mailError)
+    return NextResponse.json({ error: mailErrorMessage(mailError, "Zprávu") }, { status: 500 })
   }
 
   return NextResponse.json({ message: "Děkujeme, ozveme se vám." })

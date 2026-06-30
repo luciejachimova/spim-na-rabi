@@ -3,7 +3,7 @@ import { PageHero, PriceCard } from "@/components/ui"
 
 export const metadata = {
   title: "Ceník ubytování",
-  description: "Ceník ubytování Spim na Rabí. Studio až pro 4 osoby a loft až pro 6 osob od 1 800 Kč za noc.",
+  description: "Ceník ubytování Spim na Rabí. Studio až pro 4 osoby a loft až pro 6 osob od 1 900 Kč za noc.",
   alternates: { canonical: "/cenik" }
 }
 
@@ -28,7 +28,7 @@ export default function PricingPage() {
 
           <div className="my-12 text-center font-serif text-xl tracking-[0.4em] text-light opacity-60">· · ·</div>
           <p className="text-center text-[0.82rem] text-mid">
-            Minimální délka pobytu: 2 noci. Snídaně na vyžádání. Úklidový poplatek 350 Kč jednorázově. Domácí mazlíček 250 Kč / noc.
+            Minimální délka pobytu jsou 2 noci. Na přání pro vás rádi připravíme snídani. Domácí mazlíčci jsou vítáni za poplatek 250 Kč / noc.
           </p>
         </div>
       </section>
