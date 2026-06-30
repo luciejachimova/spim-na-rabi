@@ -2,7 +2,9 @@ import Link from "next/link"
 import { PageHero, PhotoPlaceholder } from "@/components/ui"
 
 export const metadata = {
-  title: "O nás"
+  title: "O nás",
+  description: "Poznejte příběh ubytování Spim na Rabí a naši filozofii klidného pobytu pod hradem Rabí.",
+  alternates: { canonical: "/o-nas" }
 }
 
 export default function AboutPage() {
@@ -18,16 +20,16 @@ export default function AboutPage() {
             </div>
 
             <div className="js-fade-in">
-              <p className="mb-2 text-[0.68rem] font-normal uppercase tracking-[0.3em] text-mid">Naše filozofie</p>
+              <p className="mb-2 text-[0.68rem] font-normal uppercase tracking-[0.3em] text-mid">Náš příběh</p>
               <h2 className="mb-4 font-serif text-[clamp(2rem,4vw,2.8rem)] font-normal leading-[1.2]">
-                Vzniklo z lásky k tomuto místu
+                Jak vzniklo Spim na Rabí?
               </h2>
               <div className="mb-8 h-px w-10 bg-light" />
 
               <div className="space-y-5 text-[0.95rem] leading-[1.8] text-mid">
-                <p>Spim na Rabí vzniklo z lásky k tomuto místu. Chtěli jsme vytvořit prostor, kde si lidé odpočinou, zpomalí a na chvíli vypnou.</p>
-                <p>Věříme v jednoduchost, klid a atmosféru, kterou si odvezete s sebou. Každý detail v apartmánech je promyšlený tak, aby vás přivítal jako doma.</p>
-                <p>Hrad Rabí nás fascinuje od dětství. Rozhodli jsme se, že toto místo budeme sdílet s těmi, kteří to ocení stejně jako my.</p>
+                <p>Rabí a jeho okolí jsou pro nás místem, ke kterému máme blízko už od dětství. Právě tady jsme strávili spoustu krásných chvil a vždy jsme se sem rádi vraceli.</p>
+                <p>Když jsme přemýšleli, kde vytvořit místo pro odpočinek, bylo rozhodnutí vlastně jednoduché. Chtěli jsme nabídnout ubytování, kde se budou hosté cítit příjemně, zpomalí a budou mít ideální výchozí bod pro objevování krás Šumavy a Pošumaví.</p>
+                <p>Spim na Rabí jsme zařídili tak, jak bychom si přáli cestovat i my sami – pohodlně, útulně a bez zbytečností. Budeme rádi, když si pobyt u nás užijete a odvezete si domů stejně hezké vzpomínky, jaké máme s tímto místem my.</p>
               </div>
 
               <div className="mt-8">

@@ -10,7 +10,7 @@ export const metadata = {
   },
 
   description:
-    "Stylové ubytování v malebném městečku Rabí. Komfortní apartmán v Pošumaví jen pár kroků od hradu Rabí. Ideální pro páry, rodiny i cyklisty.",
+    "Studio a prostorný loft v Rabí v Pošumaví, jen pár kroků od hradu Rabí. Stylové ubytování až pro 4 nebo 6 osob.",
 
   keywords: [
     "ubytování Rabí",
@@ -27,6 +27,21 @@ export const metadata = {
   authors: [{ name: "Spim na Rabí" }],
 
   creator: "Spim na Rabí",
+  publisher: "Spim na Rabí",
+  category: "travel",
+  referrer: "origin-when-cross-origin",
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 
   alternates: {
     canonical: "/",
@@ -41,32 +56,54 @@ export const metadata = {
   openGraph: {
     title: "Spim na Rabí | Stylové ubytování pod hradem Rabí",
     description:
-      "Stylové ubytování v srdci Pošumaví. Jen pár kroků od hradu Rabí.",
+      "Studio a prostorný loft v Rabí v Pošumaví. Ubytování až pro 4 nebo 6 osob jen pár kroků od hradu Rabí.",
     url: "https://spimnarabi.cz",
     siteName: "Spim na Rabí",
     locale: "cs_CZ",
     type: "website",
-    images: [
-      {
-        url: "/images/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Spim na Rabí",
-      },
-    ],
   },
 
   twitter: {
     card: "summary_large_image",
     title: "Spim na Rabí",
-    description: "Stylové ubytování pod hradem Rabí.",
-    images: ["/images/og-image.jpg"],
+    description: "Studio a loft pod hradem Rabí v Pošumaví.",
   },
 };
 
 export default function RootLayout({ children }) {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "LodgingBusiness",
+    "@id": "https://spimnarabi.cz/#ubytovani",
+    name: "Spim na Rabí",
+    description:
+      "Studio a prostorný loft v Rabí v Pošumaví, jen pár kroků od hradu Rabí.",
+    url: "https://spimnarabi.cz",
+    telephone: "+420723936426",
+    email: "spimnarabi@seznam.cz",
+    priceRange: "1 800–3 400 Kč za noc",
+    petsAllowed: true,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Rabí 175",
+      postalCode: "342 01",
+      addressLocality: "Rabí",
+      addressCountry: "CZ",
+    },
+    sameAs: [
+      "https://www.facebook.com/profile.php?id=61579506120985",
+      "https://www.instagram.com/spimnarabi/",
+    ],
+  };
+
   return (
-    <html lang="cs">
+    <html lang="cs" data-scroll-behavior="smooth">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </head>
       <body className="bg-cream text-dark antialiased">
         <ClientChrome>{children}</ClientChrome>
       </body>

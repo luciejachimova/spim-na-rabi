@@ -2,7 +2,9 @@ import { galleryImages } from "@/data/content"
 import { PageHero, PhotoPlaceholder } from "@/components/ui"
 
 export const metadata = {
-  title: "Galerie"
+  title: "Galerie ubytování",
+  description: "Galerie studia a loftu Spim na Rabí. Prohlédněte si ubytování v Rabí v srdci Pošumaví.",
+  alternates: { canonical: "/galerie" }
 }
 
 export default function GalleryPage() {

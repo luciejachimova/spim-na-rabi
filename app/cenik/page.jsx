@@ -2,7 +2,9 @@ import { priceCards } from "@/data/content"
 import { PageHero, PriceCard } from "@/components/ui"
 
 export const metadata = {
-  title: "Ceník"
+  title: "Ceník ubytování",
+  description: "Ceník ubytování Spim na Rabí. Studio až pro 4 osoby a loft až pro 6 osob od 1 800 Kč za noc.",
+  alternates: { canonical: "/cenik" }
 }
 
 export default function PricingPage() {

@@ -2,7 +2,9 @@ import { ContactForm } from "@/components/forms"
 import { MapEmbed, PageHero } from "@/components/ui"
 
 export const metadata = {
-  title: "Kontakt"
+  title: "Kontakt a rezervace",
+  description: "Kontaktujte Spim na Rabí a rezervujte si studio nebo loft pod hradem Rabí. Rabí 175, Pošumaví.",
+  alternates: { canonical: "/kontakt" }
 }
 
 export default function ContactPage() {
