@@ -16,7 +16,7 @@ export default function PricingPage() {
         <div className="mx-auto max-w-[1100px] px-8">
           <div className="mb-16 max-w-xl js-fade-in">
             <p className="text-[0.95rem] leading-relaxed text-mid">
-              Transparentní ceny bez překvapení. Cena zahrnuje ubytování, základní vybavení a přístup ke všem společným prostorám.
+              Minimální délka pobytu jsou 2 noci. Na přání pro vás rádi připravíme snídani. Domácí mazlíčci jsou vítáni za poplatek 250 Kč / noc.
             </p>
           </div>
 
@@ -26,10 +26,6 @@ export default function PricingPage() {
             ))}
           </div>
 
-          <div className="my-12 text-center font-serif text-xl tracking-[0.4em] text-light opacity-60">· · ·</div>
-          <p className="text-center text-[0.82rem] text-mid">
-            Minimální délka pobytu jsou 2 noci. Na přání pro vás rádi připravíme snídani. Domácí mazlíčci jsou vítáni za poplatek 250 Kč / noc.
-          </p>
         </div>
       </section>
     </>

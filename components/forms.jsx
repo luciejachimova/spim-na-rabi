@@ -1,6 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import { apartments } from "@/data/content"
+import { AvailabilityCalendar } from "./availability-calendar"
 
 const inputClass = "w-full rounded-[2px] border border-mid/20 bg-pale px-4 py-[0.85rem] font-jost text-[0.9rem] text-dark outline-none transition-colors duration-200 focus:border-dark"
 const labelClass = "mb-2 block text-[0.7rem] uppercase tracking-[0.16em] text-mid"
@@ -20,13 +22,15 @@ async function submitForm(endpoint, form, setStatus) {
 
     if (!response.ok) {
       setStatus({ type: "error", message: payload.error || "Formulář se nepodařilo odeslat." })
-      return
+      return false
     }
 
     form.reset()
     setStatus({ type: "success", message: payload.message || "Děkujeme, ozveme se vám." })
+    return true
   } catch {
     setStatus({ type: "error", message: "Formulář se nepodařilo odeslat. Zkuste to prosím znovu." })
+    return false
   }
 }
 
@@ -34,9 +38,14 @@ function StatusMessage({ status }) {
   if (!status) return null
 
   return (
-    <div className={`border p-4 text-sm leading-relaxed ${status.type === "error" ? "border-accent/40 bg-pale text-dark" : "border-mid/20 bg-pale text-mid"}`}>
+    <p
+      className={`text-sm leading-relaxed ${
+        status.type === "error" ? "text-accent" : status.type === "success" ? "text-dark" : "text-mid"
+      }`}
+      role={status.type === "error" ? "alert" : "status"}
+    >
       {status.message}
-    </div>
+    </p>
   )
 }
 
@@ -83,6 +92,9 @@ export function ContactForm() {
 
 export function ReservationForm({ onSuccess }) {
   const [status, setStatus] = useState(null)
+  const [apartmentSelection, setApartmentSelection] = useState("")
+  const [dateFrom, setDateFrom] = useState("")
+  const [dateTo, setDateTo] = useState("")
   const loading = status?.type === "loading"
 
   return (
@@ -90,8 +102,18 @@ export function ReservationForm({ onSuccess }) {
       className="space-y-5"
       onSubmit={async (event) => {
         event.preventDefault()
-        await submitForm("/api/reservation", event.currentTarget, setStatus)
-        onSuccess?.()
+
+        if (!dateFrom || !dateTo) {
+          setStatus({ type: "error", message: "Vyberte prosím termín příjezdu a odjezdu v kalendáři." })
+          return
+        }
+
+        const success = await submitForm("/api/reservation", event.currentTarget, setStatus)
+        if (success) {
+          setDateFrom("")
+          setDateTo("")
+          onSuccess?.()
+        }
       }}
     >
       <StatusMessage status={status} />
@@ -111,21 +133,38 @@ export function ReservationForm({ onSuccess }) {
         </div>
         <div>
           <label htmlFor="reservation-apartment" className={labelClass}>Apartmán</label>
-          <select id="reservation-apartment" name="apartment" className={inputClass} defaultValue="">
+          <select
+            id="reservation-apartment"
+            name="apartment_selection"
+            required
+            className={inputClass}
+            value={apartmentSelection}
+            onChange={(event) => setApartmentSelection(event.target.value)}
+          >
             <option value="">Vyberte apartmán</option>
-            <option>Apartmán 1 - Studio ³</option>
-            <option>Apartmán 2 - Loft ¹⁰</option>
-            <option>Je mi to jedno</option>
+            <option value="any">Je mi to jedno</option>
+            {apartments.map((apartment) => (
+              <option key={apartment.slug} value={apartment.slug}>
+                {apartment.name}
+              </option>
+            ))}
           </select>
         </div>
-        <div>
-          <label htmlFor="reservation-date-from" className={labelClass}>Příjezd</label>
-          <input id="reservation-date-from" name="dateFrom" type="date" required className={inputClass} />
-        </div>
-        <div>
-          <label htmlFor="reservation-date-to" className={labelClass}>Odjezd</label>
-          <input id="reservation-date-to" name="dateTo" type="date" required className={inputClass} />
-        </div>
+      </div>
+
+      <div>
+        <label className={labelClass}>Termín pobytu</label>
+        <input type="hidden" name="dateFrom" value={dateFrom} />
+        <input type="hidden" name="dateTo" value={dateTo} />
+        <AvailabilityCalendar
+          apartmentSelection={apartmentSelection}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
+          onChange={({ dateFrom: nextFrom, dateTo: nextTo }) => {
+            setDateFrom(nextFrom)
+            setDateTo(nextTo)
+          }}
+        />
       </div>
 
       <div>

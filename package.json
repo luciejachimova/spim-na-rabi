@@ -2,21 +2,37 @@
   "name": "spim-na-rabi-app",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=22.5.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "postinstall": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "prisma db seed",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "ical-generator": "^10.0.0",
     "next": "^16.2.9",
+    "node-ical": "^0.20.0",
     "nodemailer": "^9.0.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.1.10",
-    "tailwindcss": "4.1.10"
+    "@types/node": "^24.3.0",
+    "@types/react": "19.2.17",
+    "prisma": "^6.19.3",
+    "tailwindcss": "4.1.10",
+    "tsx": "^4.22.4",
+    "typescript": "^5.9.2"
   },
   "overrides": {
     "postcss": "^8.5.10"

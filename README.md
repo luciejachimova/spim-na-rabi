@@ -1,33 +1,36 @@
 # spim-na-rabi-app
 
-Rails 8.1 aplikace (Ruby 3.4.9, SQLite, Tailwind, Hotwire, importmap).
+Next.js 16 aplikace (TypeScript, React 19, Tailwind CSS, SQLite).
 
-## Lokální vývoj v Dockeru
+## Lokální vývoj
 
-Předpoklady: Docker Desktop.
+Předpoklady: Node.js 22.5+.
 
 ```sh
 git clone <repo>
 cd spim-na-rabi-app
-docker compose up --build # První spuštění - build image
-docker compose up       # Následující spuštění - rychlejší, protože image je již vytvořená
+cp .env.example .env   # a doplňte skutečné hodnoty
+npm install
+npm run dev
 ```
 
-Aplikace poběží na <http://localhost:3000>. Při prvním spuštění proběhne `bundle install` a `db:prepare`, takže start chvíli trvá.
+Aplikace poběží na <http://localhost:3000>. Databáze (SQLite v `storage/development.sqlite3`) se schématem a základními apartmány se vytvoří automaticky při prvním requestu.
 
 ### Užitečné příkazy
 
 ```sh
-docker compose run --rm web bin/rails console
-docker compose run --rm web bin/rails generate controller Pages home
-docker compose run --rm web bundle add <gem>
-docker compose down            # zastavit
-docker compose down -v         # zastavit a smazat DB i nainstalované gemy
+npm run dev         # vývojový server
+npm run build       # produkční build
+npm run start       # spuštění produkčního buildu
+npm run lint        # ESLint
+npm run typecheck   # kontrola TypeScript typů
 ```
 
-### Lokální vývoj bez Dockeru
+## Lokální vývoj v Dockeru
 
 ```sh
-bundle install
-bin/dev
+docker compose up --build   # první spuštění - build image
+docker compose up           # následující spuštění - rychlejší
+docker compose down          # zastavit
+docker compose down -v       # zastavit a smazat i uložená data
 ```

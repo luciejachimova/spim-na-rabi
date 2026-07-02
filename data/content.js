@@ -25,8 +25,8 @@ export const priceCards = [
     subtitle: "Útulné studio - až 4 osoby",
     seasons: [
       { label: "Mimo sezónu (říjen-duben)", price: "1 900 Kč / noc" },
-      { label: "Sezóna (květen-září)", price: "2 400 Kč / noc" },
-      { label: "Víkendy a svátky", price: "2 600 Kč / noc" }
+      { label: "Sezóna (květen-září)", price: "2 100 Kč / noc" },
+      { label: "Víkendy a svátky", price: "2 300 Kč / noc" }
     ]
   },
   {
@@ -34,15 +34,16 @@ export const priceCards = [
     name: "Loft ¹⁰",
     subtitle: "Prostorný loft - až 6 osob",
     seasons: [
-      { label: "Mimo sezónu (říjen-duben)", price: "2 800 Kč / noc" },
-      { label: "Sezóna (květen-září)", price: "3 200 Kč / noc" },
-      { label: "Víkendy a svátky", price: "3 400 Kč / noc" }
+      { label: "Mimo sezónu (říjen-duben)", price: "2 600 Kč / noc" },
+      { label: "Hlavní sezóna (květen-září)", price: "2 800 Kč / noc" },
+      { label: "Víkendy a svátky", price: "3 000 Kč / noc" }
     ]
   }
 ]
 
 export const apartments = [
   {
+    slug: "studio-3",
     badge: "Apartmán 1",
     name: "Studio ³",
     desc: "Útulné studio až pro 4 osoby. Ideální pro hosty, kteří hledají jednoduchost, klid a pohodlí.",
@@ -50,6 +51,7 @@ export const apartments = [
     imageAlt: "Apartmán 1"
   },
   {
+    slug: "loft-10",
     badge: "Apartmán 2",
     name: "Loft ¹⁰",
     desc: "Prostorný loft až pro 6 osob s dostatkem místa pro rodinu nebo delší pobyt. Kombinace pohodlí a vzdušného prostoru.",
