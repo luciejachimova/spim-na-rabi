@@ -17,6 +17,8 @@
     "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@libsql/client": "^0.17.4",
+    "@prisma/adapter-libsql": "^6.19.3",
     "@prisma/client": "^6.19.3",
     "ical-generator": "^10.0.0",
     "next": "^16.2.9",
