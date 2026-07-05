@@ -87,3 +87,54 @@ přidejte `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN` a ostatní proměnné z
 SMTP_* atd.). `DATABASE_URL` na Vercelu nastavovat nemusíte — jakmile je
 `TURSO_DATABASE_URL` vyplněné, aplikace se automaticky připojí k Turso místo
 k lokálnímu souboru (viz `lib/db.ts`).
+
+## Pravidelná synchronizace s Booking.com/Airbnb (externí cron)
+
+Endpoint `/api/cron/reservations` stahuje iCal feedy nastavené v adminu
+(`/admin`) a promítá je do rezervací. Nic ho ale samo o sobě pravidelně
+nespouští — na Vercel Hobby (free) plánu totiž vestavěné Vercel Cron Jobs
+běží nejvýše 1× denně, což na sledování obsazenosti nestačí. Řešením je
+externí cron služba, která endpoint pravidelně zavolá přes HTTP.
+
+**Doporučená služba: [cron-job.org](https://cron-job.org)** — zdarma,
+spolehlivá (provozovaná přes 15 let), umožňuje vlastní HTTP hlavičky
+a interval až 1× za minutu i na free tarifu. Žádná platba, žádné API klíče
+navíc.
+
+**Doporučená frekvence: každých 15 minut.** Dost často na to, aby se nová
+rezervace z Bookingu/Airbnb promítla rychle, a zároveň šetrné k free tarifu
+cílové služby i k limitům Vercel funkcí.
+
+### Zabezpečení endpointu
+
+Endpoint bez platného `CRON_SECRET` v `Authorization` hlavičce (nebo
+alternativně `x-cron-secret` hlavičce, nebo `?secret=` parametru v URL)
+vrací `401`. Pokud `CRON_SECRET` není na serveru vůbec nastavené, endpoint
+se **záměrně sám uzamkne** (vrací `500`) — nikdy tedy neběží nezabezpečený
+ve veřejném přístupu.
+
+### Návod: propojení cron-job.org s projektem
+
+1. Ujistěte se, že proměnná `CRON_SECRET` je nastavená ve Vercel
+   Environment Variables (viz krok 4 výše) — vygenerujte si dlouhý náhodný
+   řetězec, např. `openssl rand -hex 32`.
+2. Zaregistrujte se zdarma na [cron-job.org](https://cron-job.org).
+3. Vytvořte nový cronjob (**Create cronjob**):
+   - **URL**: `https://www.spimnarabi.cz/api/cron/reservations`
+   - **Schedule**: každých 15 minut (`*/15 * * * *`, nebo v UI zvolte
+     "Every 15 minutes")
+   - **Request method**: `GET`
+   - **Headers** → přidejte hlavičku `Authorization` s hodnotou
+     `Bearer <hodnota CRON_SECRET>`
+4. Uložte a nechte proběhnout první test spuštění (cron-job.org nabízí
+   tlačítko "Test run" / "Execute now") — odpověď by měla mít HTTP 200
+   a JSON tvaru `{"feeds": [...], "durationMs": ...}`.
+5. V historii spuštění (Execution history) na cron-job.org lze zpětně
+   zkontrolovat HTTP status a délku odpovědi každého běhu; podrobný průběh
+   (který feed se stáhl, kolik rezervací se vytvořilo/aktualizovalo, případné
+   chyby) je navíc vidět ve Vercel function logs pro `/api/cron/reservations`.
+
+Selhání jednoho feedu (např. dočasně nedostupná URL od Bookingu) nezastaví
+synchronizaci ostatních apartmánů/poskytovatelů — chyba se zaloguje a zapíše
+k danému feedu (`IcalFeed.lastSyncError`, vidět i v adminu), ale odpověď je
+i tak `200` s výsledky za všechny feedy.
