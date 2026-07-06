@@ -8,7 +8,12 @@ export async function POST(request: Request) {
   const password = typeof body?.password === "string" ? body.password : ""
 
   const expected = process.env.ADMIN_PASSWORD
-  if (!expected || password !== expected) {
+  if (!expected) {
+    console.error("ADMIN_PASSWORD is not configured — refusing all admin logins.")
+    return NextResponse.json({ error: "Administrace není nakonfigurována (chybí ADMIN_PASSWORD)." }, { status: 500 })
+  }
+
+  if (password !== expected) {
     return NextResponse.json({ error: "Nesprávné heslo." }, { status: 401 })
   }
 
