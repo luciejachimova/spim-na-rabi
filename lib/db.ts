@@ -21,6 +21,17 @@ function createPrismaClient() {
   const tursoUrl = process.env.TURSO_DATABASE_URL
   const isRemote = Boolean(tursoUrl)
 
+  if (!isRemote) {
+    // Not necessarily wrong (local dev and the Docker/VPS deployment both
+    // intentionally rely on this fallback), but on a host without a
+    // persistent local disk this is the exact misconfiguration that causes
+    // "Failed to connect to database: .../storage/....sqlite3" — logged so
+    // it's visible instead of only surfacing as a downstream connection error.
+    console.warn("TURSO_DATABASE_URL is not set — falling back to a local SQLite file.", {
+      resolvedUrl: resolveLocalFileUrl()
+    })
+  }
+
   const config: Config = tursoUrl
     ? { url: tursoUrl, authToken: process.env.TURSO_AUTH_TOKEN }
     : { url: resolveLocalFileUrl() }

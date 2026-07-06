@@ -48,12 +48,16 @@ async function handleSync(request: Request) {
     feedCount = await prisma.icalFeed.count()
   } catch (error) {
     const details = describeError(error)
-    console.error("Reservation sync: database connection failed", details)
+    const usingTurso = Boolean(process.env.TURSO_DATABASE_URL)
+    console.error("Reservation sync: database connection failed", { ...details, usingTurso })
     return NextResponse.json(
       {
         error: "Synchronizaci se nepodařilo spustit — chyba připojení k databázi.",
         stage: "database",
-        ...details
+        ...details,
+        hint: usingTurso
+          ? "TURSO_DATABASE_URL je nastavené, ale připojení selhalo — zkontrolujte TURSO_AUTH_TOKEN a že databáze v Turso existuje."
+          : "TURSO_DATABASE_URL není v tomto prostředí nastavené, aplikace používá lokální SQLite soubor. Na Vercelu to nemůže fungovat — zkontrolujte, že TURSO_DATABASE_URL a TURSO_AUTH_TOKEN jsou nastavené pro prostředí Production (ne jen Preview/Development) a že jste po jejich nastavení udělali nový deploy."
       },
       { status: 500 }
     )
