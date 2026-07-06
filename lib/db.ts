@@ -39,13 +39,15 @@ function createPrismaClient() {
   const adapter = new PrismaLibSQL(config)
   const client = new PrismaClient({ adapter })
 
-  // PRAGMA statements that change a setting also return the new value as a
-  // result row, which $executeRaw rejects on SQLite — use $queryRaw instead.
-  // journal_mode only applies to a local file, not a remote libSQL connection.
+  // PRAGMA statements only apply to a local SQLite file connection — Turso's
+  // remote protocol rejects them outright ("SQL not allowed statement").
+  // Concurrency there is handled server-side, so there's nothing to configure.
   if (!isRemote) {
+    // PRAGMA statements that change a setting also return the new value as a
+    // result row, which $executeRaw rejects on SQLite — use $queryRaw instead.
     client.$queryRawUnsafe("PRAGMA journal_mode = WAL;").catch((error) => console.error("Failed to set journal_mode", error))
+    client.$queryRawUnsafe("PRAGMA busy_timeout = 5000;").catch((error) => console.error("Failed to set busy_timeout", error))
   }
-  client.$queryRawUnsafe("PRAGMA busy_timeout = 5000;").catch((error) => console.error("Failed to set busy_timeout", error))
 
   return client
 }
