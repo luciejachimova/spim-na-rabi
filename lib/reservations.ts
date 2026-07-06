@@ -949,3 +949,113 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     systemStatus
   }
 }
+
+export type HealthStatus = "ok" | "warning" | "error"
+
+export interface ProviderHealth {
+  status: HealthStatus
+  detail: string | null
+}
+
+export interface SyncSystemStatus {
+  cron: {
+    status: HealthStatus
+    lastRun: string | null
+    lastSuccess: string | null
+    lastError: string | null
+  }
+  booking: ProviderHealth
+  airbnb: ProviderHealth
+  icalExport: ProviderHealth
+  turso: ProviderHealth
+  smtp: ProviderHealth
+}
+
+function statusForProvider(feeds: PrismaIcalFeed[], provider: IcalProvider): ProviderHealth {
+  const providerFeeds = feeds.filter((feed) => feed.provider === provider)
+
+  if (providerFeeds.length === 0) {
+    return { status: "warning", detail: "Není nastaven žádný feed." }
+  }
+
+  const withError = providerFeeds.find((feed) => feed.lastSyncError)
+  if (withError) {
+    return { status: "error", detail: withError.lastSyncError }
+  }
+
+  const neverSynced = providerFeeds.find((feed) => !feed.lastSyncedAt)
+  if (neverSynced) {
+    return { status: "warning", detail: "Čeká na první synchronizaci." }
+  }
+
+  return { status: "ok", detail: null }
+}
+
+// Detailed health panel for the Kalendáře page. Reuses existing IcalFeed
+// fields rather than adding new columns: `updatedAt` doubles as "last
+// attempt" since both the success and failure paths in importIcalFeed call
+// prisma.icalFeed.update(), and `lastSyncedAt` already only advances on
+// success — so "last run" vs "last successful run" falls out for free.
+export async function getSyncSystemStatus(): Promise<SyncSystemStatus> {
+  let turso: ProviderHealth = { status: "ok", detail: null }
+  let feeds: PrismaIcalFeed[] = []
+  let apartments: ApartmentRecord[] = []
+
+  try {
+    ;[feeds, apartments] = await Promise.all([prisma.icalFeed.findMany(), listApartments()])
+  } catch (error) {
+    turso = { status: "error", detail: error instanceof Error ? error.message : "Databáze není dostupná." }
+  }
+
+  const booking = statusForProvider(feeds, "booking")
+  const airbnb = statusForProvider(feeds, "airbnb")
+
+  let icalExport: ProviderHealth = { status: "warning", detail: "Není nastaven žádný apartmán." }
+  if (apartments.length > 0) {
+    try {
+      await buildApartmentIcal(apartments[0])
+      icalExport = { status: "ok", detail: null }
+    } catch (error) {
+      icalExport = { status: "error", detail: error instanceof Error ? error.message : "Export selhal." }
+    }
+  }
+
+  const smtpConfigured = Boolean(
+    (process.env.SMTP_PASS || process.env.SMTP_PASSWORD) && (process.env.SMTP_HOST || process.env.SMTP_ADDRESS)
+  )
+  const smtp: ProviderHealth = smtpConfigured
+    ? { status: "ok", detail: null }
+    : { status: "warning", detail: "SMTP není nakonfigurováno." }
+
+  const lastRun = feeds
+    .map((feed) => feed.updatedAt)
+    .sort((a, b) => b.getTime() - a.getTime())[0]
+  const lastSuccess = feeds
+    .map((feed) => feed.lastSyncedAt)
+    .filter((value): value is Date => value !== null)
+    .sort((a, b) => b.getTime() - a.getTime())[0]
+  const lastErrorFeed = feeds
+    .filter((feed) => feed.lastSyncError)
+    .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())[0]
+
+  const cronStatus: HealthStatus =
+    booking.status === "error" || airbnb.status === "error"
+      ? "error"
+      : booking.status === "warning" || airbnb.status === "warning"
+        ? "warning"
+        : "ok"
+
+  return {
+    cron: {
+      status: cronStatus,
+      lastRun: lastRun ? lastRun.toISOString() : null,
+      lastSuccess: lastSuccess ? lastSuccess.toISOString() : null,
+      lastError: lastErrorFeed?.lastSyncError ?? null
+    },
+    booking,
+    airbnb,
+    icalExport,
+    turso,
+    smtp
+  }
+}
