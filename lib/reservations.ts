@@ -215,12 +215,16 @@ function describeReservationSource(source: ReservationSource) {
 }
 
 function mapApartment(apartment: PrismaApartment): ApartmentRecord {
-  return {
+  const record: ApartmentRecord = {
     id: apartment.id,
     slug: apartment.slug,
     name: apartment.name,
     publicIcalUrl: apartment.publicIcalUrl
   }
+
+  // Always resolve to a real URL (falls back to PUBLIC_APP_URL) rather than
+  // exposing a possibly-null/stale stored column to callers like the admin UI.
+  return { ...record, publicIcalUrl: getPublicIcalUrl(record) }
 }
 
 function mapIcalFeed(feed: PrismaIcalFeed): IcalFeedRecord {
@@ -505,11 +509,27 @@ export async function cancelReservation(reservationId: number): Promise<Reservat
   return toReservationWithApartment(updated, updated.apartment)
 }
 
+function validateIcalFeedUrl(provider: IcalProvider, url: string) {
+  if (!/^https?:\/\//i.test(url)) {
+    throw new ReservationValidationError("URL musí začínat http:// nebo https://.")
+  }
+
+  if (provider === "booking" && !/booking/i.test(url)) {
+    throw new ReservationValidationError("Booking.com URL musí obsahovat „booking“.")
+  }
+
+  if (provider === "airbnb" && !/airbnb/i.test(url)) {
+    throw new ReservationValidationError("Airbnb URL musí obsahovat „airbnb“.")
+  }
+}
+
 export async function upsertIcalFeed(input: { apartmentId: number; provider: IcalProvider; url: string }): Promise<IcalFeedRecord> {
   const url = input.url.trim()
   if (!url) {
     throw new ReservationValidationError("URL feedu je povinná.")
   }
+
+  validateIcalFeedUrl(input.provider, url)
 
   const apartment = await getApartmentById(input.apartmentId)
   if (!apartment) {
@@ -654,12 +674,13 @@ export async function importIcalFeed(feed: IcalFeedWithApartment): Promise<IcalI
   }
 }
 
-export async function syncAllApartments(): Promise<SyncResult> {
-  const feeds = await prisma.icalFeed.findMany({ include: { apartment: true } })
+// A single unreachable/broken feed shouldn't abort syncing the others —
+// failures are recorded per feed (and surfaced via IcalFeed.lastSyncError).
+// Shared by syncAllApartments (cron, all feeds) and syncApartment (admin
+// "Synchronizovat nyní", one apartment's feeds only).
+async function runFeedSync(feeds: IcalFeedWithApartment[]): Promise<IcalImportResult[]> {
   const results: IcalImportResult[] = []
 
-  // A single unreachable/broken feed shouldn't abort syncing the others —
-  // failures are recorded per feed (and surfaced via IcalFeed.lastSyncError).
   for (const feed of feeds) {
     try {
       results.push(await importIcalFeed(feed))
@@ -680,7 +701,22 @@ export async function syncAllApartments(): Promise<SyncResult> {
     }
   }
 
-  return { feeds: results }
+  return results
+}
+
+export async function syncAllApartments(): Promise<SyncResult> {
+  const feeds = await prisma.icalFeed.findMany({ include: { apartment: true } })
+  return { feeds: await runFeedSync(feeds) }
+}
+
+export async function syncApartment(apartmentId: number): Promise<SyncResult> {
+  const apartment = await getApartmentById(apartmentId)
+  if (!apartment) {
+    throw new ReservationValidationError("Apartmán nebyl nalezen.")
+  }
+
+  const feeds = await prisma.icalFeed.findMany({ where: { apartmentId }, include: { apartment: true } })
+  return { feeds: await runFeedSync(feeds) }
 }
 
 export async function buildApartmentIcal(apartment: ApartmentRecord) {

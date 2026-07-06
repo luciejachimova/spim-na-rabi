@@ -3,7 +3,7 @@ import { listApartmentsWithFeeds, upsertIcalFeed, ReservationValidationError } f
 
 export const runtime = "nodejs"
 
-interface FeedRequestBody {
+interface IcalFeedRequestBody {
   apartmentId?: unknown
   provider?: unknown
   url?: unknown
@@ -14,8 +14,8 @@ export async function GET() {
   return NextResponse.json({ apartments })
 }
 
-export async function PUT(request: Request) {
-  const body = (await request.json().catch(() => null)) as FeedRequestBody | null
+export async function POST(request: Request) {
+  const body = (await request.json().catch(() => null)) as IcalFeedRequestBody | null
 
   const apartmentId = Number(body?.apartmentId)
   const provider = body?.provider

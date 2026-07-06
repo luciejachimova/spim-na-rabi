@@ -2,7 +2,9 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import type { ApartmentWithFeeds, IcalProvider, ReservationWithApartment } from "@/lib/reservations"
+import Link from "next/link"
+import type { ApartmentWithFeeds, ReservationWithApartment } from "@/lib/reservations"
+import { FeedStatusIcon, getFeedStatus } from "./admin-sync"
 
 const SOURCE_LABELS: Record<string, string> = {
   website: "Web",
@@ -113,8 +115,68 @@ export default function AdminDashboard({ reservations, apartments }: Props) {
       </section>
 
       <BlockForm apartments={apartments} onCreated={() => router.refresh()} />
-      <FeedsEditor apartments={apartments} onSaved={() => router.refresh()} />
+      <SyncSummary apartments={apartments} />
     </div>
+  )
+}
+
+function SyncSummary({ apartments }: { apartments: ApartmentWithFeeds[] }) {
+  return (
+    <section>
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-xl font-medium">Poslední synchronizace</h2>
+        <Link href="/admin/sync" className="text-sm text-mid underline hover:text-dark">
+          Spravovat kalendáře →
+        </Link>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[560px] border-collapse text-sm">
+          <thead>
+            <tr className="border-b border-light text-left text-xs uppercase tracking-wide text-mid">
+              <th className="py-2 pr-4">Apartmán</th>
+              <th className="py-2 pr-4">Booking</th>
+              <th className="py-2 pr-4">Airbnb</th>
+              <th className="py-2 pr-4">Poslední synchronizace</th>
+              <th className="py-2 pr-4">Stav</th>
+            </tr>
+          </thead>
+          <tbody>
+            {apartments.map((apartment) => {
+              const bookingFeed = apartment.icalFeeds.find((feed) => feed.provider === "booking")
+              const airbnbFeed = apartment.icalFeeds.find((feed) => feed.provider === "airbnb")
+              const lastSyncedAt = [bookingFeed?.lastSyncedAt, airbnbFeed?.lastSyncedAt]
+                .filter((value): value is string => Boolean(value))
+                .sort()
+                .at(-1)
+              const statuses = apartment.icalFeeds.map(getFeedStatus)
+              const overallStatus = statuses.some((status) => status === "error")
+                ? "error"
+                : statuses.length === 0
+                  ? "unconfigured"
+                  : statuses.every((status) => status === "ok")
+                    ? "ok"
+                    : "pending"
+
+              return (
+                <tr key={apartment.id} className="border-b border-light/60">
+                  <td className="py-2 pr-4">{apartment.name}</td>
+                  <td className="py-2 pr-4">
+                    <FeedStatusIcon status={getFeedStatus(bookingFeed)} />
+                  </td>
+                  <td className="py-2 pr-4">
+                    <FeedStatusIcon status={getFeedStatus(airbnbFeed)} />
+                  </td>
+                  <td className="py-2 pr-4">{lastSyncedAt ? new Date(lastSyncedAt).toLocaleString("cs-CZ") : "Nikdy"}</td>
+                  <td className="py-2 pr-4">
+                    <FeedStatusIcon status={overallStatus} />
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
   )
 }
 
@@ -181,77 +243,3 @@ function BlockForm({ apartments, onCreated }: { apartments: ApartmentWithFeeds[]
   )
 }
 
-function FeedsEditor({ apartments, onSaved }: { apartments: ApartmentWithFeeds[]; onSaved: () => void }) {
-  const [status, setStatus] = useState<{ type: "error" | "success"; message: string } | null>(null)
-
-  async function handleSubmit(apartmentId: number, provider: IcalProvider, url: string) {
-    setStatus(null)
-
-    const response = await fetch("/api/admin/feeds", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ apartmentId, provider, url })
-    })
-    const payload = await response.json()
-
-    if (!response.ok) {
-      setStatus({ type: "error", message: payload.error || "Feed se nepodařilo uložit." })
-      return
-    }
-
-    setStatus({ type: "success", message: "Feed byl uložen." })
-    onSaved()
-  }
-
-  return (
-    <section>
-      <h2 className="mb-4 text-xl font-medium">iCal feedy (Booking.com / Airbnb)</h2>
-      <div className="space-y-6">
-        {apartments.map((apartment) => (
-          <div key={apartment.id} className="space-y-2">
-            <p className="font-medium">{apartment.name}</p>
-            {(["booking", "airbnb"] as const).map((provider) => {
-              const existing = apartment.icalFeeds.find((feed) => feed.provider === provider)
-
-              return (
-                <form
-                  key={provider}
-                  className="flex flex-wrap items-center gap-2"
-                  onSubmit={(event) => {
-                    event.preventDefault()
-                    const url = new FormData(event.currentTarget).get("url")
-                    if (typeof url === "string" && url.trim()) {
-                      handleSubmit(apartment.id, provider, url.trim())
-                    }
-                  }}
-                >
-                  <span className="w-24 text-xs uppercase tracking-wide text-mid">
-                    {provider === "booking" ? "Booking.com" : "Airbnb"}
-                  </span>
-                  <input
-                    type="url"
-                    name="url"
-                    defaultValue={existing?.url || ""}
-                    placeholder="https://..."
-                    className={`min-w-[280px] flex-1 ${inputClass}`}
-                  />
-                  <button
-                    type="submit"
-                    className="cursor-pointer rounded-[2px] border border-dark px-3 py-1.5 text-xs uppercase tracking-wide hover:bg-dark hover:text-cream"
-                  >
-                    Uložit
-                  </button>
-                  {existing?.lastSyncedAt && (
-                    <span className="text-xs text-mid">Naposledy: {new Date(existing.lastSyncedAt).toLocaleString("cs-CZ")}</span>
-                  )}
-                  {existing?.lastSyncError && <span className="text-xs text-accent">{existing.lastSyncError}</span>}
-                </form>
-              )
-            })}
-          </div>
-        ))}
-      </div>
-      {status && <p className={`mt-2 text-sm ${status.type === "error" ? "text-accent" : "text-dark"}`}>{status.message}</p>}
-    </section>
-  )
-}
