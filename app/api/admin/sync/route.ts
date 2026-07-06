@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { syncApartment, ReservationValidationError } from "@/lib/reservations"
+import { syncApartment, syncAllApartments, ReservationValidationError } from "@/lib/reservations"
 
 export const runtime = "nodejs"
 
@@ -9,15 +9,16 @@ interface SyncRequestBody {
 
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as SyncRequestBody | null
-  const apartmentId = Number(body?.apartmentId)
+  const hasApartmentId = body?.apartmentId !== undefined && body?.apartmentId !== null
+  const apartmentId = hasApartmentId ? Number(body?.apartmentId) : null
 
-  if (!Number.isInteger(apartmentId)) {
+  if (hasApartmentId && !Number.isInteger(apartmentId)) {
     return NextResponse.json({ error: "Vyberte apartmán k synchronizaci." }, { status: 422 })
   }
 
   try {
     const startedAt = Date.now()
-    const result = await syncApartment(apartmentId)
+    const result = apartmentId !== null ? await syncApartment(apartmentId) : await syncAllApartments()
     const durationMs = Date.now() - startedAt
 
     const failed = result.feeds.filter((feed) => feed.error)
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: error.message }, { status: 422 })
     }
 
-    console.error("Failed to sync apartment", error)
+    console.error("Failed to sync apartment(s)", error)
     return NextResponse.json({ error: "Synchronizaci se nepodařilo spustit." }, { status: 500 })
   }
 }

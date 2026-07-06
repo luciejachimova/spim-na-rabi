@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react"
+import { usePathname } from "next/navigation"
 import Footer from "./Footer"
 import Navbar from "./Navbar"
 import ReservationModal from "./ReservationModal"
@@ -12,6 +13,8 @@ export function useReservation() {
 }
 
 export default function ClientChrome({ children }) {
+  const pathname = usePathname()
+  const isAdmin = pathname?.startsWith("/admin")
   const [reservationOpen, setReservationOpen] = useState(false)
 
   useEffect(() => {
@@ -32,6 +35,10 @@ export default function ClientChrome({ children }) {
     }),
     []
   )
+
+  if (isAdmin) {
+    return <ReservationContext.Provider value={value}>{children}</ReservationContext.Provider>
+  }
 
   return (
     <ReservationContext.Provider value={value}>

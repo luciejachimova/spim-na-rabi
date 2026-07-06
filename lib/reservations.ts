@@ -2,6 +2,7 @@ import ical from "ical-generator"
 import icalParser from "node-ical"
 import type { Apartment as PrismaApartment, IcalFeed as PrismaIcalFeed, Reservation as PrismaReservation } from "@prisma/client"
 import { prisma } from "./db"
+import { getFeedStatus, type FeedStatus } from "./feed-status"
 
 export type ReservationSource = "website" | "booking" | "airbnb" | "admin_block"
 export type ReservationStatus = "active" | "cancelled"
@@ -238,6 +239,12 @@ function mapIcalFeed(feed: PrismaIcalFeed): IcalFeedRecord {
   }
 }
 
+// Re-exported (not defined here) so client components can import this pure
+// logic from lib/feed-status.ts directly without pulling in this module's
+// server-only dependencies (Prisma, node-ical) into their bundle.
+export { getFeedStatus }
+export type { FeedStatus }
+
 function toReservationWithApartment(
   reservation: PrismaReservation,
   apartment: Pick<ApartmentRecord, "slug" | "name">
@@ -395,6 +402,18 @@ export async function listAllReservations(): Promise<ReservationWithApartment[]>
   return reservations.map((reservation) => toReservationWithApartment(reservation, reservation.apartment))
 }
 
+function validateEmailFormat(email: string) {
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    throw new ReservationValidationError("Zadejte platný email.")
+  }
+}
+
+function validateGuestsCount(guests: number) {
+  if (!Number.isInteger(guests) || guests <= 0) {
+    throw new ReservationValidationError("Počet hostů musí být celé číslo větší než 0.")
+  }
+}
+
 export async function createWebsiteReservation(input: WebsiteReservationInput) {
   const name = input.name.trim()
   const email = input.email.trim()
@@ -410,13 +429,8 @@ export async function createWebsiteReservation(input: WebsiteReservationInput) {
     throw new ReservationValidationError("Email je povinný.")
   }
 
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    throw new ReservationValidationError("Zadejte platný email.")
-  }
-
-  if (!Number.isInteger(guests) || guests <= 0) {
-    throw new ReservationValidationError("Počet hostů musí být celé číslo větší než 0.")
-  }
+  validateEmailFormat(email)
+  validateGuestsCount(guests)
 
   const startDate = parseDateOnly(input.startDate)
   const endDate = parseDateOnly(input.endDate)
@@ -507,6 +521,91 @@ export async function cancelReservation(reservationId: number): Promise<Reservat
   })
 
   return toReservationWithApartment(updated, updated.apartment)
+}
+
+export interface UpdateReservationInput {
+  apartmentId: number
+  startDate: string
+  endDate: string
+  name?: string | null
+  email?: string | null
+  phone?: string | null
+  guests?: number | null
+  note?: string | null
+}
+
+// Same atomic-statement pattern as insertReservationAtomic — folds the
+// "no other active reservation overlaps" check and the write into one
+// statement so an edit can't race a concurrent booking into a conflict.
+export async function updateReservation(reservationId: number, input: UpdateReservationInput): Promise<ReservationWithApartment> {
+  const startDate = parseDateOnly(input.startDate)
+  const endDate = parseDateOnly(input.endDate)
+
+  if (!areDatesValid(startDate, endDate)) {
+    throw new ReservationValidationError("Odjezd musí být po příjezdu.")
+  }
+
+  const apartment = await getApartmentById(input.apartmentId)
+  if (!apartment) {
+    throw new ReservationValidationError("Apartmán nebyl nalezen.")
+  }
+
+  const name = input.name?.trim() || null
+  const email = input.email?.trim() || null
+  const phone = input.phone?.trim() || null
+  const note = input.note?.trim() || null
+  const guests = input.guests ?? null
+
+  if (email) {
+    validateEmailFormat(email)
+  }
+  if (guests !== null) {
+    validateGuestsCount(guests)
+  }
+
+  const rows = await prisma.$queryRaw<RawReservationRow[]>`
+    UPDATE reservations
+    SET
+      apartment_id = ${apartment.id},
+      start_date = ${startDate},
+      end_date = ${endDate},
+      name = ${name},
+      email = ${email},
+      phone = ${phone},
+      guests = ${guests},
+      note = ${note},
+      updated_at = CURRENT_TIMESTAMP
+    WHERE id = ${reservationId}
+      AND NOT EXISTS (
+        SELECT 1 FROM reservations
+        WHERE apartment_id = ${apartment.id}
+          AND status = 'active'
+          AND id != ${reservationId}
+          AND start_date < ${endDate}
+          AND end_date > ${startDate}
+      )
+    RETURNING *
+  `
+
+  const row = rows[0]
+  if (!row) {
+    const existing = await prisma.reservation.findUnique({ where: { id: reservationId } })
+    if (!existing) {
+      throw new ReservationNotFoundError("Rezervace nebyla nalezena.")
+    }
+    throw new ReservationConflictError("Vybraný termín je už obsazený.")
+  }
+
+  return mapRawReservationRow(row, apartment)
+}
+
+export async function deleteReservationPermanently(reservationId: number): Promise<void> {
+  const existing = await prisma.reservation.findUnique({ where: { id: reservationId } })
+  if (!existing) {
+    throw new ReservationNotFoundError("Rezervace nebyla nalezena.")
+  }
+
+  await prisma.reservation.delete({ where: { id: reservationId } })
 }
 
 function validateIcalFeedUrl(provider: IcalProvider, url: string) {
@@ -751,4 +850,102 @@ export function getApartmentIcalFilename(apartment: ApartmentRecord) {
 
 export function getPublicIcalUrl(apartment: ApartmentRecord) {
   return apartment.publicIcalUrl || `${getBaseUrl()}/api/ical/${apartment.slug}`
+}
+
+function pad2(value: number) {
+  return String(value).padStart(2, "0")
+}
+
+// Nights of a given calendar month booked across all apartments, as a
+// percentage of total possible apartment-nights that month.
+async function computeOccupancyForMonth(year: number, monthIndexZeroBased: number, apartmentCount: number): Promise<number> {
+  if (apartmentCount === 0) {
+    return 0
+  }
+
+  const monthStart = `${year}-${pad2(monthIndexZeroBased + 1)}-01`
+  const daysInMonth = new Date(year, monthIndexZeroBased + 1, 0).getDate()
+  const firstOfNextMonth = new Date(year, monthIndexZeroBased + 1, 1)
+  const monthEndExclusive = `${firstOfNextMonth.getFullYear()}-${pad2(firstOfNextMonth.getMonth() + 1)}-01`
+
+  const reservations = await prisma.reservation.findMany({
+    where: {
+      status: "active",
+      startDate: { lt: monthEndExclusive },
+      endDate: { gt: monthStart }
+    },
+    select: { startDate: true, endDate: true }
+  })
+
+  let bookedNights = 0
+  for (const reservation of reservations) {
+    const overlapStart = reservation.startDate > monthStart ? reservation.startDate : monthStart
+    const overlapEnd = reservation.endDate < monthEndExclusive ? reservation.endDate : monthEndExclusive
+    const nights = Math.round((toUtcDate(overlapEnd).getTime() - toUtcDate(overlapStart).getTime()) / 86_400_000)
+    bookedNights += Math.max(0, nights)
+  }
+
+  const totalPossibleNights = apartmentCount * daysInMonth
+  return totalPossibleNights === 0 ? 0 : Math.round((bookedNights / totalPossibleNights) * 100)
+}
+
+export interface DashboardStats {
+  totalReservations: number
+  futureStays: number
+  checkInsToday: number
+  checkOutsToday: number
+  occupancyThisMonth: number
+  occupancyNextMonth: number
+  lastSyncedAt: string | null
+  lastSyncError: string | null
+  systemStatus: "ok" | "warning" | "error"
+}
+
+export async function getDashboardStats(): Promise<DashboardStats> {
+  const todayKey = formatDateForPrague(new Date())
+  const apartments = await listApartments()
+
+  const [totalReservations, futureStays, checkInsToday, checkOutsToday, feeds] = await Promise.all([
+    prisma.reservation.count(),
+    prisma.reservation.count({ where: { status: "active", startDate: { gte: todayKey } } }),
+    prisma.reservation.count({ where: { status: "active", startDate: todayKey } }),
+    prisma.reservation.count({ where: { status: "active", endDate: todayKey } }),
+    prisma.icalFeed.findMany()
+  ])
+
+  const now = new Date()
+  const [occupancyThisMonth, occupancyNextMonth] = await Promise.all([
+    computeOccupancyForMonth(now.getFullYear(), now.getMonth(), apartments.length),
+    computeOccupancyForMonth(now.getFullYear(), now.getMonth() + 1, apartments.length)
+  ])
+
+  const syncedTimestamps = feeds
+    .map((feed) => feed.lastSyncedAt)
+    .filter((value): value is Date => value !== null)
+    .sort((a, b) => b.getTime() - a.getTime())
+  const lastSyncedAt = syncedTimestamps[0] ? syncedTimestamps[0].toISOString() : null
+
+  const failedFeeds = feeds
+    .filter((feed) => feed.lastSyncError)
+    .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
+  const lastSyncError = failedFeeds[0]?.lastSyncError ?? null
+
+  const feedStatuses = feeds.map((feed) => getFeedStatus(mapIcalFeed(feed)))
+  const systemStatus: DashboardStats["systemStatus"] = feedStatuses.some((status) => status === "error")
+    ? "error"
+    : feedStatuses.some((status) => status === "pending")
+      ? "warning"
+      : "ok"
+
+  return {
+    totalReservations,
+    futureStays,
+    checkInsToday,
+    checkOutsToday,
+    occupancyThisMonth,
+    occupancyNextMonth,
+    lastSyncedAt,
+    lastSyncError,
+    systemStatus
+  }
 }

@@ -1,22 +1,16 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import type { ApartmentWithFeeds, IcalFeedRecord, IcalProvider } from "@/lib/reservations"
+import { getFeedStatus } from "@/lib/feed-status"
+import { useToast } from "./admin-toast"
+import { useConfirm } from "./confirm-dialog"
 
 const inputClass =
   "w-full rounded-[2px] border border-mid/20 bg-pale px-3 py-2 text-sm text-dark outline-none focus:border-dark"
 
-type FeedStatus = "ok" | "error" | "pending" | "unconfigured"
-
-export function getFeedStatus(feed: IcalFeedRecord | undefined): FeedStatus {
-  if (!feed) return "unconfigured"
-  if (feed.lastSyncError) return "error"
-  if (!feed.lastSyncedAt) return "pending"
-  return "ok"
-}
-
-export function FeedStatusIcon({ status }: { status: FeedStatus }) {
+export function FeedStatusIcon({ status }: { status: ReturnType<typeof getFeedStatus> }) {
   if (status === "ok") {
     return (
       <span title="Poslední synchronizace proběhla v pořádku" className="inline-block h-2.5 w-2.5 rounded-full bg-green-600" />
@@ -34,31 +28,6 @@ export function FeedStatusIcon({ status }: { status: FeedStatus }) {
 function formatDateTime(value: string | null) {
   if (!value) return "Nikdy"
   return new Date(value).toLocaleString("cs-CZ")
-}
-
-// Minimal, dependency-free toast — a self-dismissing message in the corner.
-function useToast() {
-  const [toast, setToast] = useState<{ type: "success" | "error"; message: string } | null>(null)
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  function showToast(type: "success" | "error", message: string) {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    setToast({ type, message })
-    timeoutRef.current = setTimeout(() => setToast(null), 5000)
-  }
-
-  const toastElement = toast ? (
-    <div
-      role="status"
-      className={`fixed bottom-6 right-6 z-[300] max-w-sm rounded-[2px] px-4 py-3 text-sm text-cream shadow-lg ${
-        toast.type === "error" ? "bg-accent" : "bg-dark"
-      }`}
-    >
-      {toast.message}
-    </div>
-  ) : null
-
-  return { showToast, toastElement }
 }
 
 function validateFeedUrl(provider: IcalProvider, url: string): string | null {
@@ -80,24 +49,217 @@ interface Props {
 }
 
 export default function AdminSync({ apartments }: Props) {
+  const router = useRouter()
   const { showToast, toastElement } = useToast()
+  const { confirm, confirmDialog } = useConfirm()
+  const [syncingAll, setSyncingAll] = useState(false)
+
+  async function handleSyncAll() {
+    const confirmed = await confirm({
+      title: "Synchronizovat všechny apartmány?",
+      message: "Stáhnou se aktuální rezervace z Booking.com a Airbnb pro všechny apartmány.",
+      confirmLabel: "Synchronizovat vše"
+    })
+    if (!confirmed) return
+
+    setSyncingAll(true)
+    try {
+      const response = await fetch("/api/admin/sync", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({})
+      })
+      const payload = await response.json()
+
+      if (!response.ok) {
+        showToast("error", payload.error || "Synchronizaci se nepodařilo spustit.")
+        return
+      }
+
+      if (payload.error) {
+        showToast("error", payload.error)
+      } else {
+        showToast(
+          "success",
+          `Synchronizace dokončena. Nové: ${payload.created}, aktualizované: ${payload.updated}, odstraněné: ${payload.deleted}.`
+        )
+      }
+
+      router.refresh()
+    } catch {
+      showToast("error", "Synchronizaci se nepodařilo spustit.")
+    } finally {
+      setSyncingAll(false)
+    }
+  }
 
   return (
-    <div className="space-y-8">
-      {apartments.map((apartment) => (
-        <ApartmentSyncCard key={apartment.id} apartment={apartment} showToast={showToast} />
-      ))}
+    <div className="space-y-10">
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={handleSyncAll}
+          disabled={syncingAll}
+          className="cursor-pointer rounded-[2px] bg-dark px-5 py-2 text-sm uppercase tracking-wide text-cream transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {syncingAll ? "Synchronizuji…" : "Synchronizovat vše"}
+        </button>
+      </div>
+      <SyncSummary apartments={apartments} />
+      <BlockForm apartments={apartments} onCreated={() => router.refresh()} confirm={confirm} />
+      <div className="space-y-8">
+        {apartments.map((apartment) => (
+          <ApartmentSyncCard key={apartment.id} apartment={apartment} showToast={showToast} confirm={confirm} />
+        ))}
+      </div>
       {toastElement}
+      {confirmDialog}
     </div>
+  )
+}
+
+function SyncSummary({ apartments }: { apartments: ApartmentWithFeeds[] }) {
+  return (
+    <section>
+      <h2 className="mb-4 text-xl font-medium">Poslední synchronizace</h2>
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[560px] border-collapse text-sm">
+          <thead>
+            <tr className="border-b border-light text-left text-xs uppercase tracking-wide text-mid">
+              <th className="py-2 pr-4">Apartmán</th>
+              <th className="py-2 pr-4">Booking</th>
+              <th className="py-2 pr-4">Airbnb</th>
+              <th className="py-2 pr-4">Poslední synchronizace</th>
+              <th className="py-2 pr-4">Stav</th>
+            </tr>
+          </thead>
+          <tbody>
+            {apartments.map((apartment) => {
+              const bookingFeed = apartment.icalFeeds.find((feed) => feed.provider === "booking")
+              const airbnbFeed = apartment.icalFeeds.find((feed) => feed.provider === "airbnb")
+              const lastSyncedAt = [bookingFeed?.lastSyncedAt, airbnbFeed?.lastSyncedAt]
+                .filter((value): value is string => Boolean(value))
+                .sort()
+                .at(-1)
+              const statuses = apartment.icalFeeds.map(getFeedStatus)
+              const overallStatus = statuses.some((status) => status === "error")
+                ? "error"
+                : statuses.length === 0
+                  ? "unconfigured"
+                  : statuses.every((status) => status === "ok")
+                    ? "ok"
+                    : "pending"
+
+              return (
+                <tr key={apartment.id} className="border-b border-light/60">
+                  <td className="py-2 pr-4">{apartment.name}</td>
+                  <td className="py-2 pr-4">
+                    <FeedStatusIcon status={getFeedStatus(bookingFeed)} />
+                  </td>
+                  <td className="py-2 pr-4">
+                    <FeedStatusIcon status={getFeedStatus(airbnbFeed)} />
+                  </td>
+                  <td className="py-2 pr-4">{lastSyncedAt ? new Date(lastSyncedAt).toLocaleString("cs-CZ") : "Nikdy"}</td>
+                  <td className="py-2 pr-4">
+                    <FeedStatusIcon status={overallStatus} />
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  )
+}
+
+function BlockForm({
+  apartments,
+  onCreated,
+  confirm
+}: {
+  apartments: ApartmentWithFeeds[]
+  onCreated: () => void
+  confirm: (options: { title: string; message: string; confirmLabel?: string }) => Promise<boolean>
+}) {
+  const [status, setStatus] = useState<{ type: "error" | "success"; message: string } | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  return (
+    <section>
+      <h2 className="mb-4 text-xl font-medium">Zablokovat termín</h2>
+      <form
+        className="grid grid-cols-1 gap-3 md:grid-cols-4"
+        onSubmit={async (event) => {
+          event.preventDefault()
+          const form = event.currentTarget
+          const data = Object.fromEntries(new FormData(form).entries())
+
+          const confirmed = await confirm({
+            title: "Zablokovat termín?",
+            message: `Termín ${data.startDate} – ${data.endDate} bude označen jako obsazený.`,
+            confirmLabel: "Zablokovat"
+          })
+          if (!confirmed) return
+
+          setLoading(true)
+          setStatus(null)
+
+          try {
+            const response = await fetch("/api/admin/block", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ ...data, apartmentId: Number(data.apartmentId) })
+            })
+            const payload = await response.json()
+
+            if (!response.ok) {
+              setStatus({ type: "error", message: payload.error || "Blokaci se nepodařilo vytvořit." })
+              return
+            }
+
+            setStatus({ type: "success", message: "Termín byl zablokován." })
+            form.reset()
+            onCreated()
+          } finally {
+            setLoading(false)
+          }
+        }}
+      >
+        <select name="apartmentId" required defaultValue="" className={inputClass}>
+          <option value="" disabled>
+            Apartmán
+          </option>
+          {apartments.map((apartment) => (
+            <option key={apartment.id} value={apartment.id}>
+              {apartment.name}
+            </option>
+          ))}
+        </select>
+        <input type="date" name="startDate" required className={inputClass} />
+        <input type="date" name="endDate" required className={inputClass} />
+        <input type="text" name="note" placeholder="Poznámka (např. dovolená)" className={inputClass} />
+        <button
+          type="submit"
+          disabled={loading}
+          className="col-span-full w-fit cursor-pointer rounded-[2px] bg-dark px-6 py-2 text-sm uppercase tracking-wide text-cream transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          Zablokovat
+        </button>
+      </form>
+      {status && <p className={`mt-2 text-sm ${status.type === "error" ? "text-accent" : "text-dark"}`}>{status.message}</p>}
+    </section>
   )
 }
 
 function ApartmentSyncCard({
   apartment,
-  showToast
+  showToast,
+  confirm
 }: {
   apartment: ApartmentWithFeeds
   showToast: (type: "success" | "error", message: string) => void
+  confirm: (options: { title: string; message: string; confirmLabel?: string }) => Promise<boolean>
 }) {
   const router = useRouter()
   const bookingFeed = apartment.icalFeeds.find((feed) => feed.provider === "booking")
@@ -175,6 +337,13 @@ function ApartmentSyncCard({
   }
 
   async function handleSyncNow() {
+    const confirmed = await confirm({
+      title: "Spustit synchronizaci?",
+      message: `Stáhnou se aktuální rezervace z Booking.com a Airbnb pro ${apartment.name}.`,
+      confirmLabel: "Synchronizovat"
+    })
+    if (!confirmed) return
+
     setSyncing(true)
     try {
       const response = await fetch("/api/admin/sync", {
