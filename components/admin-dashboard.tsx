@@ -1,4 +1,5 @@
-import type { DashboardStats } from "@/lib/reservations"
+import type { DashboardStats, HousekeepingSchedule } from "@/lib/reservations"
+import AdminHousekeeping from "./admin-housekeeping"
 
 const STATUS_LABELS: Record<DashboardStats["systemStatus"], { label: string; className: string }> = {
   ok: { label: "Vše funguje", className: "bg-green-600" },
@@ -17,13 +18,14 @@ function StatCard({ label, value }: { label: string; value: React.ReactNode }) {
 
 interface Props {
   stats: DashboardStats
+  housekeeping: HousekeepingSchedule
 }
 
-export default function AdminDashboard({ stats }: Props) {
+export default function AdminDashboard({ stats, housekeeping }: Props) {
   const status = STATUS_LABELS[stats.systemStatus]
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <div className="mx-auto max-w-5xl space-y-10">
       <h1 className="font-serif text-3xl">Dashboard</h1>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -49,6 +51,8 @@ export default function AdminDashboard({ stats }: Props) {
           </p>
         </div>
       </div>
+
+      <AdminHousekeeping schedule={housekeeping} />
     </div>
   )
 }

@@ -1059,3 +1059,34 @@ export async function getSyncSystemStatus(): Promise<SyncSystemStatus> {
     smtp
   }
 }
+
+function addDaysToKey(dateKey: string, amount: number) {
+  const date = toUtcDate(dateKey)
+  date.setUTCDate(date.getUTCDate() + amount)
+  return formatDateForPrague(date)
+}
+
+export interface HousekeepingSchedule {
+  today: string
+  tomorrow: string
+  todayCheckIns: ReservationWithApartment[]
+  todayCheckOuts: ReservationWithApartment[]
+  tomorrowCheckIns: ReservationWithApartment[]
+  tomorrowCheckOuts: ReservationWithApartment[]
+}
+
+export async function getHousekeepingSchedule(): Promise<HousekeepingSchedule> {
+  const today = formatDateForPrague(new Date())
+  const tomorrow = addDaysToKey(today, 1)
+
+  const reservations = (await listAllReservations()).filter((reservation) => reservation.status === "active")
+
+  return {
+    today,
+    tomorrow,
+    todayCheckIns: reservations.filter((reservation) => reservation.startDate === today),
+    todayCheckOuts: reservations.filter((reservation) => reservation.endDate === today),
+    tomorrowCheckIns: reservations.filter((reservation) => reservation.startDate === tomorrow),
+    tomorrowCheckOuts: reservations.filter((reservation) => reservation.endDate === tomorrow)
+  }
+}
