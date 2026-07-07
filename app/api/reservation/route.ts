@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { cleanValue, logMailError, mailErrorMessage, readJsonBody, sendMail, validateRequired } from "@/lib/mail"
 import { createWebsiteReservation, ReservationConflictError, ReservationValidationError } from "@/lib/reservations"
-import { sendLifecycleEmail } from "@/lib/guest-emails"
+import { needsImmediateArrivalInfo, sendLifecycleEmail } from "@/lib/guest-emails"
 
 export const runtime = "nodejs"
 
@@ -97,6 +97,20 @@ export async function POST(request: Request) {
       // Never let a guest-email failure fail the reservation itself —
       // sendLifecycleEmail already logs and records the error on the row.
       console.error("Failed to send guest confirmation email", guestMailError)
+    }
+
+    // Check-in tomorrow or sooner: don't wait for the day-before cron pass,
+    // send arrival info now. Goes through the same sendLifecycleEmail/
+    // claimAttempt path as the cron does, so it's still protected by the
+    // same atomic "never sent twice" claim and the same retry budget — if
+    // this attempt fails, the next cron pass picks up the remaining retries
+    // exactly as it would for any other failed scheduled send.
+    if (needsImmediateArrivalInfo(reservation.startDate)) {
+      try {
+        await sendLifecycleEmail(reservation.id, "arrivalInfo")
+      } catch (arrivalMailError) {
+        console.error("Failed to send immediate arrival-info email", arrivalMailError)
+      }
     }
   } catch (error) {
     if (error instanceof ReservationValidationError || error instanceof ReservationConflictError) {

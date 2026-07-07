@@ -66,6 +66,19 @@ const SCHEDULE: Record<ScheduledKind, ScheduleRule> = {
 
 const CATCH_UP_WINDOW_DAYS = 3
 
+// Booking flow edge case: the normal cron schedule targets "the day before
+// check-in," so a reservation made the day before or on the day of check-in
+// itself would otherwise wait for the next cron pass (and, before 15:00,
+// possibly several hours) to get its arrival info — or in the worst case,
+// arrive after check-in has already happened. Reservations store only a
+// date (no check-in time), so this is a calendar-day check, not an exact
+// 24-hour one: check-in today or tomorrow counts as imminent.
+export function needsImmediateArrivalInfo(startDate: string): boolean {
+  const todayKey = formatDateForPrague(new Date())
+  const daysUntilCheckIn = Math.round((toUtcDate(startDate).getTime() - toUtcDate(todayKey).getTime()) / 86_400_000)
+  return daysUntilCheckIn <= 1
+}
+
 function describeError(error: unknown) {
   return error instanceof Error ? error.message : String(error)
 }

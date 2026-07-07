@@ -39,7 +39,7 @@ export function ArrivalInfoEmail({ name, apartmentSlug, reservationUrl, summary 
 
       {info.parkingInfo && <InfoRow label="Parkování">{info.parkingInfo}</InfoRow>}
 
-      {info.checkInTime && <InfoRow label="Check-in">od {info.checkInTime}</InfoRow>}
+      {info.checkInTime && <InfoRow label="Check-in">{info.checkInTime}</InfoRow>}
 
       {info.keyInstructions && <InfoRow label="Převzetí klíčů">{info.keyInstructions}</InfoRow>}
 
@@ -50,7 +50,16 @@ export function ArrivalInfoEmail({ name, apartmentSlug, reservationUrl, summary 
         </InfoRow>
       )}
 
-      {info.importantInfo && <InfoRow label="Důležité informace">{info.importantInfo}</InfoRow>}
+      {info.importantInfo && info.importantInfo.length > 0 && (
+        <InfoRow label="Důležité informace">
+          {info.importantInfo.map((item, index) => (
+            <span key={item}>
+              {index > 0 && <br />}
+              {item}
+            </span>
+          ))}
+        </InfoRow>
+      )}
 
       <Paragraph>Přejeme šťastnou cestu.</Paragraph>
 
@@ -81,12 +90,14 @@ export function arrivalInfoText({ name, apartmentSlug, reservationUrl, summary }
     lines.push(`Adresa: ${info.address}${info.googleMapsUrl ? ` (${info.googleMapsUrl})` : ""}`)
   }
   if (info.parkingInfo) lines.push(`Parkování: ${info.parkingInfo}`)
-  if (info.checkInTime) lines.push(`Check-in: od ${info.checkInTime}`)
+  if (info.checkInTime) lines.push(`Check-in: ${info.checkInTime}`)
   if (info.keyInstructions) lines.push(`Převzetí klíčů: ${info.keyInstructions}`)
   if (info.wifiNetwork) {
     lines.push(`Wifi: síť ${info.wifiNetwork}${info.wifiPassword ? `, heslo ${info.wifiPassword}` : ""}`)
   }
-  if (info.importantInfo) lines.push(`Důležité informace: ${info.importantInfo}`)
+  if (info.importantInfo && info.importantInfo.length > 0) {
+    lines.push("Důležité informace:", ...info.importantInfo.map((item) => `- ${item}`))
+  }
 
   lines.push(
     "",

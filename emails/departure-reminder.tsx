@@ -21,7 +21,7 @@ export function DepartureReminderEmail({ name, apartmentSlug, apartmentName }: D
       <Paragraph>děkujeme za pobyt v apartmánu {apartmentName}. Dnes je den vašeho odjezdu.</Paragraph>
       <Paragraph>
         {info.checkOutTime
-          ? `Check-out je do ${info.checkOutTime}.`
+          ? `Check-out je ${info.checkOutTime}.`
           : "Prosíme o odjezd v dohodnutém čase."}
       </Paragraph>
       <Paragraph>Klíče prosím vraťte stejným způsobem, jakým jste je při příjezdu převzali.</Paragraph>
@@ -41,7 +41,7 @@ export function departureReminderText({ name, apartmentName, apartmentSlug }: De
     "",
     `děkujeme za pobyt v apartmánu ${apartmentName}. Dnes je den vašeho odjezdu.`,
     "",
-    info.checkOutTime ? `Check-out je do ${info.checkOutTime}.` : "Prosíme o odjezd v dohodnutém čase.",
+    info.checkOutTime ? `Check-out je ${info.checkOutTime}.` : "Prosíme o odjezd v dohodnutém čase.",
     "",
     "Klíče prosím vraťte stejným způsobem, jakým jste je při příjezdu převzali.",
     "",

@@ -66,8 +66,8 @@ export default async function ReservationTokenPage({ params }: PageProps) {
               </InfoRow>
             )}
 
-            {info.checkInTime && <InfoRow label="Check-in">od {info.checkInTime}</InfoRow>}
-            {info.checkOutTime && <InfoRow label="Check-out">do {info.checkOutTime}</InfoRow>}
+            {info.checkInTime && <InfoRow label="Check-in">{info.checkInTime}</InfoRow>}
+            {info.checkOutTime && <InfoRow label="Check-out">{info.checkOutTime}</InfoRow>}
             {info.parkingInfo && <InfoRow label="Parkování">{info.parkingInfo}</InfoRow>}
             {info.keyInstructions && <InfoRow label="Převzetí klíčů">{info.keyInstructions}</InfoRow>}
 
@@ -78,7 +78,15 @@ export default async function ReservationTokenPage({ params }: PageProps) {
               </InfoRow>
             )}
 
-            {info.importantInfo && <InfoRow label="Důležité informace">{info.importantInfo}</InfoRow>}
+            {info.importantInfo && info.importantInfo.length > 0 && (
+              <InfoRow label="Důležité informace">
+                <ul className="list-disc space-y-1 pl-5">
+                  {info.importantInfo.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </InfoRow>
+            )}
 
             <InfoRow label="Kontakt">
               Telefon:{" "}
