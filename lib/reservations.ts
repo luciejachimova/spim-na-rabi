@@ -3,6 +3,7 @@ import icalParser from "node-ical"
 import type { Apartment as PrismaApartment, IcalFeed as PrismaIcalFeed, Reservation as PrismaReservation } from "@prisma/client"
 import { prisma } from "./db"
 import { getFeedStatus, type FeedStatus } from "./feed-status"
+import { addDaysToKey, formatDateForPrague, toUtcDate } from "./prague-date"
 
 export type ReservationSource = "website" | "booking" | "airbnb" | "admin_block"
 export type ReservationStatus = "active" | "cancelled"
@@ -41,6 +42,16 @@ export interface ReservationRecord {
   phone: string | null
   guests: number | null
   note: string | null
+  reservationToken: string | null
+  confirmationEmailedAt: string | null
+  confirmationEmailAttempts: number
+  arrivalInfoEmailedAt: string | null
+  arrivalInfoEmailAttempts: number
+  departureReminderEmailedAt: string | null
+  departureReminderEmailAttempts: number
+  thankYouEmailedAt: string | null
+  thankYouEmailAttempts: number
+  lastEmailError: string | null
   createdAt: string
   updatedAt: string
 }
@@ -107,6 +118,16 @@ interface RawReservationRow {
   phone: string | null
   guests: number | bigint | null
   note: string | null
+  reservation_token: string | null
+  confirmation_emailed_at: Date | string | null
+  confirmation_email_attempts: number | bigint
+  arrival_info_emailed_at: Date | string | null
+  arrival_info_email_attempts: number | bigint
+  departure_reminder_emailed_at: Date | string | null
+  departure_reminder_email_attempts: number | bigint
+  thank_you_emailed_at: Date | string | null
+  thank_you_email_attempts: number | bigint
+  last_email_error: string | null
   created_at: Date | string
   updated_at: Date | string
 }
@@ -119,10 +140,9 @@ export class ReservationConflictError extends ReservationError {}
 
 export class ReservationNotFoundError extends ReservationError {}
 
-const PRAGUE_TIME_ZONE = "Europe/Prague"
 const DEFAULT_BASE_URL = "http://localhost:3000"
 
-function getBaseUrl() {
+export function getBaseUrl() {
   return (process.env.PUBLIC_APP_URL || DEFAULT_BASE_URL).replace(/\/$/, "")
 }
 
@@ -144,20 +164,6 @@ function parseDateOnly(value: string) {
   }
 
   return value
-}
-
-function toUtcDate(value: string) {
-  const [year, month, day] = value.split("-").map(Number)
-  return new Date(Date.UTC(year, month - 1, day))
-}
-
-function formatDateForPrague(date: Date) {
-  return new Intl.DateTimeFormat("sv-SE", {
-    timeZone: PRAGUE_TIME_ZONE,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit"
-  }).format(date)
 }
 
 function isIcalEntry(value: unknown): value is IcalEntry {
@@ -245,7 +251,7 @@ function mapIcalFeed(feed: PrismaIcalFeed): IcalFeedRecord {
 export { getFeedStatus }
 export type { FeedStatus }
 
-function toReservationWithApartment(
+export function toReservationWithApartment(
   reservation: PrismaReservation,
   apartment: Pick<ApartmentRecord, "slug" | "name">
 ): ReservationWithApartment {
@@ -262,6 +268,16 @@ function toReservationWithApartment(
     phone: reservation.phone,
     guests: reservation.guests,
     note: reservation.note,
+    reservationToken: reservation.reservationToken,
+    confirmationEmailedAt: toNullableIsoString(reservation.confirmationEmailedAt),
+    confirmationEmailAttempts: reservation.confirmationEmailAttempts,
+    arrivalInfoEmailedAt: toNullableIsoString(reservation.arrivalInfoEmailedAt),
+    arrivalInfoEmailAttempts: reservation.arrivalInfoEmailAttempts,
+    departureReminderEmailedAt: toNullableIsoString(reservation.departureReminderEmailedAt),
+    departureReminderEmailAttempts: reservation.departureReminderEmailAttempts,
+    thankYouEmailedAt: toNullableIsoString(reservation.thankYouEmailedAt),
+    thankYouEmailAttempts: reservation.thankYouEmailAttempts,
+    lastEmailError: reservation.lastEmailError,
     createdAt: reservation.createdAt.toISOString(),
     updatedAt: reservation.updatedAt.toISOString(),
     apartmentSlug: apartment.slug,
@@ -271,6 +287,10 @@ function toReservationWithApartment(
 
 function toIsoString(value: Date | string) {
   return value instanceof Date ? value.toISOString() : value
+}
+
+function toNullableIsoString(value: Date | string | null) {
+  return value === null ? null : toIsoString(value)
 }
 
 function mapRawReservationRow(row: RawReservationRow, apartment: Pick<ApartmentRecord, "slug" | "name">): ReservationWithApartment {
@@ -287,6 +307,16 @@ function mapRawReservationRow(row: RawReservationRow, apartment: Pick<ApartmentR
     phone: row.phone,
     guests: row.guests === null ? null : Number(row.guests),
     note: row.note,
+    reservationToken: row.reservation_token,
+    confirmationEmailedAt: toNullableIsoString(row.confirmation_emailed_at),
+    confirmationEmailAttempts: Number(row.confirmation_email_attempts),
+    arrivalInfoEmailedAt: toNullableIsoString(row.arrival_info_emailed_at),
+    arrivalInfoEmailAttempts: Number(row.arrival_info_email_attempts),
+    departureReminderEmailedAt: toNullableIsoString(row.departure_reminder_emailed_at),
+    departureReminderEmailAttempts: Number(row.departure_reminder_email_attempts),
+    thankYouEmailedAt: toNullableIsoString(row.thank_you_emailed_at),
+    thankYouEmailAttempts: Number(row.thank_you_email_attempts),
+    lastEmailError: row.last_email_error,
     createdAt: toIsoString(row.created_at),
     updatedAt: toIsoString(row.updated_at),
     apartmentSlug: apartment.slug,
@@ -318,11 +348,11 @@ async function insertReservationAtomic(
   const rows = await prisma.$queryRaw<RawReservationRow[]>`
     INSERT INTO reservations (
       apartment_id, start_date, end_date, source, status, external_uid,
-      name, email, phone, guests, note, created_at, updated_at
+      name, email, phone, guests, note, reservation_token, created_at, updated_at
     )
     SELECT
       ${payload.apartmentId}, ${payload.startDate}, ${payload.endDate}, ${payload.source}, 'active', ${payload.externalUid},
-      ${payload.name}, ${payload.email}, ${payload.phone}, ${payload.guests}, ${payload.note}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+      ${payload.name}, ${payload.email}, ${payload.phone}, ${payload.guests}, ${payload.note}, ${crypto.randomUUID()}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
     WHERE NOT EXISTS (
       SELECT 1 FROM reservations
       WHERE apartment_id = ${payload.apartmentId}
@@ -400,6 +430,15 @@ export async function listAllReservations(): Promise<ReservationWithApartment[]>
   })
 
   return reservations.map((reservation) => toReservationWithApartment(reservation, reservation.apartment))
+}
+
+export async function getReservationByToken(token: string): Promise<ReservationWithApartment | null> {
+  const reservation = await prisma.reservation.findUnique({
+    where: { reservationToken: token },
+    include: { apartment: true }
+  })
+
+  return reservation ? toReservationWithApartment(reservation, reservation.apartment) : null
 }
 
 function validateEmailFormat(email: string) {
@@ -1058,12 +1097,6 @@ export async function getSyncSystemStatus(): Promise<SyncSystemStatus> {
     turso,
     smtp
   }
-}
-
-function addDaysToKey(dateKey: string, amount: number) {
-  const date = toUtcDate(dateKey)
-  date.setUTCDate(date.getUTCDate() + amount)
-  return formatDateForPrague(date)
 }
 
 export interface HousekeepingSchedule {

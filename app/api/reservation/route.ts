@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { cleanValue, logMailError, mailErrorMessage, readJsonBody, sendMail, validateRequired } from "@/lib/mail"
 import { createWebsiteReservation, ReservationConflictError, ReservationValidationError } from "@/lib/reservations"
+import { sendLifecycleEmail } from "@/lib/guest-emails"
 
 export const runtime = "nodejs"
 
@@ -89,6 +90,14 @@ export async function POST(request: Request) {
     } catch (mailError) {
       logMailError(mailError)
     }
+
+    try {
+      await sendLifecycleEmail(reservation.id, "confirmation")
+    } catch (guestMailError) {
+      // Never let a guest-email failure fail the reservation itself —
+      // sendLifecycleEmail already logs and records the error on the row.
+      console.error("Failed to send guest confirmation email", guestMailError)
+    }
   } catch (error) {
     if (error instanceof ReservationValidationError || error instanceof ReservationConflictError) {
       return NextResponse.json({ error: error.message }, { status: error instanceof ReservationConflictError ? 409 : 422 })
@@ -98,5 +107,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Rezervaci se nepodařilo uložit." }, { status: 500 })
   }
 
-  return NextResponse.json({ message: "Děkujeme, ozveme se vám s potvrzením rezervace." })
+  return NextResponse.json({
+    message: "Děkujeme, ozveme se vám s potvrzením rezervace.",
+    reservationToken: reservation.reservationToken
+  })
 }

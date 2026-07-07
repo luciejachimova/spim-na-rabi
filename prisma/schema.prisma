@@ -56,21 +56,35 @@ model IcalFeed {
 }
 
 model Reservation {
-  id          Int               @id @default(autoincrement())
-  apartmentId Int               @map("apartment_id")
-  startDate   String            @map("start_date")
-  endDate     String            @map("end_date")
-  source      ReservationSource @default(website)
-  status      ReservationStatus @default(active)
-  externalUid String?           @map("external_uid")
-  name        String?
-  email       String?
-  phone       String?
-  guests      Int?
-  note        String?
-  createdAt   DateTime          @default(now()) @map("created_at")
-  updatedAt   DateTime          @updatedAt @map("updated_at")
-  apartment   Apartment         @relation(fields: [apartmentId], references: [id])
+  id                          Int               @id @default(autoincrement())
+  apartmentId                 Int               @map("apartment_id")
+  startDate                   String            @map("start_date")
+  endDate                     String            @map("end_date")
+  source                      ReservationSource @default(website)
+  status                      ReservationStatus @default(active)
+  externalUid                 String?           @map("external_uid")
+  name                        String?
+  email                       String?
+  phone                       String?
+  guests                      Int?
+  note                        String?
+  reservationToken             String?          @unique @map("reservation_token")
+  confirmationEmailedAt        DateTime?        @map("confirmation_emailed_at")
+  confirmationEmailAttempts    Int              @default(0) @map("confirmation_email_attempts")
+  confirmationEmailAttemptedAt DateTime?        @map("confirmation_email_attempted_at")
+  arrivalInfoEmailedAt         DateTime?        @map("arrival_info_emailed_at")
+  arrivalInfoEmailAttempts     Int              @default(0) @map("arrival_info_email_attempts")
+  arrivalInfoEmailAttemptedAt  DateTime?        @map("arrival_info_email_attempted_at")
+  departureReminderEmailedAt        DateTime?   @map("departure_reminder_emailed_at")
+  departureReminderEmailAttempts    Int         @default(0) @map("departure_reminder_email_attempts")
+  departureReminderEmailAttemptedAt DateTime?   @map("departure_reminder_email_attempted_at")
+  thankYouEmailedAt            DateTime?        @map("thank_you_emailed_at")
+  thankYouEmailAttempts        Int              @default(0) @map("thank_you_email_attempts")
+  thankYouEmailAttemptedAt     DateTime?        @map("thank_you_email_attempted_at")
+  lastEmailError                String?         @map("last_email_error")
+  createdAt                   DateTime          @default(now()) @map("created_at")
+  updatedAt                   DateTime          @updatedAt @map("updated_at")
+  apartment                   Apartment         @relation(fields: [apartmentId], references: [id])
 
   @@unique([apartmentId, source, externalUid])
   @@index([apartmentId, startDate, endDate])

@@ -1,8 +1,10 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { apartments } from "@/data/content"
 import { AvailabilityCalendar } from "./availability-calendar"
+import { useReservation } from "./ClientChrome"
 
 const inputClass = "w-full rounded-[2px] border border-mid/20 bg-pale px-4 py-[0.85rem] font-jost text-[0.9rem] text-dark outline-none transition-colors duration-200 focus:border-dark"
 const labelClass = "mb-2 block text-[0.7rem] uppercase tracking-[0.16em] text-mid"
@@ -22,15 +24,15 @@ async function submitForm(endpoint, form, setStatus) {
 
     if (!response.ok) {
       setStatus({ type: "error", message: payload.error || "Formulář se nepodařilo odeslat." })
-      return false
+      return null
     }
 
     form.reset()
     setStatus({ type: "success", message: payload.message || "Děkujeme, ozveme se vám." })
-    return true
+    return payload
   } catch {
     setStatus({ type: "error", message: "Formulář se nepodařilo odeslat. Zkuste to prosím znovu." })
-    return false
+    return null
   }
 }
 
@@ -90,12 +92,14 @@ export function ContactForm() {
   )
 }
 
-export function ReservationForm({ onSuccess }) {
+export function ReservationForm() {
   const [status, setStatus] = useState(null)
   const [apartmentSelection, setApartmentSelection] = useState("")
   const [dateFrom, setDateFrom] = useState("")
   const [dateTo, setDateTo] = useState("")
   const loading = status?.type === "loading"
+  const router = useRouter()
+  const { closeReservation } = useReservation()
 
   return (
     <form
@@ -108,11 +112,12 @@ export function ReservationForm({ onSuccess }) {
           return
         }
 
-        const success = await submitForm("/api/reservation", event.currentTarget, setStatus)
-        if (success) {
+        const payload = await submitForm("/api/reservation", event.currentTarget, setStatus)
+        if (payload) {
           setDateFrom("")
           setDateTo("")
-          onSuccess?.()
+          closeReservation()
+          router.push(`/rezervace-vytvorena?token=${payload.reservationToken}`)
         }
       }}
     >

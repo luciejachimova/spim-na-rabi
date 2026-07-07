@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { syncAllApartments } from "@/lib/reservations"
+import { runScheduledGuestEmailsSafely } from "@/lib/guest-emails"
 import { prisma } from "@/lib/db"
 
 export const runtime = "nodejs"
@@ -65,12 +66,21 @@ async function handleSync(request: Request) {
 
   console.log("Reservation sync: database reachable", { feedCount })
 
+  // Runs before the feedCount === 0 early return below, on purpose: guest
+  // lifecycle emails don't depend on any Booking/Airbnb feed being
+  // configured, and this is the only cron endpoint this app is allowed to
+  // use — a deployment with zero feeds must still get its scheduled guest
+  // emails sent every time the external cron hits this route.
+  const guestEmails = await runScheduledGuestEmailsSafely()
+  console.log("Reservation sync: guest lifecycle emails", guestEmails)
+
   if (feedCount === 0) {
     console.log("Reservation sync: no Booking/Airbnb feeds configured — nothing to sync")
     return NextResponse.json({
       feeds: [],
       durationMs: 0,
-      message: "Není nastavený žádný Booking.com ani Airbnb kalendář — nastavte ho v adminu."
+      message: "Není nastavený žádný Booking.com ani Airbnb kalendář — nastavte ho v adminu.",
+      guestEmails
     })
   }
 
@@ -121,7 +131,7 @@ async function handleSync(request: Request) {
     feedsFailed: failed.length
   })
 
-  return NextResponse.json({ ...result, durationMs })
+  return NextResponse.json({ ...result, durationMs, guestEmails })
 }
 
 // Both methods run the same sync — external cron services can use whichever is easier to configure.
