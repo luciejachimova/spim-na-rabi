@@ -2,13 +2,12 @@
 
 import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
-import { apartments, legalLinks, navLinks } from "@/data/content"
+import { apartments, legalLinks } from "@/data/content"
 
 const footerLinkClass = "text-sm text-mid transition-colors duration-200 hover:text-dark"
 
 export default function Footer() {
   const t = useTranslations()
-  const nav = useTranslations("nav")
   const legal = useTranslations("meta")
 
   return (
@@ -28,17 +27,6 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="hidden md:block">
-            <h4 className="mb-4 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-dark">{t("footer.pagesHeading")}</h4>
-            <ul className="list-none space-y-2">
-              {navLinks.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href} className={footerLinkClass}>{nav(item.key)}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           <div>
             <h4 className="mb-4 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-dark">{t("footer.stayHeading")}</h4>
             <ul className="list-none space-y-2">
@@ -48,7 +36,10 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-            <h4 className="mb-4 mt-8 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-dark">{t("footer.legalHeading")}</h4>
+          </div>
+
+          <div>
+            <h4 className="mb-4 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-dark">{t("footer.legalHeading")}</h4>
             <ul className="list-none space-y-2">
               {legalLinks.map((item) => (
                 <li key={item.href}>
