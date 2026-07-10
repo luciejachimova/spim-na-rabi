@@ -1,0 +1,397 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "about": "Über uns",
+    "gallery": "Galerie",
+    "pricing": "Preise",
+    "contact": "Kontakt",
+    "reserve": "Reservieren",
+    "openMenu": "Menü öffnen",
+    "language": "Sprache"
+  },
+  "home": {
+    "heroEyebrow": "Unterkunft im Herzen des Böhmerwaldes",
+    "heroSubtitle": "Eine Unterkunft, in der die Zeit langsamer vergeht",
+    "heroStatusReservations": "Reservierungen sind eröffnet",
+    "heroStatusOpening": "Wir öffnen Mitte Juli",
+    "heroCta": "Aufenthalt reservieren",
+    "scroll": "Scrollen",
+    "quote": "Die Burg Rabí zum Greifen nah, die Ruhe der Böhmerwald-Natur und eine Luft, die jeden Gedanken entschleunigt.",
+    "apartmentsLabel": "Unterkunft",
+    "apartmentsTitle": "Unsere Apartments",
+    "apartmentsBody": "Zwei liebevoll eingerichtete Räume, jeder mit eigenem Charakter. Beide mit Ausblick, Ruhe und allem, was Sie zum Entspannen brauchen.",
+    "reviewsLabel": "Gäste sagen",
+    "reviewsTitle": "Bewertungen",
+    "locationLabel": "So finden Sie uns",
+    "locationTitle": "Rabí",
+    "locationBody": "Ein malerisches Städtchen am Rande des Böhmerwaldes, wo Geschichte auf die Ruhe der Natur trifft. Wahrzeichen ist die majestätische Burg Rabí, nur wenige Minuten von Ihrer Unterkunft entfernt.",
+    "locationAddressLabel": "Adresse",
+    "locationAddress": "Rabí 175, 342 01 Rabí",
+    "locationCta": "Schreiben Sie uns",
+    "ctaLabel": "Bereit zu entschleunigen?",
+    "ctaTitle": "Reservieren Sie Ihren Aufenthalt und gönnen Sie sich Erholung unterhalb der Burg Rabí."
+  },
+  "about": {
+    "heroLabel": "Unsere Geschichte",
+    "heroTitle": "Über uns",
+    "sectionEyebrow": "Unsere Geschichte",
+    "sectionTitle": "Wie ist Spim na Rabí entstanden?",
+    "p1": "Rabí und seine Umgebung sind für uns ein Ort, dem wir seit unserer Kindheit verbunden sind. Genau hier haben wir viele schöne Momente verbracht und sind immer gerne zurückgekehrt.",
+    "p2": "Als wir überlegten, wo wir einen Ort zum Entspannen schaffen könnten, fiel die Entscheidung eigentlich leicht. Wir wollten eine Unterkunft anbieten, in der sich Gäste wohlfühlen, zur Ruhe kommen und einen idealen Ausgangspunkt haben, um die Schönheit des Böhmerwaldes zu entdecken.",
+    "p3": "Spim na Rabí haben wir so eingerichtet, wie wir selbst gerne reisen – bequem, gemütlich und ohne Überflüssiges. Wir freuen uns, wenn Sie Ihren Aufenthalt bei uns genießen und ebenso schöne Erinnerungen mit nach Hause nehmen, wie wir sie mit diesem Ort verbinden.",
+    "cta": "Kontaktieren Sie uns"
+  },
+  "gallery": {
+    "heroLabel": "Schauen Sie sich um",
+    "heroTitle": "Galerie"
+  },
+  "pricing": {
+    "heroLabel": "Transparente Preise",
+    "heroTitle": "Preise",
+    "intro": "Die Mindestaufenthaltsdauer beträgt 2 Nächte. Auf Wunsch bereiten wir gerne ein Frühstück für Sie zu. Haustiere sind gegen eine Gebühr von 250 Kč / Nacht willkommen.",
+    "cards": {
+      "studio-3": {
+        "subtitle": "Gemütliches Studio – bis zu 4 Personen",
+        "seasons": [
+          { "label": "Nebensaison (Oktober–April)", "price": "1 900 Kč / Nacht" },
+          { "label": "Saison (Mai–September)", "price": "2 100 Kč / Nacht" },
+          { "label": "Wochenenden und Feiertage", "price": "2 300 Kč / Nacht" }
+        ]
+      },
+      "loft-10": {
+        "subtitle": "Geräumiges Loft – bis zu 6 Personen",
+        "seasons": [
+          { "label": "Nebensaison (Oktober–April)", "price": "2 600 Kč / Nacht" },
+          { "label": "Hauptsaison (Mai–September)", "price": "2 800 Kč / Nacht" },
+          { "label": "Wochenenden und Feiertage", "price": "3 000 Kč / Nacht" }
+        ]
+      }
+    }
+  },
+  "contact": {
+    "heroLabel": "Wir sind für Sie da",
+    "heroTitle": "Kontakt",
+    "emailLabel": "E-Mail",
+    "phoneLabel": "Telefon",
+    "addressLabel": "Adresse"
+  },
+  "footer": {
+    "tagline": "Unterkunft unterhalb der Burg Rabí. Ruhe, Natur, Erholung.",
+    "pagesHeading": "Seiten",
+    "stayHeading": "Unterkunft",
+    "contactHeading": "Kontakt",
+    "legalHeading": "Informationen",
+    "copyright": "Spim na Rabí – Rabí, Böhmerwald"
+  },
+  "apartments": {
+    "studio-3": {
+      "badge": "Apartment 1",
+      "desc": "Gemütliches Studio für bis zu 4 Personen. Ideal für Gäste, die Schlichtheit, Ruhe und Komfort suchen."
+    },
+    "loft-10": {
+      "badge": "Apartment 2",
+      "desc": "Geräumiges Loft für bis zu 6 Personen mit viel Platz für die Familie oder einen längeren Aufenthalt. Eine Kombination aus Komfort und luftigem Raum."
+    }
+  },
+  "reviews": [
+    { "text": "Ein wunderschöner Ort, völlige Ruhe und eine herrliche Aussicht. Wir kommen bestimmt wieder.", "author": "Jana & Tomáš" },
+    { "text": "Stilvolle Unterkunft, alles perfekt vorbereitet. Es hat uns an nichts gefehlt.", "author": "Markéta K." },
+    { "text": "Die ideale Auszeit von der Stadt. Stille, Natur, Gelassenheit. Genau das, was wir gebraucht haben.", "author": "Familie Novák" }
+  ],
+  "ui": {
+    "photoPlaceholder": "Fotos folgen in Kürze",
+    "viewDetail": "Details ansehen",
+    "ctaBannerCta": "Reservieren"
+  },
+  "reservationForm": {
+    "eyebrow": "Reservierung",
+    "title": "Fragen Sie Ihren Aufenthalt an",
+    "close": "Reservierung schließen",
+    "nameLabel": "Name",
+    "namePlaceholder": "Ihr Name",
+    "emailLabel": "E-Mail",
+    "emailPlaceholder": "ihre@email.de",
+    "phoneLabel": "Telefon",
+    "phonePlaceholder": "+49",
+    "apartmentLabel": "Apartment",
+    "apartmentPlaceholder": "Apartment auswählen",
+    "apartmentAny": "Ist mir egal",
+    "datesLabel": "Aufenthaltszeitraum",
+    "guestsLabel": "Anzahl der Gäste",
+    "guestsPlaceholder": "2",
+    "noteLabel": "Anmerkung",
+    "notePlaceholder": "Nennen Sie uns Ihren Termin, Wünsche oder Fragen...",
+    "submit": "Reservierung absenden",
+    "submitting": "Wird gesendet…",
+    "done": "Fertig",
+    "statusSubmitting": "Wir erstellen Ihre Reservierung…",
+    "statusSubmittingSlow": "Wir prüfen die Verfügbarkeit des Apartments und schließen die Reservierung ab…",
+    "statusSuccess": "Die Reservierung wurde erfolgreich erstellt.",
+    "errorMissingDates": "Bitte wählen Sie im Kalender den An- und Abreisetermin aus.",
+    "errorGeneric": "Die Reservierung konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+    "errorNetwork": "Die Reservierung konnte nicht gesendet werden. Bitte prüfen Sie Ihre Verbindung und versuchen Sie es erneut."
+  },
+  "contactForm": {
+    "nameLabel": "Name",
+    "namePlaceholder": "Ihr Name",
+    "emailLabel": "E-Mail",
+    "emailPlaceholder": "ihre@email.de",
+    "phoneLabel": "Telefon",
+    "phonePlaceholder": "+49",
+    "messageLabel": "Nachricht",
+    "messagePlaceholder": "Schreiben Sie uns...",
+    "submit": "Nachricht senden",
+    "sending": "Wird gesendet...",
+    "success": "Vielen Dank, wir melden uns bei Ihnen.",
+    "errorGeneric": "Das Formular konnte nicht gesendet werden.",
+    "errorNetwork": "Das Formular konnte nicht gesendet werden. Bitte versuchen Sie es erneut."
+  },
+  "calendar": {
+    "prevMonth": "Vorheriger Monat",
+    "nextMonth": "Nächster Monat",
+    "legendFree": "Frei",
+    "legendBusy": "Belegt",
+    "legendSelected": "Ausgewählt",
+    "loadError": "Der Belegungskalender konnte nicht geladen werden.",
+    "rangeError": "Der gewählte Zeitraum enthielt belegte Tage, die Auswahl beginnt von einem neuen Datum aus neu.",
+    "selectStart": "Wählen Sie das Anreisedatum",
+    "pickEnd": "Anreise {date} — wählen Sie das Abreisedatum",
+    "range": "Anreise {from} – Abreise {to}"
+  },
+  "reservationCreated": {
+    "heroLabel": "Vielen Dank",
+    "heroTitle": "Die Reservierung wurde erfolgreich erstellt",
+    "body": "Die Bestätigung haben wir an Ihre E-Mail-Adresse gesendet. Am Tag vor Ihrer Anreise senden wir Ihnen die Informationen zum Aufenthalt.",
+    "viewButton": "Reservierung ansehen",
+    "notFound": "Die Reservierung konnte nicht gefunden werden. Falls Sie sie gerade erstellt haben, prüfen Sie bitte Ihre E-Mail mit der Bestätigung."
+  },
+  "reservationView": {
+    "heroLabel": "Ihre Reservierung"
+  },
+  "labels": {
+    "apartment": "Apartment",
+    "checkIn": "Anreise",
+    "checkOut": "Abreise",
+    "nights": "Anzahl der Nächte",
+    "guests": "Anzahl der Gäste",
+    "address": "Adresse",
+    "checkInTime": "Check-in",
+    "checkOutTime": "Check-out",
+    "parking": "Parken",
+    "keys": "Schlüsselübergabe",
+    "wifi": "WLAN",
+    "wifiNetwork": "Netzwerk",
+    "wifiPassword": "Passwort",
+    "important": "Wichtige Informationen",
+    "contact": "Kontakt",
+    "phone": "Telefon",
+    "email": "E-Mail",
+    "openMaps": "in Google Maps öffnen"
+  },
+  "guestInfo": {
+    "checkInTime": "ab 15:00 Uhr",
+    "checkOutTime": "bis 11:00 Uhr",
+    "parking": "Sie können überall auf den ausgewiesenen Parkplätzen in der Gemeinde parken. Bei der Anreise erhalten Sie von uns eine Parkkarte, die Sie bitte während des gesamten Aufenthalts gut sichtbar hinter die Windschutzscheibe Ihres Fahrzeugs legen.",
+    "keys": "Die Schlüssel holen Sie bitte im Café Hraběnka ab, das sich direkt neben dem Eingang zu den Apartments befindet. Sollten Sie außerhalb der Öffnungszeiten ankommen oder Hilfe benötigen, rufen Sie uns bitte unter +420 723 936 426 an.",
+    "important": [
+      "Bitte beachten Sie die Nachtruhe von 22:00 bis 6:00 Uhr.",
+      "Im gesamten Gebäude ist das Rauchen untersagt.",
+      "Wenn Sie mit einem Haustier reisen, teilen Sie uns dies bitte im Voraus mit.",
+      "Bitte schließen Sie vor der Abreise die Fenster, schalten Sie das Licht aus und geben Sie die Schlüssel gemäß den Anweisungen zurück."
+    ]
+  },
+  "legal": {
+    "gdpr": {
+      "heroLabel": "Informationen",
+      "title": "Datenschutz",
+      "intro": "Ihre Privatsphäre ist uns wichtig. Nachfolgend erläutern wir, welche personenbezogenen Daten wir verarbeiten, zu welchem Zweck und welche Rechte Sie haben. Verantwortlicher ist der Betreiber der Unterkunft Spim na Rabí, Rabí 175, 342 01 Rabí.",
+      "sections": [
+        {
+          "heading": "Welche Daten wir verarbeiten",
+          "body": "Wir verarbeiten die Daten, die Sie uns bei der Reservierung oder Kontaktaufnahme selbst zur Verfügung stellen – Name, E-Mail, Telefon, Aufenthaltszeitraum, Anzahl der Gäste und eine eventuelle Anmerkung. Außerdem verarbeiten wir die für das gesetzlich vorgeschriebene Gästebuch erforderlichen Daten."
+        },
+        {
+          "heading": "Zweck und Rechtsgrundlage",
+          "body": "Wir verwenden die Daten zur Bearbeitung und Bestätigung der Reservierung, zur Kommunikation mit Ihnen vor und nach dem Aufenthalt sowie zur Erfüllung der gesetzlichen Pflichten des Unterkunftsbetreibers. Rechtsgrundlage sind die Vertragserfüllung, die Erfüllung einer rechtlichen Verpflichtung und unser berechtigtes Interesse an einer ordnungsgemäßen Leistungserbringung."
+        },
+        {
+          "heading": "Speicherdauer",
+          "body": "Wir speichern personenbezogene Daten nur so lange wie unbedingt erforderlich – für die Dauer der Reservierung und anschließend für den gesetzlich vorgeschriebenen Zeitraum (insbesondere buchhalterische und steuerliche Vorschriften)."
+        },
+        {
+          "heading": "Weitergabe von Daten",
+          "body": "Wir geben Ihre Daten nicht an Dritte weiter, mit Ausnahme von für den Betrieb notwendigen Dienstleistern (z. B. E-Mail- und Hosting-Dienst) und Fällen, in denen das Gesetz dies vorschreibt. Wir verkaufen keine Daten."
+        },
+        {
+          "heading": "Ihre Rechte",
+          "body": "Sie haben das Recht auf Auskunft über Ihre Daten, deren Berichtigung oder Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit sowie das Recht auf Widerspruch. Sie können uns jederzeit unter spimnarabi@seznam.cz kontaktieren. Zudem haben Sie das Recht, eine Beschwerde bei der Datenschutzbehörde einzureichen."
+        }
+      ]
+    },
+    "terms": {
+      "heroLabel": "Informationen",
+      "title": "Allgemeine Geschäftsbedingungen",
+      "intro": "Diese Bedingungen regeln die Reservierung und den Aufenthalt in der Unterkunft Spim na Rabí, Rabí 175, 342 01 Rabí. Mit der Erstellung einer Reservierung erklären Sie sich damit einverstanden.",
+      "sections": [
+        {
+          "heading": "Reservierung",
+          "body": "Die Reservierung kommt durch das Absenden des Reservierungsformulars und dessen Bestätigung unsererseits per E-Mail zustande. Die Mindestaufenthaltsdauer beträgt 2 Nächte. Bitte geben Sie wahrheitsgemäße und vollständige Angaben an."
+        },
+        {
+          "heading": "Preise und Zahlung",
+          "body": "Die Preise verstehen sich pro Apartment und Nacht und richten sich nach der aktuellen Preisliste. Haustiere sind gegen einen Aufpreis von 250 Kč / Nacht willkommen. Zahlungsweise und -termin teilen wir Ihnen in der Reservierungsbestätigung mit."
+        },
+        {
+          "heading": "An- und Abreise",
+          "body": "Der Check-in ist ab 15:00 Uhr, der Check-out bis 11:00 Uhr, sofern nicht anders vereinbart. Informationen zur Schlüsselübergabe und zum Parken senden wir Ihnen am Tag vor der Anreise per E-Mail."
+        },
+        {
+          "heading": "Aufenthaltsregeln",
+          "body": "Im gesamten Gebäude gilt Rauchverbot und Nachtruhe von 22:00 bis 6:00 Uhr. Die Gäste haften für während des Aufenthalts verursachte Schäden. Wir bitten um einen sorgsamen Umgang mit der Ausstattung."
+        },
+        {
+          "heading": "Stornierung",
+          "body": "Die Stornierungsbedingungen und etwaige Stornogebühren richten sich nach unseren Stornobedingungen. Bitte kontaktieren Sie uns im Bedarfsfall so früh wie möglich."
+        }
+      ]
+    },
+    "cancellation": {
+      "heroLabel": "Informationen",
+      "title": "Stornobedingungen",
+      "intro": "Wir verstehen, dass sich Pläne ändern können. Nachfolgend finden Sie die Bedingungen für die Stornierung einer bestätigten Reservierung in der Unterkunft Spim na Rabí.",
+      "sections": [
+        {
+          "heading": "Kostenlose Stornierung",
+          "body": "Sie können Ihre Reservierung bis spätestens 14 Tage vor dem Anreisetag kostenlos stornieren. In diesem Fall erstatten wir Ihnen den gesamten gezahlten Betrag."
+        },
+        {
+          "heading": "Stornogebühren",
+          "body": "Bei einer Stornierung 13 bis 7 Tage vor der Anreise beträgt die Stornogebühr 50 % des Aufenthaltspreises. Bei einer Stornierung weniger als 7 Tage vor der Anreise oder bei Nichterscheinen beträgt die Stornogebühr 100 % des Aufenthaltspreises."
+        },
+        {
+          "heading": "So stornieren Sie",
+          "body": "Sie stornieren Ihre Reservierung, indem Sie uns unter spimnarabi@seznam.cz schreiben oder unter +420 723 936 426 anrufen. Als Stornierungszeitpunkt gilt der Eingang Ihrer Mitteilung."
+        },
+        {
+          "heading": "Außergewöhnliche Umstände",
+          "body": "Bei schwerwiegenden und belegbaren Gründen bemühen wir uns stets um eine kulante Lösung. Zögern Sie nicht, uns zu kontaktieren."
+        }
+      ]
+    }
+  },
+  "errors": {
+    "invalidForm": "Ungültige Formulardaten.",
+    "requiredField": "Dieses Feld ist erforderlich.",
+    "nameRequired": "Der Name ist erforderlich.",
+    "emailRequired": "Die E-Mail ist erforderlich.",
+    "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse an.",
+    "guestsInvalid": "Die Anzahl der Gäste muss eine ganze Zahl größer als 0 sein.",
+    "datesInvalid": "Die Abreise muss nach der Anreise liegen.",
+    "dateFormat": "Das Datum muss das Format JJJJ-MM-TT haben.",
+    "dateInvalid": "Das Datum ist ungültig.",
+    "rangeIncomplete": "Der Reservierungszeitraum ist unvollständig.",
+    "rangeInvalid": "Der Reservierungszeitraum ist ungültig.",
+    "slotTaken": "Der gewählte Zeitraum ist bereits belegt.",
+    "noApartmentFree": "Im gewählten Zeitraum ist kein Apartment verfügbar.",
+    "apartmentNotFound": "Das Apartment wurde nicht gefunden.",
+    "saveFailed": "Die Reservierung konnte nicht gespeichert werden.",
+    "sendFailed": "Das Formular konnte nicht gesendet werden.",
+    "mailFailed": "Die Nachricht konnte derzeit nicht gesendet werden. Bitte versuchen Sie es später erneut oder schreiben Sie uns direkt an spimnarabi@seznam.cz."
+  },
+  "reservationApi": {
+    "success": "Vielen Dank, wir melden uns bei Ihnen mit der Bestätigung Ihrer Reservierung."
+  },
+  "contactApi": {
+    "success": "Vielen Dank, wir melden uns bei Ihnen."
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "body": "Es tut uns leid, aber diese Seite existiert nicht.",
+    "cta": "Zurück zur Startseite"
+  },
+  "meta": {
+    "defaultTitle": "Spim na Rabí | Stilvolle Unterkunft unterhalb der Burg Rabí",
+    "titleTemplate": "%s | Spim na Rabí",
+    "defaultDescription": "Studio und geräumiges Loft in Rabí im Böhmerwald, nur wenige Schritte von der Burg Rabí entfernt. Stilvolle Unterkunft für bis zu 4 oder 6 Personen.",
+    "ogSubtitle": "UNTERKUNFT UNTERHALB DER BURG RABÍ",
+    "home": {
+      "title": "Spim na Rabí | Stilvolle Unterkunft unterhalb der Burg Rabí",
+      "description": "Studio und geräumiges Loft in Rabí im Böhmerwald. Unterkunft für bis zu 4 oder 6 Personen, nur wenige Schritte von der Burg Rabí entfernt."
+    },
+    "about": {
+      "title": "Über uns",
+      "description": "Lernen Sie die Geschichte der Unterkunft Spim na Rabí und unsere Philosophie eines ruhigen Aufenthalts unterhalb der Burg Rabí kennen."
+    },
+    "gallery": {
+      "title": "Galerie der Unterkunft",
+      "description": "Galerie des Studios und des Lofts von Spim na Rabí. Sehen Sie sich die Unterkunft in Rabí im Herzen des Böhmerwaldes an."
+    },
+    "pricing": {
+      "title": "Preise der Unterkunft",
+      "description": "Preise der Unterkunft Spim na Rabí. Studio für bis zu 4 Personen und Loft für bis zu 6 Personen ab 1 900 Kč pro Nacht."
+    },
+    "contact": {
+      "title": "Kontakt und Reservierung",
+      "description": "Kontaktieren Sie Spim na Rabí und reservieren Sie das Studio oder das Loft unterhalb der Burg Rabí. Rabí 175, Böhmerwald."
+    },
+    "reservationCreated": {
+      "title": "Reservierung erstellt",
+      "description": "Ihre Reservierung bei Spim na Rabí wurde erfolgreich erstellt."
+    },
+    "gdpr": {
+      "title": "Datenschutz",
+      "description": "Datenschutzrichtlinie der Unterkunft Spim na Rabí."
+    },
+    "terms": {
+      "title": "Allgemeine Geschäftsbedingungen",
+      "description": "Geschäftsbedingungen für Reservierung und Aufenthalt in der Unterkunft Spim na Rabí."
+    },
+    "cancellation": {
+      "title": "Stornobedingungen",
+      "description": "Bedingungen für die Stornierung einer Reservierung in der Unterkunft Spim na Rabí."
+    }
+  },
+  "email": {
+    "greeting": "Guten Tag, {name},",
+    "guestFallback": "liebe Gäste",
+    "signoffNames": "Lucie und Pavel",
+    "footerAddress": "Spim na Rabí · Rabí 175, 342 01 Rabí",
+    "footerPhone": "Telefon",
+    "footerEmail": "E-Mail",
+    "confirmation": {
+      "subject": "Reservierungsbestätigung – Spim na Rabí",
+      "preheader": "Ihre Reservierung bei Spim na Rabí wurde erfolgreich erstellt.",
+      "intro": "vielen Dank für Ihre Reservierung eines Aufenthalts bei Spim na Rabí. Ihre Reservierung wurde erfolgreich erstellt.",
+      "afterSummary": "Am Tag vor Ihrer Anreise senden wir Ihnen eine E-Mail mit allen Informationen, die Sie für Ihren Aufenthalt benötigen – Adresse, Parken, WLAN und Informationen zur Schlüsselübergabe.",
+      "button": "Reservierung ansehen",
+      "contactLine": "Bei Fragen erreichen Sie uns telefonisch unter {phone} oder per E-Mail unter {email}."
+    },
+    "arrival": {
+      "subject": "Informationen zu Ihrer Anreise – Spim na Rabí",
+      "preheader": "Wir erwarten Sie morgen – hier sind Ihre Informationen zum Aufenthalt.",
+      "intro": "morgen erwarten wir Sie bei Spim na Rabí. Wir senden Ihnen die Informationen, die Ihnen für den Aufenthalt nützlich sein werden.",
+      "happyTravels": "Wir wünschen Ihnen eine gute Anreise.",
+      "button": "Reservierung ansehen",
+      "contactLine": "Bei Bedarf erreichen Sie uns telefonisch unter {phone} oder per E-Mail unter {email}."
+    },
+    "departure": {
+      "subject": "Heute ist Ihr Abreisetag – Spim na Rabí",
+      "preheader": "Danke für Ihren Aufenthalt – ein paar Worte zur heutigen Abreise.",
+      "intro": "vielen Dank für Ihren Aufenthalt im Apartment {apartment}. Heute ist Ihr Abreisetag.",
+      "checkOutLine": "Der Check-out ist {time}.",
+      "checkOutFallback": "Wir bitten Sie um Abreise zur vereinbarten Zeit.",
+      "keysLine": "Bitte geben Sie die Schlüssel auf demselben Weg zurück, auf dem Sie sie bei der Anreise erhalten haben.",
+      "contactLine": "Bei Problemen erreichen Sie uns telefonisch unter {phone} oder per E-Mail unter {email}."
+    },
+    "thankYou": {
+      "subject": "Danke für Ihren Besuch – Spim na Rabí",
+      "preheader": "Danke für Ihren Besuch bei Spim na Rabí.",
+      "intro": "vielen Dank für Ihren Besuch bei Spim na Rabí.",
+      "reviewIntro": "Wenn Sie einen Moment Zeit haben, würden wir uns sehr über eine Bewertung freuen – das hilft uns sehr.",
+      "reviewGoogle": "Bewerten Sie uns auf Google",
+      "reviewBooking": "Bewerten Sie Ihren Aufenthalt auf Booking.com",
+      "reviewAirbnb": "Bewerten Sie Ihren Aufenthalt auf Airbnb",
+      "closing": "Wir wünschen Ihnen einen schönen Tag."
+    }
+  }
+}

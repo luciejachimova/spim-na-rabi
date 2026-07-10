@@ -1,56 +1,53 @@
 import { EmailLayout } from "./layout"
-import { CtaButton, Heading, Paragraph, ReservationSummary, Signoff, type ReservationSummaryData } from "./components"
+import { CtaButton, Heading, Paragraph, ReservationSummary, Signoff, type EmailTranslator, type ReservationSummaryData } from "./components"
+import { formatReservationDate } from "@/lib/prague-date"
 import { businessInfo } from "@/data/guest-info"
 
 export interface ReservationConfirmationProps {
+  t: EmailTranslator
+  locale: string
   name: string
   reservationUrl: string
   summary: ReservationSummaryData
 }
 
-export function reservationConfirmationSubject() {
-  return "Potvrzení rezervace – Spim na Rabí"
+export function reservationConfirmationSubject(t: EmailTranslator) {
+  return t("email.confirmation.subject")
 }
 
-export function ReservationConfirmationEmail({ name, reservationUrl, summary }: ReservationConfirmationProps) {
+export function ReservationConfirmationEmail({ t, locale, name, reservationUrl, summary }: ReservationConfirmationProps) {
   return (
-    <EmailLayout preheader="Vaše rezervace ve Spim na Rabí byla úspěšně vytvořena.">
-      <Heading>Dobrý den, {name},</Heading>
-      <Paragraph>děkujeme za rezervaci pobytu ve Spim na Rabí. Vaše rezervace byla úspěšně vytvořena.</Paragraph>
-      <ReservationSummary data={summary} />
-      <Paragraph>
-        Den před příjezdem vám pošleme e-mail se všemi informacemi, které budete k pobytu potřebovat – adresu,
-        parkování, wifi a informace k převzetí klíčů.
-      </Paragraph>
-      <CtaButton href={reservationUrl}>Zobrazit rezervaci</CtaButton>
-      <Paragraph>
-        V případě jakýchkoli dotazů nás můžete kontaktovat na telefonu {businessInfo.phone} nebo e-mailu{" "}
-        {businessInfo.email}.
-      </Paragraph>
-      <Signoff />
+    <EmailLayout preheader={t("email.confirmation.preheader")} locale={locale} t={t}>
+      <Heading>{t("email.greeting", { name })}</Heading>
+      <Paragraph>{t("email.confirmation.intro")}</Paragraph>
+      <ReservationSummary data={summary} locale={locale} t={t} />
+      <Paragraph>{t("email.confirmation.afterSummary")}</Paragraph>
+      <CtaButton href={reservationUrl}>{t("email.confirmation.button")}</CtaButton>
+      <Paragraph>{t("email.confirmation.contactLine", { phone: businessInfo.phone, email: businessInfo.email })}</Paragraph>
+      <Signoff t={t} />
     </EmailLayout>
   )
 }
 
-export function reservationConfirmationText({ name, reservationUrl, summary }: ReservationConfirmationProps) {
+export function reservationConfirmationText({ t, locale, name, reservationUrl, summary }: ReservationConfirmationProps) {
   const lines = [
-    `Dobrý den, ${name},`,
+    t("email.greeting", { name }),
     "",
-    "děkujeme za rezervaci pobytu ve Spim na Rabí. Vaše rezervace byla úspěšně vytvořena.",
+    t("email.confirmation.intro"),
     "",
-    `Apartmán: ${summary.apartmentName}`,
-    `Příjezd: ${summary.startDate}`,
-    `Odjezd: ${summary.endDate}`,
-    `Počet nocí: ${summary.nights}`,
-    ...(summary.guests !== null ? [`Počet hostů: ${summary.guests}`] : []),
+    `${t("labels.apartment")}: ${summary.apartmentName}`,
+    `${t("labels.checkIn")}: ${formatReservationDate(summary.startDate, locale)}`,
+    `${t("labels.checkOut")}: ${formatReservationDate(summary.endDate, locale)}`,
+    `${t("labels.nights")}: ${summary.nights}`,
+    ...(summary.guests !== null ? [`${t("labels.guests")}: ${summary.guests}`] : []),
     "",
-    "Den před příjezdem vám pošleme e-mail se všemi informacemi, které budete k pobytu potřebovat – adresu, parkování, wifi a informace k převzetí klíčů.",
+    t("email.confirmation.afterSummary"),
     "",
-    `Zobrazit rezervaci: ${reservationUrl}`,
+    `${t("email.confirmation.button")}: ${reservationUrl}`,
     "",
-    `V případě jakýchkoli dotazů nás můžete kontaktovat na telefonu ${businessInfo.phone} nebo e-mailu ${businessInfo.email}.`,
+    t("email.confirmation.contactLine", { phone: businessInfo.phone, email: businessInfo.email }),
     "",
-    businessInfo.signoffNames,
+    t("email.signoffNames"),
     "Spim na Rabí"
   ]
   return lines.join("\n")

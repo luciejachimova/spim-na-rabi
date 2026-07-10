@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import type { EmailTranslator } from "./components"
 
 // Colors match the public site's Tailwind theme tokens (tailwind.config.js).
 // Email clients don't apply Tailwind/CSS classes reliably, so every value
@@ -17,9 +18,19 @@ export const COLORS = {
 const SERIF_FONT = "'Cormorant Garamond', Georgia, 'Times New Roman', serif"
 const SANS_FONT = "'Jost', Helvetica, Arial, sans-serif"
 
-export function EmailLayout({ preheader, children }: { preheader: string; children: ReactNode }) {
+export function EmailLayout({
+  preheader,
+  locale,
+  t,
+  children
+}: {
+  preheader: string
+  locale: string
+  t: EmailTranslator
+  children: ReactNode
+}) {
   return (
-    <html lang="cs">
+    <html lang={locale}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -61,9 +72,9 @@ export function EmailLayout({ preheader, children }: { preheader: string; childr
                     <tr>
                       <td style={{ padding: "24px 40px 32px", borderTop: `1px solid ${COLORS.light}` }}>
                         <p style={{ margin: 0, fontSize: 13, lineHeight: "20px", color: COLORS.mid }}>
-                          Spim na Rabí · Rabí 175, 342 01 Rabí
+                          {t("email.footerAddress")}
                           <br />
-                          {"•"} Telefon: +420 723 936 426 · E-mail:{" "}
+                          {"•"} {t("email.footerPhone")}: +420 723 936 426 · {t("email.footerEmail")}:{" "}
                           <a href="mailto:spimnarabi@seznam.cz" style={{ color: COLORS.accent }}>
                             spimnarabi@seznam.cz
                           </a>

@@ -14,6 +14,17 @@ export function formatDateForPrague(date: Date) {
   }).format(date)
 }
 
+// Locale-aware display of a YYYY-MM-DD date key. Formatted in UTC so the
+// calendar day never shifts across time zones (the key has no time component).
+export function formatReservationDate(dateKey: string, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
+    timeZone: "UTC",
+    day: "numeric",
+    month: "numeric",
+    year: "numeric"
+  }).format(toUtcDate(dateKey))
+}
+
 export function addDaysToKey(dateKey: string, amount: number) {
   const date = toUtcDate(dateKey)
   date.setUTCDate(date.getUTCDate() + amount)

@@ -1,7 +1,11 @@
+import { createTranslator } from "next-intl"
 import { prisma } from "./db"
 import { sendMail, logMailError } from "./mail"
 import { getBaseUrl, toReservationWithApartment, type ReservationWithApartment } from "./reservations"
 import { addDaysToKey, formatDateForPrague, getPragueHour, toUtcDate } from "./prague-date"
+import { loadMessages, normalizeLocale } from "./i18n-messages"
+import { getPathname } from "@/i18n/navigation"
+import type { EmailTranslator } from "@/emails/components"
 import { renderEmail } from "@/emails/render"
 import { ReservationConfirmationEmail, reservationConfirmationSubject, reservationConfirmationText } from "@/emails/reservation-confirmation"
 import { ArrivalInfoEmail, arrivalInfoSubject, arrivalInfoText } from "@/emails/arrival-info"
@@ -88,8 +92,20 @@ function computeNights(startDate: string, endDate: string) {
 }
 
 async function buildEmailContent(kind: EmailKind, reservation: ReservationWithApartment) {
-  const reservationUrl = `${getBaseUrl()}/reservation/${reservation.reservationToken}`
-  const name = reservation.name || "hosté"
+  // Every guest email is rendered in the language the guest booked in
+  // (reservation.locale). createTranslator works outside a request scope, so
+  // it's safe here even though this runs from the cron scheduler.
+  const locale = normalizeLocale(reservation.locale)
+  const messages = await loadMessages(locale)
+  const t = createTranslator({ locale, messages }) as unknown as EmailTranslator
+
+  const path = getPathname({
+    href: { pathname: "/reservation/[token]", params: { token: reservation.reservationToken ?? "" } },
+    locale
+  })
+  const reservationUrl = `${getBaseUrl()}${path}`
+  const name = reservation.name || t("email.guestFallback")
+  const base = { t, locale }
   const summary = {
     apartmentName: reservation.apartmentName,
     startDate: reservation.startDate,
@@ -99,35 +115,35 @@ async function buildEmailContent(kind: EmailKind, reservation: ReservationWithAp
   }
 
   if (kind === "confirmation") {
-    const props = { name, reservationUrl, summary }
+    const props = { ...base, name, reservationUrl, summary }
     return {
-      subject: reservationConfirmationSubject(),
+      subject: reservationConfirmationSubject(t),
       html: await renderEmail(<ReservationConfirmationEmail {...props} />),
       text: reservationConfirmationText(props)
     }
   }
 
   if (kind === "arrivalInfo") {
-    const props = { name, apartmentSlug: reservation.apartmentSlug, reservationUrl, summary }
+    const props = { ...base, name, apartmentSlug: reservation.apartmentSlug, reservationUrl, summary }
     return {
-      subject: arrivalInfoSubject(),
+      subject: arrivalInfoSubject(t),
       html: await renderEmail(<ArrivalInfoEmail {...props} />),
       text: arrivalInfoText(props)
     }
   }
 
   if (kind === "departureReminder") {
-    const props = { name, apartmentSlug: reservation.apartmentSlug, apartmentName: reservation.apartmentName }
+    const props = { ...base, name, apartmentSlug: reservation.apartmentSlug, apartmentName: reservation.apartmentName }
     return {
-      subject: departureReminderSubject(),
+      subject: departureReminderSubject(t),
       html: await renderEmail(<DepartureReminderEmail {...props} />),
       text: departureReminderText(props)
     }
   }
 
-  const props = { name, apartmentSlug: reservation.apartmentSlug, source: reservation.source }
+  const props = { ...base, name, apartmentSlug: reservation.apartmentSlug, source: reservation.source }
   return {
-    subject: thankYouSubject(),
+    subject: thankYouSubject(t),
     html: await renderEmail(<ThankYouEmail {...props} />),
     text: thankYouText(props)
   }

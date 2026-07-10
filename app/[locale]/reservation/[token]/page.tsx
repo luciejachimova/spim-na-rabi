@@ -1,18 +1,19 @@
 import { notFound } from "next/navigation"
+import { getTranslations, setRequestLocale } from "next-intl/server"
 import { getReservationByToken } from "@/lib/reservations"
-import { toUtcDate } from "@/lib/prague-date"
+import { formatReservationDate, toUtcDate } from "@/lib/prague-date"
 import { getGuestInfo, businessInfo } from "@/data/guest-info"
 import { PageHero } from "@/components/ui"
+import type { Locale } from "@/i18n/routing"
 
 export const dynamic = "force-dynamic"
 
 interface PageProps {
-  params: Promise<{ token: string }>
+  params: Promise<{ locale: Locale; token: string }>
 }
 
-function formatDisplayDate(dateKey: string) {
-  const [year, month, day] = dateKey.split("-")
-  return `${Number(day)}. ${Number(month)}. ${year}`
+export async function generateMetadata() {
+  return { robots: { index: false, follow: false } }
 }
 
 function computeNights(startDate: string, endDate: string) {
@@ -29,7 +30,8 @@ function InfoRow({ label, children }: { label: string; children: React.ReactNode
 }
 
 export default async function ReservationTokenPage({ params }: PageProps) {
-  const { token } = await params
+  const { locale, token } = await params
+  setRequestLocale(locale)
   const reservation = await getReservationByToken(token)
 
   if (!reservation || reservation.status !== "active") {
@@ -39,62 +41,67 @@ export default async function ReservationTokenPage({ params }: PageProps) {
   const info = getGuestInfo(reservation.apartmentSlug)
   const nights = computeNights(reservation.startDate, reservation.endDate)
 
+  const labels = await getTranslations("labels")
+  const gi = await getTranslations("guestInfo")
+  const rv = await getTranslations("reservationView")
+  const importantItems = gi.raw("important") as string[]
+
   return (
     <>
-      <PageHero label="Vaše rezervace" title={reservation.apartmentName} />
+      <PageHero label={rv("heroLabel")} title={reservation.apartmentName} />
 
       <section className="py-24 md:py-[100px]">
         <div className="mx-auto max-w-[720px] px-8">
           <div className="js-fade-in">
-            <InfoRow label="Příjezd">{formatDisplayDate(reservation.startDate)}</InfoRow>
-            <InfoRow label="Odjezd">{formatDisplayDate(reservation.endDate)}</InfoRow>
-            <InfoRow label="Počet nocí">{nights}</InfoRow>
-            {reservation.guests !== null && <InfoRow label="Počet hostů">{reservation.guests}</InfoRow>}
+            <InfoRow label={labels("checkIn")}>{formatReservationDate(reservation.startDate, locale)}</InfoRow>
+            <InfoRow label={labels("checkOut")}>{formatReservationDate(reservation.endDate, locale)}</InfoRow>
+            <InfoRow label={labels("nights")}>{nights}</InfoRow>
+            {reservation.guests !== null && <InfoRow label={labels("guests")}>{reservation.guests}</InfoRow>}
 
             {info.address && (
-              <InfoRow label="Adresa">
+              <InfoRow label={labels("address")}>
                 {info.address}
                 {info.googleMapsUrl && (
                   <>
                     {" "}
                     ·{" "}
                     <a href={info.googleMapsUrl} className="text-accent transition-colors hover:text-dark">
-                      otevřít v Google Maps
+                      {labels("openMaps")}
                     </a>
                   </>
                 )}
               </InfoRow>
             )}
 
-            {info.checkInTime && <InfoRow label="Check-in">{info.checkInTime}</InfoRow>}
-            {info.checkOutTime && <InfoRow label="Check-out">{info.checkOutTime}</InfoRow>}
-            {info.parkingInfo && <InfoRow label="Parkování">{info.parkingInfo}</InfoRow>}
-            {info.keyInstructions && <InfoRow label="Převzetí klíčů">{info.keyInstructions}</InfoRow>}
+            <InfoRow label={labels("checkInTime")}>{gi("checkInTime")}</InfoRow>
+            <InfoRow label={labels("checkOutTime")}>{gi("checkOutTime")}</InfoRow>
+            <InfoRow label={labels("parking")}>{gi("parking")}</InfoRow>
+            <InfoRow label={labels("keys")}>{gi("keys")}</InfoRow>
 
             {info.wifiNetwork && (
-              <InfoRow label="Wifi">
-                Síť: {info.wifiNetwork}
-                {info.wifiPassword && <>, heslo: {info.wifiPassword}</>}
+              <InfoRow label={labels("wifi")}>
+                {labels("wifiNetwork")}: {info.wifiNetwork}
+                {info.wifiPassword && <>, {labels("wifiPassword")}: {info.wifiPassword}</>}
               </InfoRow>
             )}
 
-            {info.importantInfo && info.importantInfo.length > 0 && (
-              <InfoRow label="Důležité informace">
+            {importantItems.length > 0 && (
+              <InfoRow label={labels("important")}>
                 <ul className="list-disc space-y-1 pl-5">
-                  {info.importantInfo.map((item) => (
+                  {importantItems.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
               </InfoRow>
             )}
 
-            <InfoRow label="Kontakt">
-              Telefon:{" "}
+            <InfoRow label={labels("contact")}>
+              {labels("phone")}:{" "}
               <a href={`tel:${businessInfo.phone.replace(/\s/g, "")}`} className="text-accent transition-colors hover:text-dark">
                 {businessInfo.phone}
               </a>
               <br />
-              E-mail:{" "}
+              {labels("email")}:{" "}
               <a href={`mailto:${businessInfo.email}`} className="text-accent transition-colors hover:text-dark">
                 {businessInfo.email}
               </a>
