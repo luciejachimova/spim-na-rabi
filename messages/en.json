@@ -22,6 +22,7 @@
     "apartmentsBody": "Two carefully furnished spaces, each with its own character. Both with a view, peace and quiet, and everything you need to unwind.",
     "reviewsLabel": "Guests say",
     "reviewsTitle": "Reviews",
+    "reviewsInvite": "Be the first to review us.",
     "locationLabel": "Where to find us",
     "locationTitle": "Rabí",
     "locationBody": "A picturesque town on the edge of Šumava, where history meets the calm of nature. The landmark is the majestic Rabí Castle, just a few minutes from your stay.",
@@ -93,11 +94,6 @@
       "desc": "A spacious loft for up to 6 guests, with plenty of room for a family or a longer stay. A blend of comfort and airy space."
     }
   },
-  "reviews": [
-    { "text": "A beautiful place, complete quiet and a wonderful view. We will definitely be back.", "author": "Jana & Tomáš" },
-    { "text": "Stylish accommodation, everything perfectly prepared. We wanted for nothing.", "author": "Markéta K." },
-    { "text": "The ideal escape from the city. Silence, nature, ease. Exactly what we needed.", "author": "The Novák family" }
-  ],
   "ui": {
     "photoPlaceholder": "Photos coming soon",
     "viewDetail": "View details",

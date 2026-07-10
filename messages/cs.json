@@ -22,6 +22,7 @@
     "apartmentsBody": "Dva pečlivě zařízené prostory, každý s vlastním charakterem. Oba s výhledem, klidem a vším, co k odpočinku potřebujete.",
     "reviewsLabel": "Hosté říkají",
     "reviewsTitle": "Recenze",
+    "reviewsInvite": "Buďte první, kdo nás ohodnotí.",
     "locationLabel": "Kde nás najdete",
     "locationTitle": "Rabí",
     "locationBody": "Malebné město na okraji Šumavy, kde se historie potkává s klidem přírody. Dominantou místa je majestátní hrad Rabí, jen pár minut od vašeho pobytu.",
@@ -93,11 +94,6 @@
       "desc": "Prostorný loft až pro 6 osob s dostatkem místa pro rodinu nebo delší pobyt. Kombinace pohodlí a vzdušného prostoru."
     }
   },
-  "reviews": [
-    { "text": "Krásné místo, naprostý klid a nádherný výhled. Určitě se vrátíme.", "author": "Jana & Tomáš" },
-    { "text": "Stylové ubytování, všechno perfektně připravené. Nic nám nechybělo.", "author": "Markéta K." },
-    { "text": "Ideální únik z města. Ticho, příroda, pohoda. Přesně to, co jsme potřebovali.", "author": "Rodina Novákova" }
-  ],
   "ui": {
     "photoPlaceholder": "Fotky připravujeme",
     "viewDetail": "Zobrazit detail",

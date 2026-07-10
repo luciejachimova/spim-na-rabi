@@ -22,6 +22,7 @@
     "apartmentsBody": "Zwei liebevoll eingerichtete Räume, jeder mit eigenem Charakter. Beide mit Ausblick, Ruhe und allem, was Sie zum Entspannen brauchen.",
     "reviewsLabel": "Gäste sagen",
     "reviewsTitle": "Bewertungen",
+    "reviewsInvite": "Seien Sie der Erste, der uns bewertet.",
     "locationLabel": "So finden Sie uns",
     "locationTitle": "Rabí",
     "locationBody": "Ein malerisches Städtchen am Rande des Böhmerwaldes, wo Geschichte auf die Ruhe der Natur trifft. Wahrzeichen ist die majestätische Burg Rabí, nur wenige Minuten von Ihrer Unterkunft entfernt.",
@@ -93,11 +94,6 @@
       "desc": "Geräumiges Loft für bis zu 6 Personen mit viel Platz für die Familie oder einen längeren Aufenthalt. Eine Kombination aus Komfort und luftigem Raum."
     }
   },
-  "reviews": [
-    { "text": "Ein wunderschöner Ort, völlige Ruhe und eine herrliche Aussicht. Wir kommen bestimmt wieder.", "author": "Jana & Tomáš" },
-    { "text": "Stilvolle Unterkunft, alles perfekt vorbereitet. Es hat uns an nichts gefehlt.", "author": "Markéta K." },
-    { "text": "Die ideale Auszeit von der Stadt. Stille, Natur, Gelassenheit. Genau das, was wir gebraucht haben.", "author": "Familie Novák" }
-  ],
   "ui": {
     "photoPlaceholder": "Fotos folgen in Kürze",
     "viewDetail": "Details ansehen",
