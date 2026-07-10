@@ -54,17 +54,17 @@
       "studio-3": {
         "subtitle": "Cosy studio – up to 4 guests",
         "seasons": [
-          { "label": "Low season (October–April)", "price": "CZK 1,900 / night" },
-          { "label": "Season (May–September)", "price": "CZK 2,100 / night" },
-          { "label": "Weekends and holidays", "price": "CZK 2,300 / night" }
+          { "label": "Low season (October–April)", "price": "CZK 1,800 / night" },
+          { "label": "Season (May–September)", "price": "CZK 1,900 / night" },
+          { "label": "Weekends and holidays", "price": "CZK 2,100 / night" }
         ]
       },
       "loft-10": {
         "subtitle": "Spacious loft – up to 6 guests",
         "seasons": [
-          { "label": "Low season (October–April)", "price": "CZK 2,600 / night" },
-          { "label": "High season (May–September)", "price": "CZK 2,800 / night" },
-          { "label": "Weekends and holidays", "price": "CZK 3,000 / night" }
+          { "label": "Low season (October–April)", "price": "CZK 2,400 / night" },
+          { "label": "High season (May–September)", "price": "CZK 2,500 / night" },
+          { "label": "Weekends and holidays", "price": "CZK 2,700 / night" }
         ]
       }
     }
@@ -324,7 +324,7 @@
     },
     "pricing": {
       "title": "Accommodation pricing",
-      "description": "Pricing for the Spim na Rabí accommodation. A studio for up to 4 guests and a loft for up to 6 guests from CZK 1,900 per night."
+      "description": "Pricing for the Spim na Rabí accommodation. A studio for up to 4 guests and a loft for up to 6 guests from CZK 1,800 per night."
     },
     "contact": {
       "title": "Contact and reservations",
