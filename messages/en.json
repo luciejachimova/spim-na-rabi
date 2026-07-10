@@ -1,0 +1,397 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About us",
+    "gallery": "Gallery",
+    "pricing": "Pricing",
+    "contact": "Contact",
+    "reserve": "Book now",
+    "openMenu": "Open menu",
+    "language": "Language"
+  },
+  "home": {
+    "heroEyebrow": "A stay in the heart of Šumava",
+    "heroSubtitle": "A stay where time slows down",
+    "heroStatusReservations": "Reservations open",
+    "heroStatusOpening": "Opening in mid-July",
+    "heroCta": "Book your stay",
+    "scroll": "Scroll",
+    "quote": "Rabí Castle within reach, the calm of the Šumava countryside, and air that slows every thought.",
+    "apartmentsLabel": "Accommodation",
+    "apartmentsTitle": "Our apartments",
+    "apartmentsBody": "Two carefully furnished spaces, each with its own character. Both with a view, peace and quiet, and everything you need to unwind.",
+    "reviewsLabel": "Guests say",
+    "reviewsTitle": "Reviews",
+    "locationLabel": "Where to find us",
+    "locationTitle": "Rabí",
+    "locationBody": "A picturesque town on the edge of Šumava, where history meets the calm of nature. The landmark is the majestic Rabí Castle, just a few minutes from your stay.",
+    "locationAddressLabel": "Address",
+    "locationAddress": "Rabí 175, 342 01 Rabí",
+    "locationCta": "Write to us",
+    "ctaLabel": "Ready to slow down?",
+    "ctaTitle": "Book your stay and treat yourself to some rest beneath Rabí Castle."
+  },
+  "about": {
+    "heroLabel": "Our story",
+    "heroTitle": "About us",
+    "sectionEyebrow": "Our story",
+    "sectionTitle": "How did Spim na Rabí come to be?",
+    "p1": "Rabí and its surroundings are a place close to our hearts since childhood. This is where we spent many wonderful moments and always loved coming back to.",
+    "p2": "When we thought about where to create a place to rest, the decision was actually easy. We wanted to offer accommodation where guests feel at ease, slow down, and have the perfect base for discovering the beauty of Šumava.",
+    "p3": "We furnished Spim na Rabí the way we would love to travel ourselves – comfortably, cosily, and without the unnecessary. We would be delighted if you enjoy your stay with us and take home memories as fond as the ones we have of this place.",
+    "cta": "Get in touch"
+  },
+  "gallery": {
+    "heroLabel": "Take a look",
+    "heroTitle": "Gallery"
+  },
+  "pricing": {
+    "heroLabel": "Transparent prices",
+    "heroTitle": "Pricing",
+    "intro": "The minimum length of stay is 2 nights. On request, we will happily prepare breakfast for you. Pets are welcome for a fee of 250 CZK / night.",
+    "cards": {
+      "studio-3": {
+        "subtitle": "Cosy studio – up to 4 guests",
+        "seasons": [
+          { "label": "Low season (October–April)", "price": "CZK 1,900 / night" },
+          { "label": "Season (May–September)", "price": "CZK 2,100 / night" },
+          { "label": "Weekends and holidays", "price": "CZK 2,300 / night" }
+        ]
+      },
+      "loft-10": {
+        "subtitle": "Spacious loft – up to 6 guests",
+        "seasons": [
+          { "label": "Low season (October–April)", "price": "CZK 2,600 / night" },
+          { "label": "High season (May–September)", "price": "CZK 2,800 / night" },
+          { "label": "Weekends and holidays", "price": "CZK 3,000 / night" }
+        ]
+      }
+    }
+  },
+  "contact": {
+    "heroLabel": "We are here for you",
+    "heroTitle": "Contact",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "addressLabel": "Address"
+  },
+  "footer": {
+    "tagline": "Accommodation beneath Rabí Castle. Calm, nature, rest.",
+    "pagesHeading": "Pages",
+    "stayHeading": "Accommodation",
+    "contactHeading": "Contact",
+    "legalHeading": "Information",
+    "copyright": "Spim na Rabí – Rabí, Šumava"
+  },
+  "apartments": {
+    "studio-3": {
+      "badge": "Apartment 1",
+      "desc": "A cosy studio for up to 4 guests. Ideal for those seeking simplicity, peace, and comfort."
+    },
+    "loft-10": {
+      "badge": "Apartment 2",
+      "desc": "A spacious loft for up to 6 guests, with plenty of room for a family or a longer stay. A blend of comfort and airy space."
+    }
+  },
+  "reviews": [
+    { "text": "A beautiful place, complete quiet and a wonderful view. We will definitely be back.", "author": "Jana & Tomáš" },
+    { "text": "Stylish accommodation, everything perfectly prepared. We wanted for nothing.", "author": "Markéta K." },
+    { "text": "The ideal escape from the city. Silence, nature, ease. Exactly what we needed.", "author": "The Novák family" }
+  ],
+  "ui": {
+    "photoPlaceholder": "Photos coming soon",
+    "viewDetail": "View details",
+    "ctaBannerCta": "Book now"
+  },
+  "reservationForm": {
+    "eyebrow": "Reservation",
+    "title": "Enquire about your stay",
+    "close": "Close reservation",
+    "nameLabel": "Name",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@email.com",
+    "phoneLabel": "Phone",
+    "phonePlaceholder": "+",
+    "apartmentLabel": "Apartment",
+    "apartmentPlaceholder": "Select an apartment",
+    "apartmentAny": "No preference",
+    "datesLabel": "Dates of stay",
+    "guestsLabel": "Number of guests",
+    "guestsPlaceholder": "2",
+    "noteLabel": "Note",
+    "notePlaceholder": "Let us know your dates, wishes or questions...",
+    "submit": "Send reservation",
+    "submitting": "Sending…",
+    "done": "Done",
+    "statusSubmitting": "Creating your reservation…",
+    "statusSubmittingSlow": "Checking apartment availability and finalising your reservation…",
+    "statusSuccess": "Your reservation has been created successfully.",
+    "errorMissingDates": "Please select your arrival and departure dates in the calendar.",
+    "errorGeneric": "The reservation could not be sent. Please try again.",
+    "errorNetwork": "The reservation could not be sent. Please check your connection and try again."
+  },
+  "contactForm": {
+    "nameLabel": "Name",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@email.com",
+    "phoneLabel": "Phone",
+    "phonePlaceholder": "+",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Write to us...",
+    "submit": "Send message",
+    "sending": "Sending...",
+    "success": "Thank you, we will be in touch.",
+    "errorGeneric": "The form could not be sent.",
+    "errorNetwork": "The form could not be sent. Please try again."
+  },
+  "calendar": {
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "legendFree": "Available",
+    "legendBusy": "Booked",
+    "legendSelected": "Selected",
+    "loadError": "The availability calendar could not be loaded.",
+    "rangeError": "The selected dates included booked days; the selection has started again from a new date.",
+    "selectStart": "Select your arrival date",
+    "pickEnd": "Arrival {date} — select your departure date",
+    "range": "Arrival {from} – Departure {to}"
+  },
+  "reservationCreated": {
+    "heroLabel": "Thank you",
+    "heroTitle": "Your reservation has been created successfully",
+    "body": "We have sent the confirmation to your email. The day before your arrival, we will send you the information for your stay.",
+    "viewButton": "View reservation",
+    "notFound": "We could not find your reservation. If you have just created it, please check your email for the confirmation."
+  },
+  "reservationView": {
+    "heroLabel": "Your reservation"
+  },
+  "labels": {
+    "apartment": "Apartment",
+    "checkIn": "Arrival",
+    "checkOut": "Departure",
+    "nights": "Nights",
+    "guests": "Guests",
+    "address": "Address",
+    "checkInTime": "Check-in",
+    "checkOutTime": "Check-out",
+    "parking": "Parking",
+    "keys": "Key pickup",
+    "wifi": "Wi-Fi",
+    "wifiNetwork": "Network",
+    "wifiPassword": "password",
+    "important": "Important information",
+    "contact": "Contact",
+    "phone": "Phone",
+    "email": "Email",
+    "openMaps": "open in Google Maps"
+  },
+  "guestInfo": {
+    "checkInTime": "from 3:00 PM",
+    "checkOutTime": "until 11:00 AM",
+    "parking": "You may park anywhere in the designated parking spaces in the village. On arrival, we will give you a parking card, which we ask you to place visibly behind your windscreen for the entire duration of your stay.",
+    "keys": "Please collect the keys at Café Hraběnka, located right next to the entrance to the apartments. If you arrive outside opening hours or need any assistance, please call us at +420 723 936 426.",
+    "important": [
+      "Please observe quiet hours from 10:00 PM to 6:00 AM.",
+      "Smoking is prohibited throughout the building.",
+      "If you are travelling with a pet, please let us know in advance.",
+      "Before leaving, please close the windows, turn off the lights, and return the keys as instructed."
+    ]
+  },
+  "legal": {
+    "gdpr": {
+      "heroLabel": "Information",
+      "title": "Privacy Policy",
+      "intro": "Your privacy matters to us. Below we explain what personal data we process, for what purpose, and what rights you have. The data controller is the operator of the Spim na Rabí accommodation, Rabí 175, 342 01 Rabí.",
+      "sections": [
+        {
+          "heading": "What data we process",
+          "body": "We process the data you provide when making a reservation or contacting us – name, email, phone, dates of stay, number of guests, and any note. We also process the data required for the guest register mandated by law."
+        },
+        {
+          "heading": "Purpose and legal basis",
+          "body": "We use your data to process and confirm your reservation, to communicate with you before and after your stay, and to fulfil the legal obligations of an accommodation operator. The legal basis is the performance of a contract, compliance with a legal obligation, and our legitimate interest in providing the service properly."
+        },
+        {
+          "heading": "Retention period",
+          "body": "We retain personal data only for as long as strictly necessary – for the duration of the reservation and thereafter for the period required by law (in particular accounting and tax regulations)."
+        },
+        {
+          "heading": "Sharing of data",
+          "body": "We do not share your data with third parties, except for providers essential to our operation (e.g. email and hosting services) and cases where the law requires it. We do not sell your data."
+        },
+        {
+          "heading": "Your rights",
+          "body": "You have the right to access your data, to have it corrected or erased, to restrict processing, to data portability, and to object. You can contact us at any time at spimnarabi@seznam.cz. You also have the right to lodge a complaint with the data protection authority."
+        }
+      ]
+    },
+    "terms": {
+      "heroLabel": "Information",
+      "title": "Terms and Conditions",
+      "intro": "These terms govern reservations and stays at the Spim na Rabí accommodation, Rabí 175, 342 01 Rabí. By creating a reservation, you agree to them.",
+      "sections": [
+        {
+          "heading": "Reservation",
+          "body": "A reservation is made by submitting the reservation form and our confirmation of it by email. The minimum length of stay is 2 nights. Please provide accurate and complete information."
+        },
+        {
+          "heading": "Prices and payment",
+          "body": "Prices are per apartment per night and follow the current price list. Pets are welcome for a surcharge of 250 CZK / night. We will inform you of the payment method and deadline in the reservation confirmation."
+        },
+        {
+          "heading": "Arrival and departure",
+          "body": "Check-in is from 3:00 PM and check-out is until 11:00 AM, unless otherwise agreed. We will send you information about key pickup and parking by email the day before your arrival."
+        },
+        {
+          "heading": "House rules",
+          "body": "Smoking is prohibited throughout the building, and quiet hours apply from 10:00 PM to 6:00 AM. Guests are responsible for any damage caused during their stay. Please treat the furnishings with care."
+        },
+        {
+          "heading": "Cancellation",
+          "body": "Cancellation terms and any cancellation fees are governed by our cancellation policy. Please contact us as early as possible if needed."
+        }
+      ]
+    },
+    "cancellation": {
+      "heroLabel": "Information",
+      "title": "Cancellation Policy",
+      "intro": "We understand that plans can change. Below you will find the terms for cancelling a confirmed reservation at the Spim na Rabí accommodation.",
+      "sections": [
+        {
+          "heading": "Free cancellation",
+          "body": "You may cancel your reservation free of charge no later than 14 days before your arrival date. In that case, we will refund the full amount paid."
+        },
+        {
+          "heading": "Cancellation fees",
+          "body": "For cancellations 13 to 7 days before arrival, the cancellation fee is 50% of the price of the stay. For cancellations less than 7 days before arrival, or in the case of a no-show, the cancellation fee is 100% of the price of the stay."
+        },
+        {
+          "heading": "How to cancel",
+          "body": "To cancel your reservation, write to us at spimnarabi@seznam.cz or call +420 723 936 426. The time of cancellation is the moment your notice reaches us."
+        },
+        {
+          "heading": "Exceptional circumstances",
+          "body": "In the case of serious and documented reasons, we will always try to find an accommodating solution. Do not hesitate to contact us."
+        }
+      ]
+    }
+  },
+  "errors": {
+    "invalidForm": "Invalid form data.",
+    "requiredField": "This field is required.",
+    "nameRequired": "Name is required.",
+    "emailRequired": "Email is required.",
+    "emailInvalid": "Please enter a valid email.",
+    "guestsInvalid": "The number of guests must be a whole number greater than 0.",
+    "datesInvalid": "Departure must be after arrival.",
+    "dateFormat": "The date must be in YYYY-MM-DD format.",
+    "dateInvalid": "The date is not valid.",
+    "rangeIncomplete": "The reservation dates are incomplete.",
+    "rangeInvalid": "The reservation dates are not valid.",
+    "slotTaken": "The selected dates are already booked.",
+    "noApartmentFree": "No apartment is available for the selected dates.",
+    "apartmentNotFound": "The apartment was not found.",
+    "saveFailed": "The reservation could not be saved.",
+    "sendFailed": "The form could not be sent.",
+    "mailFailed": "The message could not be sent right now. Please try again later or write to us directly at spimnarabi@seznam.cz."
+  },
+  "reservationApi": {
+    "success": "Thank you, we will be in touch to confirm your reservation."
+  },
+  "contactApi": {
+    "success": "Thank you, we will be in touch."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "We are sorry, but this page does not exist.",
+    "cta": "Back to home"
+  },
+  "meta": {
+    "defaultTitle": "Spim na Rabí | Stylish accommodation beneath Rabí Castle",
+    "titleTemplate": "%s | Spim na Rabí",
+    "defaultDescription": "A studio and a spacious loft in Rabí in the Šumava foothills, just a few steps from Rabí Castle. Stylish accommodation for up to 4 or 6 guests.",
+    "ogSubtitle": "ACCOMMODATION BENEATH RABÍ CASTLE",
+    "home": {
+      "title": "Spim na Rabí | Stylish accommodation beneath Rabí Castle",
+      "description": "A studio and a spacious loft in Rabí in the Šumava foothills. Accommodation for up to 4 or 6 guests, just a few steps from Rabí Castle."
+    },
+    "about": {
+      "title": "About us",
+      "description": "Discover the story of the Spim na Rabí accommodation and our philosophy of a peaceful stay beneath Rabí Castle."
+    },
+    "gallery": {
+      "title": "Accommodation gallery",
+      "description": "Gallery of the Spim na Rabí studio and loft. Take a look at the accommodation in Rabí in the heart of the Šumava foothills."
+    },
+    "pricing": {
+      "title": "Accommodation pricing",
+      "description": "Pricing for the Spim na Rabí accommodation. A studio for up to 4 guests and a loft for up to 6 guests from CZK 1,900 per night."
+    },
+    "contact": {
+      "title": "Contact and reservations",
+      "description": "Contact Spim na Rabí and book the studio or loft beneath Rabí Castle. Rabí 175, Šumava foothills."
+    },
+    "reservationCreated": {
+      "title": "Reservation created",
+      "description": "Your reservation at Spim na Rabí has been created successfully."
+    },
+    "gdpr": {
+      "title": "Privacy Policy",
+      "description": "Privacy policy of the Spim na Rabí accommodation."
+    },
+    "terms": {
+      "title": "Terms and Conditions",
+      "description": "Terms and conditions for reservations and stays at the Spim na Rabí accommodation."
+    },
+    "cancellation": {
+      "title": "Cancellation Policy",
+      "description": "Terms for cancelling a reservation at the Spim na Rabí accommodation."
+    }
+  },
+  "email": {
+    "greeting": "Hello {name},",
+    "guestFallback": "there",
+    "signoffNames": "Lucie and Pavel",
+    "footerAddress": "Spim na Rabí · Rabí 175, 342 01 Rabí",
+    "footerPhone": "Phone",
+    "footerEmail": "Email",
+    "confirmation": {
+      "subject": "Reservation confirmation – Spim na Rabí",
+      "preheader": "Your reservation at Spim na Rabí has been created successfully.",
+      "intro": "thank you for booking a stay at Spim na Rabí. Your reservation has been created successfully.",
+      "afterSummary": "The day before your arrival, we will send you an email with everything you need for your stay – the address, parking, Wi-Fi, and key pickup information.",
+      "button": "View reservation",
+      "contactLine": "If you have any questions, you can reach us by phone at {phone} or by email at {email}."
+    },
+    "arrival": {
+      "subject": "Information for your arrival – Spim na Rabí",
+      "preheader": "We look forward to seeing you tomorrow – here is your stay information.",
+      "intro": "we look forward to welcoming you at Spim na Rabí tomorrow. Here is some information that will be useful for your stay.",
+      "happyTravels": "We wish you a safe journey.",
+      "button": "View reservation",
+      "contactLine": "If you need anything, reach us by phone at {phone} or by email at {email}."
+    },
+    "departure": {
+      "subject": "Today is your departure day – Spim na Rabí",
+      "preheader": "Thank you for your stay – a few words about today's departure.",
+      "intro": "thank you for staying in the {apartment} apartment. Today is your departure day.",
+      "checkOutLine": "Check-out is {time}.",
+      "checkOutFallback": "Please depart at the agreed time.",
+      "keysLine": "Please return the keys the same way you received them on arrival.",
+      "contactLine": "If any problem arises, reach us by phone at {phone} or by email at {email}."
+    },
+    "thankYou": {
+      "subject": "Thank you for your visit – Spim na Rabí",
+      "preheader": "Thank you for visiting Spim na Rabí.",
+      "intro": "thank you for visiting Spim na Rabí.",
+      "reviewIntro": "If you have a moment, we would be grateful for a review – it helps us a lot.",
+      "reviewGoogle": "Review us on Google",
+      "reviewBooking": "Review your stay on Booking.com",
+      "reviewAirbnb": "Review your stay on Airbnb",
+      "closing": "We wish you a lovely rest of the day."
+    }
+  }
+}

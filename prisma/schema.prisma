@@ -68,6 +68,7 @@ model Reservation {
   phone                       String?
   guests                      Int?
   note                        String?
+  locale                      String            @default("cs")
   reservationToken             String?          @unique @map("reservation_token")
   confirmationEmailedAt        DateTime?        @map("confirmation_emailed_at")
   confirmationEmailAttempts    Int              @default(0) @map("confirmation_email_attempts")

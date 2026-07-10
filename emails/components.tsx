@@ -1,6 +1,14 @@
 import { COLORS } from "./layout"
+import { formatReservationDate } from "@/lib/prague-date"
 
 const SANS_FONT = "'Jost', Helvetica, Arial, sans-serif"
+
+// Minimal translator shape — the root (non-namespaced) createTranslator instance
+// passed down from the email builders.
+export interface EmailTranslator {
+  (key: string, values?: Record<string, string | number>): string
+  raw: (key: string) => unknown
+}
 
 export function Heading({ children }: { children: React.ReactNode }) {
   return (
@@ -22,19 +30,22 @@ export interface ReservationSummaryData {
   guests: number | null
 }
 
-function formatDisplayDate(dateKey: string) {
-  const [year, month, day] = dateKey.split("-")
-  return `${Number(day)}. ${Number(month)}. ${year}`
-}
-
-export function ReservationSummary({ data }: { data: ReservationSummaryData }) {
+export function ReservationSummary({
+  data,
+  locale,
+  t
+}: {
+  data: ReservationSummaryData
+  locale: string
+  t: EmailTranslator
+}) {
   const rows: [string, string][] = [
-    ["Apartmán", data.apartmentName],
-    ["Příjezd", formatDisplayDate(data.startDate)],
-    ["Odjezd", formatDisplayDate(data.endDate)],
-    ["Počet nocí", String(data.nights)]
+    [t("labels.apartment"), data.apartmentName],
+    [t("labels.checkIn"), formatReservationDate(data.startDate, locale)],
+    [t("labels.checkOut"), formatReservationDate(data.endDate, locale)],
+    [t("labels.nights"), String(data.nights)]
   ]
-  if (data.guests !== null) rows.push(["Počet hostů", String(data.guests)])
+  if (data.guests !== null) rows.push([t("labels.guests"), String(data.guests)])
 
   return (
     <table role="presentation" width="100%" cellPadding={0} cellSpacing={0} style={{ margin: "0 0 16px", backgroundColor: COLORS.pale, borderRadius: 2 }}>
@@ -94,10 +105,10 @@ export function CtaButton({ href, children }: { href: string; children: string }
   )
 }
 
-export function Signoff() {
+export function Signoff({ t }: { t: EmailTranslator }) {
   return (
     <p style={{ margin: "24px 0 0", fontSize: 15, lineHeight: "24px", color: COLORS.dark }}>
-      Lucie a Pavel
+      {t("email.signoffNames")}
       <br />
       Spim na Rabí
     </p>

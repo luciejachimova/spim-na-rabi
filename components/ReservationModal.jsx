@@ -1,8 +1,11 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { ReservationForm } from "./forms"
 
 export default function ReservationModal({ open, onClose }) {
+  const t = useTranslations("reservationForm")
+
   if (!open) return null
 
   return (
@@ -19,16 +22,16 @@ export default function ReservationModal({ open, onClose }) {
         <button
           type="button"
           className="absolute right-5 top-4 text-3xl font-light leading-none text-mid transition-colors hover:text-dark"
-          aria-label="Zavřít rezervaci"
+          aria-label={t("close")}
           onClick={onClose}
         >
           ×
         </button>
 
         <div className="mb-8 pr-8">
-          <p className="mb-2 text-[0.68rem] font-normal uppercase tracking-[0.3em] text-mid">Rezervace</p>
+          <p className="mb-2 text-[0.68rem] font-normal uppercase tracking-[0.3em] text-mid">{t("eyebrow")}</p>
           <h2 id="reservation-title" className="font-serif text-[clamp(2rem,4vw,2.8rem)] font-normal leading-[1.2] text-dark">
-            Poptejte svůj pobyt
+            {t("title")}
           </h2>
           <div className="mt-5 h-px w-10 bg-light" />
         </div>

@@ -1,12 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-
-const WEEKDAY_LABELS = ["Po", "Út", "St", "Čt", "Pá", "So", "Ne"]
-const MONTH_LABELS = [
-  "Leden", "Únor", "Březen", "Duben", "Květen", "Červen",
-  "Červenec", "Srpen", "Září", "Říjen", "Listopad", "Prosinec"
-]
+import { useLocale, useTranslations } from "next-intl"
 
 function toDateKey(date) {
   const year = date.getFullYear()
@@ -15,9 +10,9 @@ function toDateKey(date) {
   return `${year}-${month}-${day}`
 }
 
-function formatDisplayDate(dateKey) {
-  const [year, month, day] = dateKey.split("-")
-  return `${Number(day)}. ${Number(month)}. ${year}`
+function keyToDate(dateKey) {
+  const [year, month, day] = dateKey.split("-").map(Number)
+  return new Date(year, month - 1, day)
 }
 
 function startOfMonth(date) {
@@ -35,16 +30,29 @@ function isBusyOnDate(dateKey, apartmentSelection, availabilityBySlug) {
     return isBusyForSlug(apartmentSelection)
   }
 
-  // "Je mi to jedno" / not chosen yet: a day only counts as fully booked
+  // "No preference" / not chosen yet: a day only counts as fully booked
   // when every apartment is taken — otherwise "any" can still be booked.
   return slugs.every(isBusyForSlug)
 }
 
 export function AvailabilityCalendar({ apartmentSelection, dateFrom, dateTo, onChange }) {
+  const t = useTranslations("calendar")
+  const locale = useLocale()
   const [availabilityBySlug, setAvailabilityBySlug] = useState({})
   const [loadError, setLoadError] = useState(null)
   const [visibleMonth, setVisibleMonth] = useState(() => startOfMonth(new Date()))
   const [rangeError, setRangeError] = useState(null)
+
+  // Locale-aware month title, weekday headers, and summary dates.
+  const weekdayLabels = useMemo(() => {
+    const formatter = new Intl.DateTimeFormat(locale, { weekday: "short" })
+    // 2024-01-01 is a Monday — build Mon…Sun.
+    return Array.from({ length: 7 }, (_, i) => formatter.format(new Date(2024, 0, 1 + i)))
+  }, [locale])
+
+  const monthFormatter = useMemo(() => new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }), [locale])
+  const dateFormatter = useMemo(() => new Intl.DateTimeFormat(locale, { day: "numeric", month: "numeric", year: "numeric" }), [locale])
+  const formatDisplayDate = (dateKey) => dateFormatter.format(keyToDate(dateKey))
 
   useEffect(() => {
     let cancelled = false
@@ -60,13 +68,13 @@ export function AvailabilityCalendar({ apartmentSelection, dateFrom, dateTo, onC
         setAvailabilityBySlug(bySlug)
       })
       .catch(() => {
-        if (!cancelled) setLoadError("Kalendář obsazenosti se nepodařilo načíst.")
+        if (!cancelled) setLoadError(t("loadError"))
       })
 
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [t])
 
   const todayKey = useMemo(() => toDateKey(new Date()), [])
 
@@ -124,7 +132,7 @@ export function AvailabilityCalendar({ apartmentSelection, dateFrom, dateTo, onC
     // Completing this range would cross a booked date — rather than freezing
     // on an error, treat the clicked (free) date as a fresh start so the
     // guest can immediately try a different range without getting stuck.
-    setRangeError("Vybraný termín zahrnoval obsazené dny, výběr začal znovu od nového data.")
+    setRangeError(t("rangeError"))
     onChange({ dateFrom: dateKey, dateTo: "" })
   }
 
@@ -143,26 +151,26 @@ export function AvailabilityCalendar({ apartmentSelection, dateFrom, dateTo, onC
           onClick={() => goToMonth(-1)}
           disabled={isCurrentMonth}
           className="cursor-pointer px-2 py-1 text-mid disabled:cursor-not-allowed disabled:opacity-30"
-          aria-label="Předchozí měsíc"
+          aria-label={t("prevMonth")}
         >
           ‹
         </button>
         <p className="text-sm font-medium uppercase tracking-wide text-dark">
-          {MONTH_LABELS[visibleMonth.getMonth()]} {visibleMonth.getFullYear()}
+          {monthFormatter.format(visibleMonth)}
         </p>
         <button
           type="button"
           onClick={() => goToMonth(1)}
           className="cursor-pointer px-2 py-1 text-mid hover:text-dark"
-          aria-label="Následující měsíc"
+          aria-label={t("nextMonth")}
         >
           ›
         </button>
       </div>
 
       <div className="grid grid-cols-7 gap-1 text-center text-[0.7rem] uppercase text-mid">
-        {WEEKDAY_LABELS.map((label) => (
-          <div key={label} className="py-1">
+        {weekdayLabels.map((label, index) => (
+          <div key={index} className="py-1">
             {label}
           </div>
         ))}
@@ -210,22 +218,22 @@ export function AvailabilityCalendar({ apartmentSelection, dateFrom, dateTo, onC
 
       <div className="mt-3 flex flex-wrap gap-4 text-[0.68rem] text-mid">
         <span className="flex items-center gap-1">
-          <span className="inline-block h-3 w-3 rounded-[2px] bg-cream border border-mid/30" /> Volno
+          <span className="inline-block h-3 w-3 rounded-[2px] bg-cream border border-mid/30" /> {t("legendFree")}
         </span>
         <span className="flex items-center gap-1">
-          <span className="inline-block h-3 w-3 rounded-[2px] bg-mid/20" /> Obsazeno
+          <span className="inline-block h-3 w-3 rounded-[2px] bg-mid/20" /> {t("legendBusy")}
         </span>
         <span className="flex items-center gap-1">
-          <span className="inline-block h-3 w-3 rounded-[2px] bg-dark" /> Vybráno
+          <span className="inline-block h-3 w-3 rounded-[2px] bg-dark" /> {t("legendSelected")}
         </span>
       </div>
 
       <p className="mt-3 text-sm text-dark">
         {dateFrom && dateTo
-          ? `Příjezd ${formatDisplayDate(dateFrom)} – Odjezd ${formatDisplayDate(dateTo)}`
+          ? t("range", { from: formatDisplayDate(dateFrom), to: formatDisplayDate(dateTo) })
           : dateFrom
-            ? `Příjezd ${formatDisplayDate(dateFrom)} — vyberte datum odjezdu`
-            : "Vyberte datum příjezdu"}
+            ? t("pickEnd", { date: formatDisplayDate(dateFrom) })
+            : t("selectStart")}
       </p>
       {rangeError && <p className="mt-1 text-sm text-accent">{rangeError}</p>}
       {loadError && <p className="mt-1 text-sm text-accent">{loadError}</p>}

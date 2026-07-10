@@ -1,58 +1,60 @@
 import { EmailLayout } from "./layout"
-import { CtaButton, Heading, InfoRow, Paragraph, ReservationSummary, Signoff, type ReservationSummaryData } from "./components"
+import { CtaButton, Heading, InfoRow, Paragraph, ReservationSummary, Signoff, type EmailTranslator, type ReservationSummaryData } from "./components"
+import { formatReservationDate } from "@/lib/prague-date"
 import { businessInfo, getGuestInfo } from "@/data/guest-info"
 
 export interface ArrivalInfoProps {
+  t: EmailTranslator
+  locale: string
   name: string
   apartmentSlug: string
   reservationUrl: string
   summary: ReservationSummaryData
 }
 
-export function arrivalInfoSubject() {
-  return "Informace k vašemu příjezdu – Spim na Rabí"
+export function arrivalInfoSubject(t: EmailTranslator) {
+  return t("email.arrival.subject")
 }
 
-export function ArrivalInfoEmail({ name, apartmentSlug, reservationUrl, summary }: ArrivalInfoProps) {
+export function ArrivalInfoEmail({ t, locale, name, apartmentSlug, reservationUrl, summary }: ArrivalInfoProps) {
   const info = getGuestInfo(apartmentSlug)
+  const important = t.raw("guestInfo.important") as string[]
 
   return (
-    <EmailLayout preheader="Zítra vás čekáme – posíláme vám informace k pobytu.">
-      <Heading>Dobrý den, {name},</Heading>
-      <Paragraph>zítra vás čekáme ve Spim na Rabí. Posíláme vám informace, které se budou hodit k pobytu.</Paragraph>
-      <ReservationSummary data={summary} />
+    <EmailLayout preheader={t("email.arrival.preheader")} locale={locale} t={t}>
+      <Heading>{t("email.greeting", { name })}</Heading>
+      <Paragraph>{t("email.arrival.intro")}</Paragraph>
+      <ReservationSummary data={summary} locale={locale} t={t} />
 
       {info.address && (
-        <InfoRow label="Adresa">
+        <InfoRow label={t("labels.address")}>
           {info.address}
           {info.googleMapsUrl && (
             <>
               {" "}
               ·{" "}
               <a href={info.googleMapsUrl} style={{ color: "#8B7355" }}>
-                otevřít v Google Maps
+                {t("labels.openMaps")}
               </a>
             </>
           )}
         </InfoRow>
       )}
 
-      {info.parkingInfo && <InfoRow label="Parkování">{info.parkingInfo}</InfoRow>}
-
-      {info.checkInTime && <InfoRow label="Check-in">{info.checkInTime}</InfoRow>}
-
-      {info.keyInstructions && <InfoRow label="Převzetí klíčů">{info.keyInstructions}</InfoRow>}
+      <InfoRow label={t("labels.parking")}>{t("guestInfo.parking")}</InfoRow>
+      <InfoRow label={t("labels.checkInTime")}>{t("guestInfo.checkInTime")}</InfoRow>
+      <InfoRow label={t("labels.keys")}>{t("guestInfo.keys")}</InfoRow>
 
       {info.wifiNetwork && (
-        <InfoRow label="Wifi">
-          Síť: {info.wifiNetwork}
-          {info.wifiPassword && <>, heslo: {info.wifiPassword}</>}
+        <InfoRow label={t("labels.wifi")}>
+          {t("labels.wifiNetwork")}: {info.wifiNetwork}
+          {info.wifiPassword && <>, {t("labels.wifiPassword")}: {info.wifiPassword}</>}
         </InfoRow>
       )}
 
-      {info.importantInfo && info.importantInfo.length > 0 && (
-        <InfoRow label="Důležité informace">
-          {info.importantInfo.map((item, index) => (
+      {important.length > 0 && (
+        <InfoRow label={t("labels.important")}>
+          {important.map((item, index) => (
             <span key={item}>
               {index > 0 && <br />}
               {item}
@@ -61,53 +63,53 @@ export function ArrivalInfoEmail({ name, apartmentSlug, reservationUrl, summary 
         </InfoRow>
       )}
 
-      <Paragraph>Přejeme šťastnou cestu.</Paragraph>
+      <Paragraph>{t("email.arrival.happyTravels")}</Paragraph>
 
-      <CtaButton href={reservationUrl}>Zobrazit rezervaci</CtaButton>
+      <CtaButton href={reservationUrl}>{t("email.arrival.button")}</CtaButton>
 
-      <Paragraph>
-        V případě potřeby nás kontaktujte na telefonu {businessInfo.phone} nebo e-mailu {businessInfo.email}.
-      </Paragraph>
-      <Signoff />
+      <Paragraph>{t("email.arrival.contactLine", { phone: businessInfo.phone, email: businessInfo.email })}</Paragraph>
+      <Signoff t={t} />
     </EmailLayout>
   )
 }
 
-export function arrivalInfoText({ name, apartmentSlug, reservationUrl, summary }: ArrivalInfoProps) {
+export function arrivalInfoText({ t, locale, name, apartmentSlug, reservationUrl, summary }: ArrivalInfoProps) {
   const info = getGuestInfo(apartmentSlug)
+  const important = t.raw("guestInfo.important") as string[]
+
   const lines = [
-    `Dobrý den, ${name},`,
+    t("email.greeting", { name }),
     "",
-    "zítra vás čekáme ve Spim na Rabí. Posíláme vám informace, které se budou hodit k pobytu.",
+    t("email.arrival.intro"),
     "",
-    `Apartmán: ${summary.apartmentName}`,
-    `Příjezd: ${summary.startDate}`,
-    `Odjezd: ${summary.endDate}`,
+    `${t("labels.apartment")}: ${summary.apartmentName}`,
+    `${t("labels.checkIn")}: ${formatReservationDate(summary.startDate, locale)}`,
+    `${t("labels.checkOut")}: ${formatReservationDate(summary.endDate, locale)}`,
     ""
   ]
 
   if (info.address) {
-    lines.push(`Adresa: ${info.address}${info.googleMapsUrl ? ` (${info.googleMapsUrl})` : ""}`)
+    lines.push(`${t("labels.address")}: ${info.address}${info.googleMapsUrl ? ` (${info.googleMapsUrl})` : ""}`)
   }
-  if (info.parkingInfo) lines.push(`Parkování: ${info.parkingInfo}`)
-  if (info.checkInTime) lines.push(`Check-in: ${info.checkInTime}`)
-  if (info.keyInstructions) lines.push(`Převzetí klíčů: ${info.keyInstructions}`)
+  lines.push(`${t("labels.parking")}: ${t("guestInfo.parking")}`)
+  lines.push(`${t("labels.checkInTime")}: ${t("guestInfo.checkInTime")}`)
+  lines.push(`${t("labels.keys")}: ${t("guestInfo.keys")}`)
   if (info.wifiNetwork) {
-    lines.push(`Wifi: síť ${info.wifiNetwork}${info.wifiPassword ? `, heslo ${info.wifiPassword}` : ""}`)
+    lines.push(`${t("labels.wifi")}: ${info.wifiNetwork}${info.wifiPassword ? `, ${t("labels.wifiPassword")} ${info.wifiPassword}` : ""}`)
   }
-  if (info.importantInfo && info.importantInfo.length > 0) {
-    lines.push("Důležité informace:", ...info.importantInfo.map((item) => `- ${item}`))
+  if (important.length > 0) {
+    lines.push(`${t("labels.important")}:`, ...important.map((item) => `- ${item}`))
   }
 
   lines.push(
     "",
-    "Přejeme šťastnou cestu.",
+    t("email.arrival.happyTravels"),
     "",
-    `Zobrazit rezervaci: ${reservationUrl}`,
+    `${t("email.arrival.button")}: ${reservationUrl}`,
     "",
-    `V případě potřeby nás kontaktujte na telefonu ${businessInfo.phone} nebo e-mailu ${businessInfo.email}.`,
+    t("email.arrival.contactLine", { phone: businessInfo.phone, email: businessInfo.email }),
     "",
-    businessInfo.signoffNames,
+    t("email.signoffNames"),
     "Spim na Rabí"
   )
 

@@ -1,6 +1,9 @@
-import Link from "next/link"
+"use client"
 
-export function PhotoPlaceholder({ className = "", label = "Fotky připravujeme" }) {
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
+
+export function PhotoPlaceholder({ className = "", label }) {
   return (
     <div
       className={`flex items-center justify-center border border-mid/20 bg-pale text-center ${className}`}
@@ -11,9 +14,9 @@ export function PhotoPlaceholder({ className = "", label = "Fotky připravujeme"
         <div className="mx-auto mb-4 h-8 w-10 rounded-sm border border-accent/50">
           <div className="mx-auto mt-[7px] h-3.5 w-3.5 rounded-full border border-accent/50" />
         </div>
-        <p className="text-[0.68rem] font-medium uppercase tracking-[0.24em] text-mid">
-          {label}
-        </p>
+        {label ? (
+          <p className="text-[0.68rem] font-medium uppercase tracking-[0.24em] text-mid">{label}</p>
+        ) : null}
       </div>
     </div>
   )
@@ -54,17 +57,27 @@ export function PageHero({ label, title }) {
 }
 
 export function ApartmentCard({ apartment }) {
+  const t = useTranslations()
+
   return (
     <div className="group overflow-hidden border border-mid/20 bg-cream transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(51,51,51,0.10)] js-fade-in">
       <div className="overflow-hidden">
-        <PhotoPlaceholder className="aspect-[4/3] w-full transition-colors duration-300 group-hover:bg-cream" />
+        <PhotoPlaceholder
+          className="aspect-[4/3] w-full transition-colors duration-300 group-hover:bg-cream"
+          label={t("ui.photoPlaceholder")}
+        />
       </div>
       <div className="p-8 pb-9">
-        <p className="mb-2 text-[0.65rem] font-medium uppercase tracking-[0.22em] text-accent">{apartment.badge}</p>
+        <p className="mb-2 text-[0.65rem] font-medium uppercase tracking-[0.22em] text-accent">
+          {t(`apartments.${apartment.slug}.badge`)}
+        </p>
         <h3 className="mb-2 font-serif text-[1.55rem] font-normal">{apartment.name}</h3>
-        <p className="mb-6 text-[0.88rem] leading-[1.65] text-mid">{apartment.desc}</p>
-        <Link href="/cenik" className="inline-block rounded-[2px] border border-dark px-[1.6rem] py-[0.65rem] text-[0.72rem] font-medium uppercase tracking-[0.18em] text-dark transition-colors duration-200 hover:bg-dark hover:text-cream">
-          Zobrazit detail
+        <p className="mb-6 text-[0.88rem] leading-[1.65] text-mid">{t(`apartments.${apartment.slug}.desc`)}</p>
+        <Link
+          href="/cenik"
+          className="inline-block rounded-[2px] border border-dark px-[1.6rem] py-[0.65rem] text-[0.72rem] font-medium uppercase tracking-[0.18em] text-dark transition-colors duration-200 hover:bg-dark hover:text-cream"
+        >
+          {t("ui.viewDetail")}
         </Link>
       </div>
     </div>
@@ -82,7 +95,7 @@ export function ReviewCard({ text, author }) {
   )
 }
 
-export function MapEmbed() {
+export function MapEmbed({ title = "Rabí 175, 342 01 Rabí" }) {
   return (
     <iframe
       className="aspect-[4/3] w-full border-0 grayscale-[30%] contrast-[1.05]"
@@ -90,12 +103,12 @@ export function MapEmbed() {
       allowFullScreen
       loading="lazy"
       referrerPolicy="no-referrer-when-downgrade"
-      title="Mapa - Rabí 175"
+      title={title}
     />
   )
 }
 
-export function CtaBanner({ label, title, ctaText = "Rezervace" }) {
+export function CtaBanner({ label, title, ctaText }) {
   return (
     <div className="relative overflow-hidden bg-dark px-8 py-28 text-center text-cream">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(232,225,215,0.16),transparent_55%)] opacity-[0.35]" />
@@ -104,7 +117,10 @@ export function CtaBanner({ label, title, ctaText = "Rezervace" }) {
         <h2 className="mx-auto mb-10 max-w-[600px] font-serif text-[clamp(1.8rem,4vw,2.8rem)] font-light leading-[1.3]">
           {title}
         </h2>
-        <Link href="/kontakt" className="inline-block rounded-[2px] border border-cream/60 px-10 py-[0.9rem] text-[0.78rem] font-medium uppercase tracking-[0.2em] text-cream transition-colors duration-200 hover:bg-cream hover:text-dark">
+        <Link
+          href="/kontakt"
+          className="inline-block rounded-[2px] border border-cream/60 px-10 py-[0.9rem] text-[0.78rem] font-medium uppercase tracking-[0.2em] text-cream transition-colors duration-200 hover:bg-cream hover:text-dark"
+        >
           {ctaText}
         </Link>
       </div>
@@ -112,14 +128,19 @@ export function CtaBanner({ label, title, ctaText = "Rezervace" }) {
   )
 }
 
-export function PriceCard({ card }) {
+export function PriceCard({ apartment }) {
+  const t = useTranslations()
+  const seasons = t.raw(`pricing.cards.${apartment.slug}.seasons`)
+
   return (
     <div className="border border-mid/20 bg-pale p-8 js-fade-in">
-      <p className="mb-2 text-[0.65rem] font-medium uppercase tracking-[0.22em] text-accent">{card.badge}</p>
-      <h3 className="mb-1 font-serif text-[1.65rem] font-normal">{card.name}</h3>
-      <p className="mb-8 text-[0.86rem] text-mid">{card.subtitle}</p>
+      <p className="mb-2 text-[0.65rem] font-medium uppercase tracking-[0.22em] text-accent">
+        {t(`apartments.${apartment.slug}.badge`)}
+      </p>
+      <h3 className="mb-1 font-serif text-[1.65rem] font-normal">{apartment.name}</h3>
+      <p className="mb-8 text-[0.86rem] text-mid">{t(`pricing.cards.${apartment.slug}.subtitle`)}</p>
       <div className="space-y-4">
-        {card.seasons.map((season) => (
+        {seasons.map((season) => (
           <div key={season.label} className="flex items-baseline justify-between gap-4 border-t border-mid/10 pt-4">
             <span className="text-sm leading-snug text-mid">{season.label}</span>
             <strong className="shrink-0 text-sm font-medium text-dark">{season.price}</strong>

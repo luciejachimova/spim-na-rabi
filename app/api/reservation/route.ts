@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server"
-import { cleanValue, logMailError, mailErrorMessage, readJsonBody, sendMail, validateRequired } from "@/lib/mail"
+import { cleanValue, logMailError, readJsonBody, sendMail, validateRequired } from "@/lib/mail"
 import { createWebsiteReservation, ReservationConflictError, ReservationValidationError } from "@/lib/reservations"
 import { needsImmediateArrivalInfo, sendLifecycleEmail } from "@/lib/guest-emails"
+import { getTranslator, normalizeLocale } from "@/lib/i18n-messages"
 
 export const runtime = "nodejs"
 
@@ -17,6 +18,7 @@ interface ReservationRequestBody {
   date_to?: unknown
   guests?: unknown
   note?: unknown
+  locale?: unknown
 }
 
 function readString(value: unknown) {
@@ -26,8 +28,11 @@ function readString(value: unknown) {
 export async function POST(request: Request) {
   const body = (await readJsonBody(request)) as ReservationRequestBody | null
 
+  const locale = normalizeLocale(body?.locale)
+  const t = await getTranslator(locale, "errors")
+
   if (!body) {
-    return NextResponse.json({ error: "Neplatná data formuláře." }, { status: 400 })
+    return NextResponse.json({ error: t("invalidForm") }, { status: 400 })
   }
 
   const normalizedInput = {
@@ -38,9 +43,9 @@ export async function POST(request: Request) {
     guests: body.guests
   }
 
-  const error = validateRequired(normalizedInput, ["name", "email", "dateFrom", "dateTo", "guests"])
-  if (error) {
-    return NextResponse.json({ error }, { status: 422 })
+  const errorCode = validateRequired(normalizedInput, ["name", "email", "dateFrom", "dateTo", "guests"])
+  if (errorCode) {
+    return NextResponse.json({ error: t(errorCode) }, { status: 422 })
   }
 
   const name = readString(body.name)
@@ -62,12 +67,15 @@ export async function POST(request: Request) {
       startDate: dateFrom,
       endDate: dateTo,
       guests,
-      note
+      note,
+      locale
     })
 
     reservation = result.reservation
 
     try {
+      // Owner notification stays in Czech; the guest's chosen language is
+      // included so the admin knows which language to reply in.
       await sendMail({
         subject: "Nová rezervace Spim na Rabí",
         replyTo: email,
@@ -79,6 +87,7 @@ export async function POST(request: Request) {
           `Příjezd: ${dateFrom}`,
           `Odjezd: ${dateTo}`,
           `Počet hostů: ${guests}`,
+          `Jazyk hosta: ${locale}`,
           "",
           "Poznámka:",
           note || "-",
@@ -114,15 +123,17 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     if (error instanceof ReservationValidationError || error instanceof ReservationConflictError) {
-      return NextResponse.json({ error: error.message }, { status: error instanceof ReservationConflictError ? 409 : 422 })
+      const message = error.code ? t(error.code) : error.message
+      return NextResponse.json({ error: message }, { status: error instanceof ReservationConflictError ? 409 : 422 })
     }
 
     console.error("Failed to save reservation", error)
-    return NextResponse.json({ error: "Rezervaci se nepodařilo uložit." }, { status: 500 })
+    return NextResponse.json({ error: t("saveFailed") }, { status: 500 })
   }
 
+  const successT = await getTranslator(locale, "reservationApi")
   return NextResponse.json({
-    message: "Děkujeme, ozveme se vám s potvrzením rezervace.",
+    message: successT("success"),
     reservationToken: reservation.reservationToken
   })
 }

@@ -1,0 +1,397 @@
+{
+  "nav": {
+    "home": "Hlavní stránka",
+    "about": "O nás",
+    "gallery": "Galerie",
+    "pricing": "Ceník",
+    "contact": "Kontakt",
+    "reserve": "Rezervovat",
+    "openMenu": "Otevřít menu",
+    "language": "Jazyk"
+  },
+  "home": {
+    "heroEyebrow": "Ubytování v srdci Šumavy",
+    "heroSubtitle": "Ubytování, kde se čas zpomalí",
+    "heroStatusReservations": "Rezervace spuštěny",
+    "heroStatusOpening": "Otevíráme v polovině července",
+    "heroCta": "Rezervovat pobyt",
+    "scroll": "Scroll",
+    "quote": "Hrad Rabí na dosah, klid šumavské přírody a vzduch, který zpomalí každou myšlenku.",
+    "apartmentsLabel": "Ubytování",
+    "apartmentsTitle": "Naše apartmány",
+    "apartmentsBody": "Dva pečlivě zařízené prostory, každý s vlastním charakterem. Oba s výhledem, klidem a vším, co k odpočinku potřebujete.",
+    "reviewsLabel": "Hosté říkají",
+    "reviewsTitle": "Recenze",
+    "locationLabel": "Kde nás najdete",
+    "locationTitle": "Rabí",
+    "locationBody": "Malebné město na okraji Šumavy, kde se historie potkává s klidem přírody. Dominantou místa je majestátní hrad Rabí, jen pár minut od vašeho pobytu.",
+    "locationAddressLabel": "Adresa",
+    "locationAddress": "Rabí 175, 342 01 Rabí",
+    "locationCta": "Napsat nám",
+    "ctaLabel": "Připraveni zpomalit?",
+    "ctaTitle": "Rezervujte si pobyt a dopřejte si odpočinek pod hradem Rabí."
+  },
+  "about": {
+    "heroLabel": "Náš příběh",
+    "heroTitle": "O nás",
+    "sectionEyebrow": "Náš příběh",
+    "sectionTitle": "Jak vzniklo Spim na Rabí?",
+    "p1": "Rabí a jeho okolí jsou pro nás místem, ke kterému máme blízko už od dětství. Právě tady jsme strávili spoustu krásných chvil a vždy jsme se sem rádi vraceli.",
+    "p2": "Když jsme přemýšleli, kde vytvořit místo pro odpočinek, bylo rozhodnutí vlastně jednoduché. Chtěli jsme nabídnout ubytování, kde se budou hosté cítit příjemně, zpomalí a budou mít ideální výchozí bod pro objevování krás Šumavy a Pošumaví.",
+    "p3": "Spim na Rabí jsme zařídili tak, jak bychom si přáli cestovat i my sami – pohodlně, útulně a bez zbytečností. Budeme rádi, když si pobyt u nás užijete a odvezete si domů stejně hezké vzpomínky, jaké máme s tímto místem my.",
+    "cta": "Kontaktujte nás"
+  },
+  "gallery": {
+    "heroLabel": "Podívejte se",
+    "heroTitle": "Galerie"
+  },
+  "pricing": {
+    "heroLabel": "Transparentní ceny",
+    "heroTitle": "Ceník",
+    "intro": "Minimální délka pobytu jsou 2 noci. Na přání pro vás rádi připravíme snídani. Domácí mazlíčci jsou vítáni za poplatek 250 Kč / noc.",
+    "cards": {
+      "studio-3": {
+        "subtitle": "Útulné studio – až 4 osoby",
+        "seasons": [
+          { "label": "Mimo sezónu (říjen–duben)", "price": "1 900 Kč / noc" },
+          { "label": "Sezóna (květen–září)", "price": "2 100 Kč / noc" },
+          { "label": "Víkendy a svátky", "price": "2 300 Kč / noc" }
+        ]
+      },
+      "loft-10": {
+        "subtitle": "Prostorný loft – až 6 osob",
+        "seasons": [
+          { "label": "Mimo sezónu (říjen–duben)", "price": "2 600 Kč / noc" },
+          { "label": "Hlavní sezóna (květen–září)", "price": "2 800 Kč / noc" },
+          { "label": "Víkendy a svátky", "price": "3 000 Kč / noc" }
+        ]
+      }
+    }
+  },
+  "contact": {
+    "heroLabel": "Jsme tu pro vás",
+    "heroTitle": "Kontakt",
+    "emailLabel": "Email",
+    "phoneLabel": "Telefon",
+    "addressLabel": "Adresa"
+  },
+  "footer": {
+    "tagline": "Ubytování pod hradem Rabí. Klid, příroda, odpočinek.",
+    "pagesHeading": "Stránky",
+    "stayHeading": "Ubytování",
+    "contactHeading": "Kontakt",
+    "legalHeading": "Informace",
+    "copyright": "Spim na Rabí – Rabí, Šumava"
+  },
+  "apartments": {
+    "studio-3": {
+      "badge": "Apartmán 1",
+      "desc": "Útulné studio až pro 4 osoby. Ideální pro hosty, kteří hledají jednoduchost, klid a pohodlí."
+    },
+    "loft-10": {
+      "badge": "Apartmán 2",
+      "desc": "Prostorný loft až pro 6 osob s dostatkem místa pro rodinu nebo delší pobyt. Kombinace pohodlí a vzdušného prostoru."
+    }
+  },
+  "reviews": [
+    { "text": "Krásné místo, naprostý klid a nádherný výhled. Určitě se vrátíme.", "author": "Jana & Tomáš" },
+    { "text": "Stylové ubytování, všechno perfektně připravené. Nic nám nechybělo.", "author": "Markéta K." },
+    { "text": "Ideální únik z města. Ticho, příroda, pohoda. Přesně to, co jsme potřebovali.", "author": "Rodina Novákova" }
+  ],
+  "ui": {
+    "photoPlaceholder": "Fotky připravujeme",
+    "viewDetail": "Zobrazit detail",
+    "ctaBannerCta": "Rezervace"
+  },
+  "reservationForm": {
+    "eyebrow": "Rezervace",
+    "title": "Poptejte svůj pobyt",
+    "close": "Zavřít rezervaci",
+    "nameLabel": "Jméno",
+    "namePlaceholder": "Vaše jméno",
+    "emailLabel": "Email",
+    "emailPlaceholder": "vas@email.cz",
+    "phoneLabel": "Telefon",
+    "phonePlaceholder": "+420",
+    "apartmentLabel": "Apartmán",
+    "apartmentPlaceholder": "Vyberte apartmán",
+    "apartmentAny": "Je mi to jedno",
+    "datesLabel": "Termín pobytu",
+    "guestsLabel": "Počet hostů",
+    "guestsPlaceholder": "2",
+    "noteLabel": "Poznámka",
+    "notePlaceholder": "Napište nám termín, přání nebo dotaz...",
+    "submit": "Odeslat rezervaci",
+    "submitting": "Odesíláme…",
+    "done": "Hotovo",
+    "statusSubmitting": "Vytváříme vaši rezervaci…",
+    "statusSubmittingSlow": "Kontrolujeme dostupnost apartmánu a dokončujeme rezervaci…",
+    "statusSuccess": "Rezervace byla úspěšně vytvořena.",
+    "errorMissingDates": "Vyberte prosím termín příjezdu a odjezdu v kalendáři.",
+    "errorGeneric": "Rezervaci se nepodařilo odeslat. Zkuste to prosím znovu.",
+    "errorNetwork": "Rezervaci se nepodařilo odeslat. Zkontrolujte připojení a zkuste to prosím znovu."
+  },
+  "contactForm": {
+    "nameLabel": "Jméno",
+    "namePlaceholder": "Vaše jméno",
+    "emailLabel": "Email",
+    "emailPlaceholder": "vas@email.cz",
+    "phoneLabel": "Telefon",
+    "phonePlaceholder": "+420",
+    "messageLabel": "Zpráva",
+    "messagePlaceholder": "Napište nám...",
+    "submit": "Odeslat zprávu",
+    "sending": "Odesílám...",
+    "success": "Děkujeme, ozveme se vám.",
+    "errorGeneric": "Formulář se nepodařilo odeslat.",
+    "errorNetwork": "Formulář se nepodařilo odeslat. Zkuste to prosím znovu."
+  },
+  "calendar": {
+    "prevMonth": "Předchozí měsíc",
+    "nextMonth": "Následující měsíc",
+    "legendFree": "Volno",
+    "legendBusy": "Obsazeno",
+    "legendSelected": "Vybráno",
+    "loadError": "Kalendář obsazenosti se nepodařilo načíst.",
+    "rangeError": "Vybraný termín zahrnoval obsazené dny, výběr začal znovu od nového data.",
+    "selectStart": "Vyberte datum příjezdu",
+    "pickEnd": "Příjezd {date} — vyberte datum odjezdu",
+    "range": "Příjezd {from} – Odjezd {to}"
+  },
+  "reservationCreated": {
+    "heroLabel": "Děkujeme",
+    "heroTitle": "Rezervace byla úspěšně vytvořena",
+    "body": "Potvrzení jsme odeslali na váš e-mail. Den před příjezdem vám pošleme informace k pobytu.",
+    "viewButton": "Zobrazit rezervaci",
+    "notFound": "Rezervaci se nepodařilo dohledat. Pokud jste ji právě vytvořili, zkontrolujte prosím svůj e-mail s potvrzením."
+  },
+  "reservationView": {
+    "heroLabel": "Vaše rezervace"
+  },
+  "labels": {
+    "apartment": "Apartmán",
+    "checkIn": "Příjezd",
+    "checkOut": "Odjezd",
+    "nights": "Počet nocí",
+    "guests": "Počet hostů",
+    "address": "Adresa",
+    "checkInTime": "Check-in",
+    "checkOutTime": "Check-out",
+    "parking": "Parkování",
+    "keys": "Převzetí klíčů",
+    "wifi": "Wifi",
+    "wifiNetwork": "Síť",
+    "wifiPassword": "heslo",
+    "important": "Důležité informace",
+    "contact": "Kontakt",
+    "phone": "Telefon",
+    "email": "E-mail",
+    "openMaps": "otevřít v Google Maps"
+  },
+  "guestInfo": {
+    "checkInTime": "od 15:00",
+    "checkOutTime": "do 11:00",
+    "parking": "Parkovat můžete kdekoliv na vyhrazených parkovacích místech v obci. Při příjezdu od nás obdržíte parkovací kartu, kterou si prosím umístěte viditelně za čelní sklo vozidla po celou dobu pobytu.",
+    "keys": "Klíče si prosím vyzvedněte v kavárně Hraběnka, která se nachází hned vedle vstupu do apartmánů. Pokud přijedete mimo otevírací dobu nebo budete potřebovat s čímkoliv poradit, zavolejte nám na +420 723 936 426.",
+    "important": [
+      "Prosíme o dodržování nočního klidu od 22:00 do 6:00.",
+      "V celém objektu je zakázáno kouřit.",
+      "Pokud cestujete s domácím mazlíčkem, dejte nám to prosím vědět předem.",
+      "Před odjezdem prosím zavřete okna, zhasněte světla a vraťte klíče podle pokynů."
+    ]
+  },
+  "legal": {
+    "gdpr": {
+      "heroLabel": "Informace",
+      "title": "Ochrana osobních údajů",
+      "intro": "Vaše soukromí je pro nás důležité. Níže vysvětlujeme, jaké osobní údaje zpracováváme, za jakým účelem a jaká máte práva. Správcem údajů je provozovatel ubytování Spim na Rabí, Rabí 175, 342 01 Rabí.",
+      "sections": [
+        {
+          "heading": "Jaké údaje zpracováváme",
+          "body": "Zpracováváme údaje, které nám sami poskytnete při rezervaci nebo kontaktu – jméno, e-mail, telefon, termín pobytu, počet hostů a případnou poznámku. Dále zpracováváme údaje nezbytné pro vedení ubytovací knihy podle zákona."
+        },
+        {
+          "heading": "Účel a právní základ",
+          "body": "Údaje používáme k vyřízení a potvrzení rezervace, ke komunikaci s vámi před pobytem i po něm a ke splnění zákonných povinností provozovatele ubytování. Právním základem je plnění smlouvy, plnění právní povinnosti a náš oprávněný zájem na řádném poskytnutí služby."
+        },
+        {
+          "heading": "Doba uchování",
+          "body": "Osobní údaje uchováváme pouze po dobu nezbytně nutnou – po dobu trvání rezervace a následně po dobu vyžadovanou právními předpisy (zejména účetními a daňovými)."
+        },
+        {
+          "heading": "Předání údajů",
+          "body": "Vaše údaje nepředáváme třetím stranám s výjimkou poskytovatelů nezbytných pro provoz (např. e-mailová a hostingová služba) a případů, kdy nám to ukládá zákon. Údaje neprodáváme."
+        },
+        {
+          "heading": "Vaše práva",
+          "body": "Máte právo na přístup ke svým údajům, jejich opravu nebo výmaz, omezení zpracování, přenositelnost a právo vznést námitku. Kdykoliv nás můžete kontaktovat na spimnarabi@seznam.cz. Máte také právo podat stížnost u Úřadu pro ochranu osobních údajů."
+        }
+      ]
+    },
+    "terms": {
+      "heroLabel": "Informace",
+      "title": "Obchodní podmínky",
+      "intro": "Tyto podmínky upravují rezervaci a pobyt v ubytování Spim na Rabí, Rabí 175, 342 01 Rabí. Vytvořením rezervace s nimi souhlasíte.",
+      "sections": [
+        {
+          "heading": "Rezervace",
+          "body": "Rezervace vzniká odesláním rezervačního formuláře a jejím potvrzením z naší strany e-mailem. Minimální délka pobytu jsou 2 noci. Uvádějte prosím pravdivé a úplné údaje."
+        },
+        {
+          "heading": "Ceny a platba",
+          "body": "Ceny jsou uvedeny za apartmán a noc a řídí se aktuálním ceníkem. Domácí mazlíčci jsou vítáni za příplatek 250 Kč / noc. Způsob a termín platby vám sdělíme v potvrzení rezervace."
+        },
+        {
+          "heading": "Příjezd a odjezd",
+          "body": "Check-in probíhá od 15:00, check-out do 11:00, není-li dohodnuto jinak. Informace k převzetí klíčů a parkování vám zašleme e-mailem den před příjezdem."
+        },
+        {
+          "heading": "Pravidla pobytu",
+          "body": "V celém objektu platí zákaz kouření a noční klid od 22:00 do 6:00. Hosté odpovídají za případné škody způsobené během pobytu. Prosíme o šetrné zacházení s vybavením."
+        },
+        {
+          "heading": "Zrušení rezervace",
+          "body": "Podmínky zrušení a případné storno poplatky se řídí našimi storno podmínkami. V případě potřeby nás prosím kontaktujte co nejdříve."
+        }
+      ]
+    },
+    "cancellation": {
+      "heroLabel": "Informace",
+      "title": "Storno podmínky",
+      "intro": "Chápeme, že plány se mohou změnit. Níže najdete podmínky pro zrušení potvrzené rezervace v ubytování Spim na Rabí.",
+      "sections": [
+        {
+          "heading": "Zrušení zdarma",
+          "body": "Rezervaci můžete bezplatně zrušit nejpozději 14 dní před dnem příjezdu. V takovém případě vám vrátíme celou uhrazenou částku."
+        },
+        {
+          "heading": "Storno poplatky",
+          "body": "Při zrušení 13 až 7 dní před příjezdem činí storno poplatek 50 % z ceny pobytu. Při zrušení méně než 7 dní před příjezdem nebo při nedostavení se činí storno poplatek 100 % z ceny pobytu."
+        },
+        {
+          "heading": "Jak zrušit rezervaci",
+          "body": "Rezervaci zrušíte tak, že nám napíšete na spimnarabi@seznam.cz nebo zavoláte na +420 723 936 426. Za okamžik zrušení se považuje doručení vašeho oznámení."
+        },
+        {
+          "heading": "Výjimečné okolnosti",
+          "body": "V případě vážných a doložitelných důvodů se vždy pokusíme najít vstřícné řešení. Neváhejte nás kontaktovat."
+        }
+      ]
+    }
+  },
+  "errors": {
+    "invalidForm": "Neplatná data formuláře.",
+    "requiredField": "Toto pole je povinné.",
+    "nameRequired": "Jméno je povinné.",
+    "emailRequired": "Email je povinný.",
+    "emailInvalid": "Zadejte platný email.",
+    "guestsInvalid": "Počet hostů musí být celé číslo větší než 0.",
+    "datesInvalid": "Odjezd musí být po příjezdu.",
+    "dateFormat": "Datum musí mít formát RRRR-MM-DD.",
+    "dateInvalid": "Datum není platné.",
+    "rangeIncomplete": "Termín rezervace je neúplný.",
+    "rangeInvalid": "Termín rezervace je neplatný.",
+    "slotTaken": "Vybraný termín je už obsazený.",
+    "noApartmentFree": "V daném termínu není volný žádný apartmán.",
+    "apartmentNotFound": "Apartmán nebyl nalezen.",
+    "saveFailed": "Rezervaci se nepodařilo uložit.",
+    "sendFailed": "Formulář se nepodařilo odeslat.",
+    "mailFailed": "Zprávu se nyní nepodařilo odeslat. Zkuste to prosím později nebo nám napište přímo na spimnarabi@seznam.cz."
+  },
+  "reservationApi": {
+    "success": "Děkujeme, ozveme se vám s potvrzením rezervace."
+  },
+  "contactApi": {
+    "success": "Děkujeme, ozveme se vám."
+  },
+  "notFound": {
+    "title": "Stránka nenalezena",
+    "body": "Omlouváme se, ale tato stránka neexistuje.",
+    "cta": "Zpět na hlavní stránku"
+  },
+  "meta": {
+    "defaultTitle": "Spim na Rabí | Stylové ubytování pod hradem Rabí",
+    "titleTemplate": "%s | Spim na Rabí",
+    "defaultDescription": "Studio a prostorný loft v Rabí v Pošumaví, jen pár kroků od hradu Rabí. Stylové ubytování až pro 4 nebo 6 osob.",
+    "ogSubtitle": "UBYTOVÁNÍ POD HRADEM RABÍ",
+    "home": {
+      "title": "Spim na Rabí | Stylové ubytování pod hradem Rabí",
+      "description": "Studio a prostorný loft v Rabí v Pošumaví. Ubytování až pro 4 nebo 6 osob jen pár kroků od hradu Rabí."
+    },
+    "about": {
+      "title": "O nás",
+      "description": "Poznejte příběh ubytování Spim na Rabí a naši filozofii klidného pobytu pod hradem Rabí."
+    },
+    "gallery": {
+      "title": "Galerie ubytování",
+      "description": "Galerie studia a loftu Spim na Rabí. Prohlédněte si ubytování v Rabí v srdci Pošumaví."
+    },
+    "pricing": {
+      "title": "Ceník ubytování",
+      "description": "Ceník ubytování Spim na Rabí. Studio až pro 4 osoby a loft až pro 6 osob od 1 900 Kč za noc."
+    },
+    "contact": {
+      "title": "Kontakt a rezervace",
+      "description": "Kontaktujte Spim na Rabí a rezervujte si studio nebo loft pod hradem Rabí. Rabí 175, Pošumaví."
+    },
+    "reservationCreated": {
+      "title": "Rezervace vytvořena",
+      "description": "Vaše rezervace ve Spim na Rabí byla úspěšně vytvořena."
+    },
+    "gdpr": {
+      "title": "Ochrana osobních údajů",
+      "description": "Zásady zpracování osobních údajů ubytování Spim na Rabí."
+    },
+    "terms": {
+      "title": "Obchodní podmínky",
+      "description": "Obchodní podmínky rezervace a pobytu v ubytování Spim na Rabí."
+    },
+    "cancellation": {
+      "title": "Storno podmínky",
+      "description": "Podmínky zrušení rezervace v ubytování Spim na Rabí."
+    }
+  },
+  "email": {
+    "greeting": "Dobrý den, {name},",
+    "guestFallback": "hosté",
+    "signoffNames": "Lucie a Pavel",
+    "footerAddress": "Spim na Rabí · Rabí 175, 342 01 Rabí",
+    "footerPhone": "Telefon",
+    "footerEmail": "E-mail",
+    "confirmation": {
+      "subject": "Potvrzení rezervace – Spim na Rabí",
+      "preheader": "Vaše rezervace ve Spim na Rabí byla úspěšně vytvořena.",
+      "intro": "děkujeme za rezervaci pobytu ve Spim na Rabí. Vaše rezervace byla úspěšně vytvořena.",
+      "afterSummary": "Den před příjezdem vám pošleme e-mail se všemi informacemi, které budete k pobytu potřebovat – adresu, parkování, wifi a informace k převzetí klíčů.",
+      "button": "Zobrazit rezervaci",
+      "contactLine": "V případě jakýchkoli dotazů nás můžete kontaktovat na telefonu {phone} nebo e-mailu {email}."
+    },
+    "arrival": {
+      "subject": "Informace k vašemu příjezdu – Spim na Rabí",
+      "preheader": "Zítra vás čekáme – posíláme vám informace k pobytu.",
+      "intro": "zítra vás čekáme ve Spim na Rabí. Posíláme vám informace, které se budou hodit k pobytu.",
+      "happyTravels": "Přejeme šťastnou cestu.",
+      "button": "Zobrazit rezervaci",
+      "contactLine": "V případě potřeby nás kontaktujte na telefonu {phone} nebo e-mailu {email}."
+    },
+    "departure": {
+      "subject": "Dnes je den vašeho odjezdu – Spim na Rabí",
+      "preheader": "Děkujeme za pobyt – pár slov k dnešnímu odjezdu.",
+      "intro": "děkujeme za pobyt v apartmánu {apartment}. Dnes je den vašeho odjezdu.",
+      "checkOutLine": "Check-out je {time}.",
+      "checkOutFallback": "Prosíme o odjezd v dohodnutém čase.",
+      "keysLine": "Klíče prosím vraťte stejným způsobem, jakým jste je při příjezdu převzali.",
+      "contactLine": "V případě jakéhokoli problému nás kontaktujte na telefonu {phone} nebo e-mailu {email}."
+    },
+    "thankYou": {
+      "subject": "Děkujeme za návštěvu – Spim na Rabí",
+      "preheader": "Děkujeme za návštěvu Spim na Rabí.",
+      "intro": "děkujeme za návštěvu Spim na Rabí.",
+      "reviewIntro": "Pokud budete mít chvíli, budeme vděční za hodnocení – moc nám to pomůže.",
+      "reviewGoogle": "Ohodnotit nás na Google",
+      "reviewBooking": "Ohodnotit pobyt na Booking.com",
+      "reviewAirbnb": "Ohodnotit pobyt na Airbnb",
+      "closing": "Přejeme vám hezký zbytek dne."
+    }
+  }
+}

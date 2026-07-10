@@ -42,6 +42,7 @@ export interface ReservationRecord {
   phone: string | null
   guests: number | null
   note: string | null
+  locale: string
   reservationToken: string | null
   confirmationEmailedAt: string | null
   confirmationEmailAttempts: number
@@ -70,6 +71,7 @@ export interface WebsiteReservationInput {
   endDate: string
   guests: number
   note?: string
+  locale?: string
 }
 
 export interface AdminBlockInput {
@@ -118,6 +120,7 @@ interface RawReservationRow {
   phone: string | null
   guests: number | bigint | null
   note: string | null
+  locale: string
   reservation_token: string | null
   confirmation_emailed_at: Date | string | null
   confirmation_email_attempts: number | bigint
@@ -134,9 +137,24 @@ interface RawReservationRow {
 
 class ReservationError extends Error {}
 
-export class ReservationValidationError extends ReservationError {}
+// `code` (optional) is a stable key into the "errors" message namespace so
+// public API routes can translate the failure into the guest's language. The
+// Czech `message` remains for admin callers (admin UI stays Czech) and logs.
+export class ReservationValidationError extends ReservationError {
+  code?: string
+  constructor(message: string, code?: string) {
+    super(message)
+    this.code = code
+  }
+}
 
-export class ReservationConflictError extends ReservationError {}
+export class ReservationConflictError extends ReservationError {
+  code?: string
+  constructor(message: string, code?: string) {
+    super(message)
+    this.code = code
+  }
+}
 
 export class ReservationNotFoundError extends ReservationError {}
 
@@ -148,7 +166,7 @@ export function getBaseUrl() {
 
 function parseDateOnly(value: string) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-    throw new ReservationValidationError("Datum musí mít formát YYYY-MM-DD.")
+    throw new ReservationValidationError("Datum musí mít formát YYYY-MM-DD.", "dateFormat")
   }
 
   const [year, month, day] = value.split("-").map(Number)
@@ -160,7 +178,7 @@ function parseDateOnly(value: string) {
     date.getUTCMonth() !== month - 1 ||
     date.getUTCDate() !== day
   ) {
-    throw new ReservationValidationError("Datum není platné.")
+    throw new ReservationValidationError("Datum není platné.", "dateInvalid")
   }
 
   return value
@@ -192,13 +210,13 @@ function normalizeExternalUid(entry: IcalEntry) {
 
 function toDateString(value: Date | string | undefined) {
   if (!value) {
-    throw new ReservationValidationError("Termín rezervace je neúplný.")
+    throw new ReservationValidationError("Termín rezervace je neúplný.", "rangeIncomplete")
   }
 
   const date = value instanceof Date ? value : new Date(value)
 
   if (Number.isNaN(date.getTime())) {
-    throw new ReservationValidationError("Termín rezervace je neplatný.")
+    throw new ReservationValidationError("Termín rezervace je neplatný.", "rangeInvalid")
   }
 
   return formatDateForPrague(date)
@@ -268,6 +286,7 @@ export function toReservationWithApartment(
     phone: reservation.phone,
     guests: reservation.guests,
     note: reservation.note,
+    locale: reservation.locale,
     reservationToken: reservation.reservationToken,
     confirmationEmailedAt: toNullableIsoString(reservation.confirmationEmailedAt),
     confirmationEmailAttempts: reservation.confirmationEmailAttempts,
@@ -307,6 +326,7 @@ function mapRawReservationRow(row: RawReservationRow, apartment: Pick<ApartmentR
     phone: row.phone,
     guests: row.guests === null ? null : Number(row.guests),
     note: row.note,
+    locale: row.locale,
     reservationToken: row.reservation_token,
     confirmationEmailedAt: toNullableIsoString(row.confirmation_emailed_at),
     confirmationEmailAttempts: Number(row.confirmation_email_attempts),
@@ -335,6 +355,7 @@ interface AtomicInsertPayload {
   phone: string | null
   guests: number | null
   note: string | null
+  locale: string
 }
 
 // Folds the overlap check and the write into one atomic SQL statement so two
@@ -348,11 +369,11 @@ async function insertReservationAtomic(
   const rows = await prisma.$queryRaw<RawReservationRow[]>`
     INSERT INTO reservations (
       apartment_id, start_date, end_date, source, status, external_uid,
-      name, email, phone, guests, note, reservation_token, created_at, updated_at
+      name, email, phone, guests, note, locale, reservation_token, created_at, updated_at
     )
     SELECT
       ${payload.apartmentId}, ${payload.startDate}, ${payload.endDate}, ${payload.source}, 'active', ${payload.externalUid},
-      ${payload.name}, ${payload.email}, ${payload.phone}, ${payload.guests}, ${payload.note}, ${crypto.randomUUID()}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+      ${payload.name}, ${payload.email}, ${payload.phone}, ${payload.guests}, ${payload.note}, ${payload.locale}, ${crypto.randomUUID()}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
     WHERE NOT EXISTS (
       SELECT 1 FROM reservations
       WHERE apartment_id = ${payload.apartmentId}
@@ -443,13 +464,13 @@ export async function getReservationByToken(token: string): Promise<ReservationW
 
 function validateEmailFormat(email: string) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    throw new ReservationValidationError("Zadejte platný email.")
+    throw new ReservationValidationError("Zadejte platný email.", "emailInvalid")
   }
 }
 
 function validateGuestsCount(guests: number) {
   if (!Number.isInteger(guests) || guests <= 0) {
-    throw new ReservationValidationError("Počet hostů musí být celé číslo větší než 0.")
+    throw new ReservationValidationError("Počet hostů musí být celé číslo větší než 0.", "guestsInvalid")
   }
 }
 
@@ -459,13 +480,14 @@ export async function createWebsiteReservation(input: WebsiteReservationInput) {
   const phone = input.phone?.trim() || null
   const note = input.note?.trim() || null
   const guests = Number(input.guests)
+  const locale = input.locale || "cs"
 
   if (!name) {
-    throw new ReservationValidationError("Jméno je povinné.")
+    throw new ReservationValidationError("Jméno je povinné.", "nameRequired")
   }
 
   if (!email) {
-    throw new ReservationValidationError("Email je povinný.")
+    throw new ReservationValidationError("Email je povinný.", "emailRequired")
   }
 
   validateEmailFormat(email)
@@ -475,7 +497,7 @@ export async function createWebsiteReservation(input: WebsiteReservationInput) {
   const endDate = parseDateOnly(input.endDate)
 
   if (!areDatesValid(startDate, endDate)) {
-    throw new ReservationValidationError("Odjezd musí být po příjezdu.")
+    throw new ReservationValidationError("Odjezd musí být po příjezdu.", "datesInvalid")
   }
 
   const isAnySelection = !input.apartmentSelection || input.apartmentSelection === "any"
@@ -496,7 +518,8 @@ export async function createWebsiteReservation(input: WebsiteReservationInput) {
         email,
         phone,
         guests,
-        note
+        note,
+        locale
       },
       apartment
     )
@@ -507,7 +530,8 @@ export async function createWebsiteReservation(input: WebsiteReservationInput) {
   }
 
   throw new ReservationConflictError(
-    isAnySelection ? "V daném termínu není volný žádný apartmán." : "Vybraný termín je už obsazený."
+    isAnySelection ? "V daném termínu není volný žádný apartmán." : "Vybraný termín je už obsazený.",
+    isAnySelection ? "noApartmentFree" : "slotTaken"
   )
 }
 
@@ -535,7 +559,8 @@ export async function createAdminBlock(input: AdminBlockInput) {
       email: null,
       phone: null,
       guests: null,
-      note: input.note?.trim() || null
+      note: input.note?.trim() || null,
+      locale: "cs"
     },
     apartment
   )

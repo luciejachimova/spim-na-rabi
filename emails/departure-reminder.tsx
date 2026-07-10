@@ -1,53 +1,45 @@
 import { EmailLayout } from "./layout"
-import { Heading, Paragraph, Signoff } from "./components"
-import { businessInfo, getGuestInfo } from "@/data/guest-info"
+import { Heading, Paragraph, Signoff, type EmailTranslator } from "./components"
+import { businessInfo } from "@/data/guest-info"
 
 export interface DepartureReminderProps {
+  t: EmailTranslator
+  locale: string
   name: string
   apartmentSlug: string
   apartmentName: string
 }
 
-export function departureReminderSubject() {
-  return "Dnes je den vašeho odjezdu – Spim na Rabí"
+export function departureReminderSubject(t: EmailTranslator) {
+  return t("email.departure.subject")
 }
 
-export function DepartureReminderEmail({ name, apartmentSlug, apartmentName }: DepartureReminderProps) {
-  const info = getGuestInfo(apartmentSlug)
-
+export function DepartureReminderEmail({ t, locale, name, apartmentName }: DepartureReminderProps) {
   return (
-    <EmailLayout preheader="Děkujeme za pobyt – pár slov k dnešnímu odjezdu.">
-      <Heading>Dobrý den, {name},</Heading>
-      <Paragraph>děkujeme za pobyt v apartmánu {apartmentName}. Dnes je den vašeho odjezdu.</Paragraph>
-      <Paragraph>
-        {info.checkOutTime
-          ? `Check-out je ${info.checkOutTime}.`
-          : "Prosíme o odjezd v dohodnutém čase."}
-      </Paragraph>
-      <Paragraph>Klíče prosím vraťte stejným způsobem, jakým jste je při příjezdu převzali.</Paragraph>
-      <Paragraph>
-        V případě jakéhokoli problému nás kontaktujte na telefonu {businessInfo.phone} nebo e-mailu{" "}
-        {businessInfo.email}.
-      </Paragraph>
-      <Signoff />
+    <EmailLayout preheader={t("email.departure.preheader")} locale={locale} t={t}>
+      <Heading>{t("email.greeting", { name })}</Heading>
+      <Paragraph>{t("email.departure.intro", { apartment: apartmentName })}</Paragraph>
+      <Paragraph>{t("email.departure.checkOutLine", { time: t("guestInfo.checkOutTime") })}</Paragraph>
+      <Paragraph>{t("email.departure.keysLine")}</Paragraph>
+      <Paragraph>{t("email.departure.contactLine", { phone: businessInfo.phone, email: businessInfo.email })}</Paragraph>
+      <Signoff t={t} />
     </EmailLayout>
   )
 }
 
-export function departureReminderText({ name, apartmentName, apartmentSlug }: DepartureReminderProps) {
-  const info = getGuestInfo(apartmentSlug)
+export function departureReminderText({ t, name, apartmentName }: DepartureReminderProps) {
   const lines = [
-    `Dobrý den, ${name},`,
+    t("email.greeting", { name }),
     "",
-    `děkujeme za pobyt v apartmánu ${apartmentName}. Dnes je den vašeho odjezdu.`,
+    t("email.departure.intro", { apartment: apartmentName }),
     "",
-    info.checkOutTime ? `Check-out je ${info.checkOutTime}.` : "Prosíme o odjezd v dohodnutém čase.",
+    t("email.departure.checkOutLine", { time: t("guestInfo.checkOutTime") }),
     "",
-    "Klíče prosím vraťte stejným způsobem, jakým jste je při příjezdu převzali.",
+    t("email.departure.keysLine"),
     "",
-    `V případě jakéhokoli problému nás kontaktujte na telefonu ${businessInfo.phone} nebo e-mailu ${businessInfo.email}.`,
+    t("email.departure.contactLine", { phone: businessInfo.phone, email: businessInfo.email }),
     "",
-    businessInfo.signoffNames,
+    t("email.signoffNames"),
     "Spim na Rabí"
   ]
   return lines.join("\n")

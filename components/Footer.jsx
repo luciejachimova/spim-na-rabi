@@ -1,17 +1,23 @@
-import Link from "next/link"
+"use client"
+
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
+import { apartments, legalLinks, navLinks } from "@/data/content"
 
 const footerLinkClass = "text-sm text-mid transition-colors duration-200 hover:text-dark"
 
 export default function Footer() {
+  const t = useTranslations()
+  const nav = useTranslations("nav")
+  const legal = useTranslations("meta")
+
   return (
     <footer className="border-t border-mid/15 bg-cream pb-10 pt-16">
       <div className="mx-auto max-w-[1100px] px-8">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-[2fr_1fr_1fr_1fr]">
           <div>
             <span className="mb-2 block font-script text-[1.4rem] text-dark">Spim na Rabí</span>
-            <p className="max-w-[220px] text-sm leading-relaxed text-mid">
-              Ubytování pod hradem Rabí. <br /> Klid, příroda, odpočinek.
-            </p>
+            <p className="max-w-[220px] text-sm leading-relaxed text-mid">{t("footer.tagline")}</p>
             <div className="mt-5 flex gap-3">
               <a href="https://www.facebook.com/profile.php?id=61579506120985" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook" className="flex h-9 w-9 items-center justify-center rounded-[2px] border border-light text-mid transition-colors duration-200 hover:border-dark hover:text-dark">
                 <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current"><path d="M13.36 22v-8.2h2.76l.41-3.2h-3.17V8.56c0-.93.26-1.56 1.59-1.56H16.8V4.14c-.32-.04-1.43-.14-2.72-.14-2.69 0-4.53 1.64-4.53 4.66v1.94H6.5v3.2h3.05V22h3.81Z" /></svg>
@@ -23,26 +29,37 @@ export default function Footer() {
           </div>
 
           <div className="hidden md:block">
-            <h4 className="mb-4 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-dark">Stránky</h4>
+            <h4 className="mb-4 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-dark">{t("footer.pagesHeading")}</h4>
             <ul className="list-none space-y-2">
-              <li><Link href="/" className={footerLinkClass}>Hlavní stránka</Link></li>
-              <li><Link href="/o-nas" className={footerLinkClass}>O nás</Link></li>
-              <li><Link href="/galerie" className={footerLinkClass}>Galerie</Link></li>
-              <li><Link href="/cenik" className={footerLinkClass}>Ceník</Link></li>
-              <li><Link href="/kontakt" className={footerLinkClass}>Kontakt</Link></li>
+              {navLinks.map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className={footerLinkClass}>{nav(item.key)}</Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           <div>
-            <h4 className="mb-4 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-dark">Ubytování</h4>
+            <h4 className="mb-4 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-dark">{t("footer.stayHeading")}</h4>
             <ul className="list-none space-y-2">
-              <li><Link href="/cenik" className={footerLinkClass}>Studio ³</Link></li>
-              <li><Link href="/cenik" className={footerLinkClass}>Loft ¹⁰</Link></li>
+              {apartments.map((apartment) => (
+                <li key={apartment.slug}>
+                  <Link href="/cenik" className={footerLinkClass}>{apartment.name}</Link>
+                </li>
+              ))}
+            </ul>
+            <h4 className="mb-4 mt-8 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-dark">{t("footer.legalHeading")}</h4>
+            <ul className="list-none space-y-2">
+              {legalLinks.map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className={footerLinkClass}>{legal(`${item.key}.title`)}</Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           <div>
-            <h4 className="mb-4 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-dark">Kontakt</h4>
+            <h4 className="mb-4 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-dark">{t("footer.contactHeading")}</h4>
             <ul className="list-none space-y-2">
               <li><a href="mailto:spimnarabi@seznam.cz" className={footerLinkClass}>spimnarabi@seznam.cz</a></li>
               <li><a href="tel:+420723936426" className={footerLinkClass}>+420 723 936 426</a></li>
@@ -52,7 +69,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-14 border-t border-mid/10 pt-6 text-center text-[0.75rem] tracking-wide text-light">
-          © {new Date().getFullYear()} Spim na Rabí - Rabí, Šumava
+          © {new Date().getFullYear()} {t("footer.copyright")}
         </div>
       </div>
     </footer>
