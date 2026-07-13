@@ -16,20 +16,25 @@ export const legalLinks = [
   { key: "cancellation", href: "/storno" }
 ]
 
-// Brand names and images are locale-independent; badge/desc/subtitle come from
-// the "apartments" and "pricing" message namespaces keyed by slug.
+// Studio photos (web-optimized, stored under public/images/studio). Shown in
+// the gallery and as the Studio ³ card image.
+export const studioPhotos = Array.from(
+  { length: 18 },
+  (_, i) => `/images/studio/studio-${String(i + 1).padStart(2, "0")}.jpg`
+)
+
+// Brand names are locale-independent; badge/desc/subtitle come from the
+// "apartments" and "pricing" message namespaces keyed by slug. imageUrl is the
+// card photo, or null to fall back to a placeholder (Loft ¹⁰ has no photos yet).
 export const apartments = [
   {
     slug: "studio-3",
     name: "Studio ³",
-    imageUrl: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=1000&q=80"
+    imageUrl: studioPhotos[0]
   },
   {
     slug: "loft-10",
     name: "Loft ¹⁰",
-    imageUrl: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1000&q=80"
+    imageUrl: null
   }
 ]
-
-// Number of placeholder tiles rendered on the gallery page.
-export const galleryImageCount = 9

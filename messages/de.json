@@ -44,7 +44,11 @@
   },
   "gallery": {
     "heroLabel": "Schauen Sie sich um",
-    "heroTitle": "Galerie"
+    "heroTitle": "Galerie",
+    "photoAlt": "Studio ³ – Foto {n}",
+    "close": "Schließen",
+    "prev": "Vorheriges Foto",
+    "next": "Nächstes Foto"
   },
   "pricing": {
     "heroLabel": "Transparente Preise",

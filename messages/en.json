@@ -44,7 +44,11 @@
   },
   "gallery": {
     "heroLabel": "Take a look",
-    "heroTitle": "Gallery"
+    "heroTitle": "Gallery",
+    "photoAlt": "Studio ³ – photo {n}",
+    "close": "Close",
+    "prev": "Previous photo",
+    "next": "Next photo"
   },
   "pricing": {
     "heroLabel": "Transparent prices",

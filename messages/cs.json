@@ -44,7 +44,11 @@
   },
   "gallery": {
     "heroLabel": "Podívejte se",
-    "heroTitle": "Galerie"
+    "heroTitle": "Galerie",
+    "photoAlt": "Studio ³ – fotografie {n}",
+    "close": "Zavřít",
+    "prev": "Předchozí fotografie",
+    "next": "Další fotografie"
   },
   "pricing": {
     "heroLabel": "Transparentní ceny",

@@ -62,10 +62,19 @@ export function ApartmentCard({ apartment }) {
   return (
     <div className="group overflow-hidden border border-mid/20 bg-cream transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(51,51,51,0.10)] js-fade-in">
       <div className="overflow-hidden">
-        <PhotoPlaceholder
-          className="aspect-[4/3] w-full transition-colors duration-300 group-hover:bg-cream"
-          label={t("ui.photoPlaceholder")}
-        />
+        {apartment.imageUrl ? (
+          <img
+            src={apartment.imageUrl}
+            alt={apartment.name}
+            loading="lazy"
+            className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <PhotoPlaceholder
+            className="aspect-[4/3] w-full transition-colors duration-300 group-hover:bg-cream"
+            label={t("ui.photoPlaceholder")}
+          />
+        )}
       </div>
       <div className="p-8 pb-9">
         <p className="mb-2 text-[0.65rem] font-medium uppercase tracking-[0.22em] text-accent">
