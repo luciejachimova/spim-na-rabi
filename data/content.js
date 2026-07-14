@@ -1,6 +1,14 @@
 // Structural (non-textual) content only. All user-facing text lives in the
 // message catalogs under /messages and is looked up by the keys/slugs below.
 
+// Contact / booking channels shown in the reservation dialog. Client-safe
+// (plain data), so client components can import it directly.
+export const businessContact = {
+  phone: "+420 723 936 426",
+  email: "spimnarabi@seznam.cz",
+  bookingUrl: "https://www.booking.com/hotel/cz/spim-na-rabi-studio-3.cs.html"
+}
+
 export const navLinks = [
   { key: "home", href: "/" },
   { key: "about", href: "/o-nas" },

@@ -103,6 +103,11 @@
     "viewDetail": "Details ansehen",
     "ctaBannerCta": "Reservieren"
   },
+  "booking": {
+    "title": "Reservieren Sie Ihren Aufenthalt",
+    "intro": "Kontaktieren Sie uns telefonisch oder per E-Mail, oder buchen Sie direkt über Booking.com.",
+    "bookingCta": "Auf Booking.com buchen"
+  },
   "reservationForm": {
     "eyebrow": "Reservierung",
     "title": "Fragen Sie Ihren Aufenthalt an",

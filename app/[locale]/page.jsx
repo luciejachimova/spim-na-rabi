@@ -4,10 +4,12 @@ import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
 import { apartments } from "@/data/content"
 import { ApartmentCard, CtaBanner, MapEmbed, SectionHeader } from "@/components/ui"
+import { useReservation } from "@/components/ClientChrome"
 
 export default function HomePage() {
   const t = useTranslations("home")
   const ui = useTranslations("ui")
+  const { openReservation } = useReservation()
 
   return (
     <>
@@ -33,12 +35,13 @@ export default function HomePage() {
           <p className="mb-8 animate-fade-up text-[0.68rem] font-medium uppercase tracking-[0.2em] text-accent [animation-delay:900ms]">
             {t("heroStatusReservations")} <span aria-hidden="true" className="mx-2 text-light">·</span> {t("heroStatusOpening")}
           </p>
-          <Link
-            href="/kontakt"
-            className="inline-block animate-fade-up rounded-[2px] bg-dark px-10 py-[0.9rem] text-[0.78rem] font-medium uppercase tracking-[0.2em] text-cream transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent [animation-delay:1050ms]"
+          <button
+            type="button"
+            onClick={openReservation}
+            className="inline-block animate-fade-up cursor-pointer rounded-[2px] border-none bg-dark px-10 py-[0.9rem] text-[0.78rem] font-medium uppercase tracking-[0.2em] text-cream transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent [animation-delay:1050ms]"
           >
             {t("heroCta")}
-          </Link>
+          </button>
         </div>
 
         <div className="absolute bottom-9 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 opacity-55">

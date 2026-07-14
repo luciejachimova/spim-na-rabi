@@ -103,6 +103,11 @@
     "viewDetail": "Zobrazit detail",
     "ctaBannerCta": "Rezervace"
   },
+  "booking": {
+    "title": "Rezervujte si pobyt",
+    "intro": "Ozvěte se nám telefonicky nebo e-mailem, nebo rezervujte přímo přes Booking.com.",
+    "bookingCta": "Rezervovat na Booking.com"
+  },
   "reservationForm": {
     "eyebrow": "Rezervace",
     "title": "Poptejte svůj pobyt",

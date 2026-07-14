@@ -103,6 +103,11 @@
     "viewDetail": "View details",
     "ctaBannerCta": "Book now"
   },
+  "booking": {
+    "title": "Book your stay",
+    "intro": "Reach us by phone or email, or book directly on Booking.com.",
+    "bookingCta": "Book on Booking.com"
+  },
   "reservationForm": {
     "eyebrow": "Reservation",
     "title": "Enquire about your stay",

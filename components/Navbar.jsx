@@ -5,10 +5,12 @@ import { useTranslations } from "next-intl"
 import { Link, usePathname } from "@/i18n/navigation"
 import { navLinks } from "@/data/content"
 import LanguageSwitcher from "./LanguageSwitcher"
+import { useReservation } from "./ClientChrome"
 
 export default function Navbar() {
   const t = useTranslations("nav")
   const pathname = usePathname()
+  const { openReservation } = useReservation()
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -40,12 +42,16 @@ export default function Navbar() {
             </li>
           ))}
           <li>
-            <Link
-              href="/kontakt"
-              className="rounded-[2px] bg-dark px-[1.4rem] py-2 text-[0.78rem] font-medium uppercase tracking-[0.16em] text-cream transition-colors duration-200 hover:bg-accent"
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false)
+                openReservation()
+              }}
+              className="cursor-pointer rounded-[2px] border-none bg-dark px-[1.4rem] py-2 text-[0.78rem] font-medium uppercase tracking-[0.16em] text-cream transition-colors duration-200 hover:bg-accent"
             >
               {t("reserve")}
-            </Link>
+            </button>
           </li>
           <li className="md:hidden">
             <LanguageSwitcher className="text-[0.9rem]" />

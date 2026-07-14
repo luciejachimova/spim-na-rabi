@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
+import { useReservation } from "./ClientChrome"
 
 export function PhotoPlaceholder({ className = "", label }) {
   return (
@@ -118,6 +119,8 @@ export function MapEmbed({ title = "Rabí 175, 342 01 Rabí" }) {
 }
 
 export function CtaBanner({ label, title, ctaText }) {
+  const { openReservation } = useReservation()
+
   return (
     <div className="relative overflow-hidden bg-dark px-8 py-28 text-center text-cream">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(232,225,215,0.16),transparent_55%)] opacity-[0.35]" />
@@ -126,12 +129,13 @@ export function CtaBanner({ label, title, ctaText }) {
         <h2 className="mx-auto mb-10 max-w-[600px] font-serif text-[clamp(1.8rem,4vw,2.8rem)] font-light leading-[1.3]">
           {title}
         </h2>
-        <Link
-          href="/kontakt"
-          className="inline-block rounded-[2px] border border-cream/60 px-10 py-[0.9rem] text-[0.78rem] font-medium uppercase tracking-[0.2em] text-cream transition-colors duration-200 hover:bg-cream hover:text-dark"
+        <button
+          type="button"
+          onClick={openReservation}
+          className="inline-block cursor-pointer rounded-[2px] border border-cream/60 px-10 py-[0.9rem] text-[0.78rem] font-medium uppercase tracking-[0.2em] text-cream transition-colors duration-200 hover:bg-cream hover:text-dark"
         >
           {ctaText}
-        </Link>
+        </button>
       </div>
     </div>
   )
