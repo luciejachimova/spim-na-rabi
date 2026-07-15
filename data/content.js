@@ -31,6 +31,10 @@ export const studioPhotos = Array.from(
   (_, i) => `/images/studio/studio-${String(i + 1).padStart(2, "0")}.jpg`
 )
 
+// Loft photos — none yet. Drop web-optimized files under public/images/loft
+// and list them here to fill the Loft ¹⁰ gallery section.
+export const loftPhotos = []
+
 // Brand names are locale-independent; badge/desc/subtitle come from the
 // "apartments" and "pricing" message namespaces keyed by slug. imageUrl is the
 // card photo, or null to fall back to a placeholder (Loft ¹⁰ has no photos yet).
@@ -45,4 +49,11 @@ export const apartments = [
     name: "Loft ¹⁰",
     imageUrl: null
   }
+]
+
+// Gallery, grouped per apartment. Each section renders its photos, or a
+// "coming soon" placeholder when the apartment has none yet.
+export const galleryByApartment = [
+  { slug: "studio-3", name: "Studio ³", photos: studioPhotos },
+  { slug: "loft-10", name: "Loft ¹⁰", photos: loftPhotos }
 ]

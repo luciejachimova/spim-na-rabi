@@ -79,7 +79,7 @@ export default async function LocaleLayout({ children, params }) {
     url: "https://spimnarabi.cz",
     telephone: "+420723936426",
     email: "spimnarabi@seznam.cz",
-    priceRange: "1 800–2 700 Kč",
+    priceRange: "1 900–2 800 Kč",
     petsAllowed: true,
     address: {
       "@type": "PostalAddress",

@@ -45,7 +45,7 @@
   "gallery": {
     "heroLabel": "Schauen Sie sich um",
     "heroTitle": "Galerie",
-    "photoAlt": "Studio ³ – Foto {n}",
+    "photoAlt": "{name} – Foto {n}",
     "close": "Schließen",
     "prev": "Vorheriges Foto",
     "next": "Nächstes Foto"
@@ -58,17 +58,17 @@
       "studio-3": {
         "subtitle": "Gemütliches Studio – bis zu 4 Personen",
         "seasons": [
-          { "label": "Nebensaison (Oktober–April)", "price": "1 800 Kč / Nacht" },
-          { "label": "Saison (Mai–September)", "price": "1 900 Kč / Nacht" },
-          { "label": "Wochenenden und Feiertage", "price": "2 100 Kč / Nacht" }
+          { "label": "Nebensaison (Oktober–April)", "price": "1 900 Kč / Nacht" },
+          { "label": "Saison (Mai–September)", "price": "2 000 Kč / Nacht" },
+          { "label": "Wochenenden und Feiertage", "price": "2 200 Kč / Nacht" }
         ]
       },
       "loft-10": {
         "subtitle": "Geräumiges Loft – bis zu 6 Personen",
         "seasons": [
-          { "label": "Nebensaison (Oktober–April)", "price": "2 400 Kč / Nacht" },
-          { "label": "Hauptsaison (Mai–September)", "price": "2 500 Kč / Nacht" },
-          { "label": "Wochenenden und Feiertage", "price": "2 700 Kč / Nacht" }
+          { "label": "Nebensaison (Oktober–April)", "price": "2 500 Kč / Nacht" },
+          { "label": "Hauptsaison (Mai–September)", "price": "2 600 Kč / Nacht" },
+          { "label": "Wochenenden und Feiertage", "price": "2 800 Kč / Nacht" }
         ]
       }
     }
@@ -333,7 +333,7 @@
     },
     "pricing": {
       "title": "Preise der Unterkunft",
-      "description": "Preise der Unterkunft Spim na Rabí. Studio für bis zu 4 Personen und Loft für bis zu 6 Personen ab 1 800 Kč pro Nacht."
+      "description": "Preise der Unterkunft Spim na Rabí. Studio für bis zu 4 Personen und Loft für bis zu 6 Personen ab 1 900 Kč pro Nacht."
     },
     "contact": {
       "title": "Kontakt und Reservierung",
