@@ -1,8 +1,11 @@
 "use client"
 
+import { useState } from "react"
 import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
 import { useReservation } from "./ClientChrome"
+import Lightbox from "./lightbox"
+import ApartmentDetailModal from "./apartment-detail-modal"
 
 export function PhotoPlaceholder({ className = "", label }) {
   return (
@@ -59,17 +62,42 @@ export function PageHero({ label, title }) {
 
 export function ApartmentCard({ apartment }) {
   const t = useTranslations()
+  const [lightboxIndex, setLightboxIndex] = useState(null)
+  const [detailOpen, setDetailOpen] = useState(false)
+
+  const hasPhotos = Array.isArray(apartment.photos) && apartment.photos.length > 0
+  const photos = hasPhotos
+    ? apartment.photos.map((src, i) => ({ src, alt: t("gallery.photoAlt", { name: apartment.name, n: i + 1 }) }))
+    : []
+  const lightboxLabels = { close: t("gallery.close"), prev: t("gallery.prev"), next: t("gallery.next") }
+
+  const detailButtonClass =
+    "inline-block cursor-pointer rounded-[2px] border border-dark px-[1.6rem] py-[0.65rem] text-[0.72rem] font-medium uppercase tracking-[0.18em] text-dark transition-colors duration-200 hover:bg-dark hover:text-cream"
 
   return (
     <div className="group overflow-hidden border border-mid/20 bg-cream transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(51,51,51,0.10)] js-fade-in">
       <div className="overflow-hidden">
-        {apartment.imageUrl ? (
-          <img
-            src={apartment.imageUrl}
-            alt={apartment.name}
-            loading="lazy"
-            className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
+        {hasPhotos ? (
+          <button
+            type="button"
+            onClick={() => setLightboxIndex(0)}
+            aria-label={apartment.name}
+            className="group/photo relative block w-full cursor-pointer overflow-hidden"
+          >
+            <img
+              src={apartment.imageUrl}
+              alt={apartment.name}
+              loading="lazy"
+              className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-dark/0 opacity-0 transition-all duration-300 group-hover/photo:bg-dark/25 group-hover/photo:opacity-100">
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-9 w-9 fill-none stroke-cream stroke-[1.5]">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m20 20-3.5-3.5" strokeLinecap="round" />
+                <path d="M11 8v6M8 11h6" strokeLinecap="round" />
+              </svg>
+            </span>
+          </button>
         ) : (
           <PhotoPlaceholder
             className="aspect-[4/3] w-full transition-colors duration-300 group-hover:bg-cream"
@@ -83,13 +111,29 @@ export function ApartmentCard({ apartment }) {
         </p>
         <h3 className="mb-2 font-serif text-[1.55rem] font-normal">{apartment.name}</h3>
         <p className="mb-6 text-[0.88rem] leading-[1.65] text-mid">{t(`apartments.${apartment.slug}.desc`)}</p>
-        <Link
-          href="/cenik"
-          className="inline-block rounded-[2px] border border-dark px-[1.6rem] py-[0.65rem] text-[0.72rem] font-medium uppercase tracking-[0.18em] text-dark transition-colors duration-200 hover:bg-dark hover:text-cream"
-        >
-          {t("ui.viewDetail")}
-        </Link>
+        {apartment.hasDetail ? (
+          <button type="button" onClick={() => setDetailOpen(true)} className={detailButtonClass}>
+            {t("ui.viewDetail")}
+          </button>
+        ) : (
+          <Link href="/cenik" className={detailButtonClass}>
+            {t("ui.viewDetail")}
+          </Link>
+        )}
       </div>
+
+      {hasPhotos && (
+        <Lightbox
+          photos={photos}
+          index={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+          onIndexChange={setLightboxIndex}
+          labels={lightboxLabels}
+        />
+      )}
+      {apartment.hasDetail && (
+        <ApartmentDetailModal open={detailOpen} onClose={() => setDetailOpen(false)} apartment={apartment} />
+      )}
     </div>
   )
 }
@@ -143,7 +187,6 @@ export function CtaBanner({ label, title, ctaText }) {
 
 export function PriceCard({ apartment }) {
   const t = useTranslations()
-  const seasons = t.raw(`pricing.cards.${apartment.slug}.seasons`)
 
   return (
     <div className="border border-mid/20 bg-pale p-8 js-fade-in">
@@ -152,13 +195,10 @@ export function PriceCard({ apartment }) {
       </p>
       <h3 className="mb-1 font-serif text-[1.65rem] font-normal">{apartment.name}</h3>
       <p className="mb-8 text-[0.86rem] text-mid">{t(`pricing.cards.${apartment.slug}.subtitle`)}</p>
-      <div className="space-y-4">
-        {seasons.map((season) => (
-          <div key={season.label} className="flex items-baseline justify-between gap-4 border-t border-mid/10 pt-4">
-            <span className="text-sm leading-snug text-mid">{season.label}</span>
-            <strong className="shrink-0 text-sm font-medium text-dark">{season.price}</strong>
-          </div>
-        ))}
+      <div className="border-t border-mid/10 pt-6">
+        <strong className="font-serif text-[1.9rem] font-normal leading-none text-dark">
+          {t(`pricing.cards.${apartment.slug}.price`)}
+        </strong>
       </div>
     </div>
   )

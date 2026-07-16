@@ -57,19 +57,11 @@
     "cards": {
       "studio-3": {
         "subtitle": "Útulné studio – až 4 osoby",
-        "seasons": [
-          { "label": "Mimo sezónu (říjen–duben)", "price": "1 900 Kč / noc" },
-          { "label": "Sezóna (květen–září)", "price": "2 000 Kč / noc" },
-          { "label": "Víkendy a svátky", "price": "2 200 Kč / noc" }
-        ]
+        "price": "2 000 Kč / noc"
       },
       "loft-10": {
         "subtitle": "Prostorný loft – až 6 osob",
-        "seasons": [
-          { "label": "Mimo sezónu (říjen–duben)", "price": "2 500 Kč / noc" },
-          { "label": "Hlavní sezóna (květen–září)", "price": "2 600 Kč / noc" },
-          { "label": "Víkendy a svátky", "price": "2 800 Kč / noc" }
-        ]
+        "price": "2 600 Kč / noc"
       }
     }
   },
@@ -96,6 +88,24 @@
     "loft-10": {
       "badge": "Apartmán 2",
       "desc": "Prostorný loft až pro 6 osob s dostatkem místa pro rodinu nebo delší pobyt. Kombinace pohodlí a vzdušného prostoru."
+    }
+  },
+  "apartmentDetail": {
+    "studio-3": {
+      "description": "Komfortní studio pro pohodlný pobyt v historickém městečku Rabí. Ideální pro páry nebo jednotlivce.",
+      "groups": [
+        { "icon": "🍳", "heading": "Kuchyně", "items": ["plně vybavená kuchyň", "trouba", "varná deska", "menší lednice s mrazákem", "mikrovlnná trouba", "rychlovarná konvice", "kávovar Tchibo", "základní nádobí"] },
+        { "icon": "🛁", "heading": "Koupelna", "items": ["sprchový kout", "pračka", "šampon", "tekuté mýdlo", "ručníky", "fén"] },
+        { "icon": "📶", "heading": "Ostatní", "items": ["Wi-Fi zdarma", "pohodlná manželská postel", "jídelní stůl", "TV"] }
+      ]
+    },
+    "loft-10": {
+      "description": "Prostorný mezonetový apartmán vhodný pro páry, rodiny i skupiny přátel. Nabízí více prostoru, moderní vybavení a příjemnou atmosféru pro krátké i delší pobyty.",
+      "groups": [
+        { "icon": "🍳", "heading": "Kuchyně", "items": ["plně vybavená kuchyň", "trouba", "varná deska", "myčka nádobí", "lednice s mrazákem", "mikrovlnná trouba", "rychlovarná konvice", "kávovar Tchibo", "základní nádobí"] },
+        { "icon": "🛁", "heading": "Koupelna", "items": ["sprchový kout", "pračka", "fén", "ručníky", "šampon", "tekuté mýdlo"] },
+        { "icon": "📶", "heading": "Ostatní", "items": ["Wi-Fi zdarma", "TV", "jídelní stůl", "pohodlné spaní pro více hostů"] }
+      ]
     }
   },
   "ui": {
@@ -333,7 +343,7 @@
     },
     "pricing": {
       "title": "Ceník ubytování",
-      "description": "Ceník ubytování Spim na Rabí. Studio až pro 4 osoby a loft až pro 6 osob od 1 900 Kč za noc."
+      "description": "Ceník ubytování Spim na Rabí. Studio až pro 4 osoby a loft až pro 6 osob od 2 000 Kč za noc."
     },
     "contact": {
       "title": "Kontakt a rezervace",

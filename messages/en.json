@@ -57,19 +57,11 @@
     "cards": {
       "studio-3": {
         "subtitle": "Cosy studio – up to 4 guests",
-        "seasons": [
-          { "label": "Low season (October–April)", "price": "CZK 1,900 / night" },
-          { "label": "Season (May–September)", "price": "CZK 2,000 / night" },
-          { "label": "Weekends and holidays", "price": "CZK 2,200 / night" }
-        ]
+        "price": "CZK 2,000 / night"
       },
       "loft-10": {
         "subtitle": "Spacious loft – up to 6 guests",
-        "seasons": [
-          { "label": "Low season (October–April)", "price": "CZK 2,500 / night" },
-          { "label": "High season (May–September)", "price": "CZK 2,600 / night" },
-          { "label": "Weekends and holidays", "price": "CZK 2,800 / night" }
-        ]
+        "price": "CZK 2,600 / night"
       }
     }
   },
@@ -96,6 +88,24 @@
     "loft-10": {
       "badge": "Apartment 2",
       "desc": "A spacious loft for up to 6 guests, with plenty of room for a family or a longer stay. A blend of comfort and airy space."
+    }
+  },
+  "apartmentDetail": {
+    "studio-3": {
+      "description": "A comfortable studio for a relaxed stay in the historic town of Rabí. Ideal for couples or solo travellers.",
+      "groups": [
+        { "icon": "🍳", "heading": "Kitchen", "items": ["fully equipped kitchen", "oven", "hob", "small fridge with freezer", "microwave", "kettle", "Tchibo coffee maker", "basic kitchenware"] },
+        { "icon": "🛁", "heading": "Bathroom", "items": ["shower", "washing machine", "shampoo", "liquid soap", "towels", "hairdryer"] },
+        { "icon": "📶", "heading": "Other", "items": ["free Wi-Fi", "comfortable double bed", "dining table", "TV"] }
+      ]
+    },
+    "loft-10": {
+      "description": "A spacious maisonette apartment suitable for couples, families and groups of friends. It offers more space, modern amenities and a pleasant atmosphere for short and longer stays.",
+      "groups": [
+        { "icon": "🍳", "heading": "Kitchen", "items": ["fully equipped kitchen", "oven", "hob", "dishwasher", "fridge with freezer", "microwave", "kettle", "Tchibo coffee maker", "basic kitchenware"] },
+        { "icon": "🛁", "heading": "Bathroom", "items": ["shower", "washing machine", "hairdryer", "towels", "shampoo", "liquid soap"] },
+        { "icon": "📶", "heading": "Other", "items": ["free Wi-Fi", "TV", "dining table", "comfortable sleeping for several guests"] }
+      ]
     }
   },
   "ui": {
@@ -333,7 +343,7 @@
     },
     "pricing": {
       "title": "Accommodation pricing",
-      "description": "Pricing for the Spim na Rabí accommodation. A studio for up to 4 guests and a loft for up to 6 guests from CZK 1,900 per night."
+      "description": "Pricing for the Spim na Rabí accommodation. A studio for up to 4 guests and a loft for up to 6 guests from CZK 2,000 per night."
     },
     "contact": {
       "title": "Contact and reservations",

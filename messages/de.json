@@ -57,19 +57,11 @@
     "cards": {
       "studio-3": {
         "subtitle": "Gemütliches Studio – bis zu 4 Personen",
-        "seasons": [
-          { "label": "Nebensaison (Oktober–April)", "price": "1 900 Kč / Nacht" },
-          { "label": "Saison (Mai–September)", "price": "2 000 Kč / Nacht" },
-          { "label": "Wochenenden und Feiertage", "price": "2 200 Kč / Nacht" }
-        ]
+        "price": "2 000 Kč / Nacht"
       },
       "loft-10": {
         "subtitle": "Geräumiges Loft – bis zu 6 Personen",
-        "seasons": [
-          { "label": "Nebensaison (Oktober–April)", "price": "2 500 Kč / Nacht" },
-          { "label": "Hauptsaison (Mai–September)", "price": "2 600 Kč / Nacht" },
-          { "label": "Wochenenden und Feiertage", "price": "2 800 Kč / Nacht" }
-        ]
+        "price": "2 600 Kč / Nacht"
       }
     }
   },
@@ -96,6 +88,24 @@
     "loft-10": {
       "badge": "Apartment 2",
       "desc": "Geräumiges Loft für bis zu 6 Personen mit viel Platz für die Familie oder einen längeren Aufenthalt. Eine Kombination aus Komfort und luftigem Raum."
+    }
+  },
+  "apartmentDetail": {
+    "studio-3": {
+      "description": "Komfortables Studio für einen angenehmen Aufenthalt im historischen Städtchen Rabí. Ideal für Paare oder Alleinreisende.",
+      "groups": [
+        { "icon": "🍳", "heading": "Küche", "items": ["voll ausgestattete Küche", "Backofen", "Kochfeld", "kleiner Kühlschrank mit Gefrierfach", "Mikrowelle", "Wasserkocher", "Tchibo Kaffeemaschine", "Grundgeschirr"] },
+        { "icon": "🛁", "heading": "Badezimmer", "items": ["Duschkabine", "Waschmaschine", "Shampoo", "Flüssigseife", "Handtücher", "Föhn"] },
+        { "icon": "📶", "heading": "Sonstiges", "items": ["kostenloses WLAN", "bequemes Doppelbett", "Esstisch", "TV"] }
+      ]
+    },
+    "loft-10": {
+      "description": "Geräumiges Maisonette-Apartment, geeignet für Paare, Familien und Freundesgruppen. Es bietet mehr Platz, moderne Ausstattung und eine angenehme Atmosphäre für kurze wie längere Aufenthalte.",
+      "groups": [
+        { "icon": "🍳", "heading": "Küche", "items": ["voll ausgestattete Küche", "Backofen", "Kochfeld", "Geschirrspüler", "Kühlschrank mit Gefrierfach", "Mikrowelle", "Wasserkocher", "Tchibo Kaffeemaschine", "Grundgeschirr"] },
+        { "icon": "🛁", "heading": "Badezimmer", "items": ["Duschkabine", "Waschmaschine", "Föhn", "Handtücher", "Shampoo", "Flüssigseife"] },
+        { "icon": "📶", "heading": "Sonstiges", "items": ["kostenloses WLAN", "TV", "Esstisch", "bequeme Schlafmöglichkeiten für mehrere Gäste"] }
+      ]
     }
   },
   "ui": {
@@ -333,7 +343,7 @@
     },
     "pricing": {
       "title": "Preise der Unterkunft",
-      "description": "Preise der Unterkunft Spim na Rabí. Studio für bis zu 4 Personen und Loft für bis zu 6 Personen ab 1 900 Kč pro Nacht."
+      "description": "Preise der Unterkunft Spim na Rabí. Studio für bis zu 4 Personen und Loft für bis zu 6 Personen ab 2 000 Kč pro Nacht."
     },
     "contact": {
       "title": "Kontakt und Reservierung",
