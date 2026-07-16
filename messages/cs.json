@@ -325,13 +325,14 @@
     "cta": "Zpět na hlavní stránku"
   },
   "meta": {
-    "defaultTitle": "Spim na Rabí | Stylové ubytování pod hradem Rabí",
+    "defaultTitle": "Spim na Rabí | Ubytování v Rabí pod hradem",
     "titleTemplate": "%s | Spim na Rabí",
-    "defaultDescription": "Studio a prostorný loft v Rabí v Pošumaví, jen pár kroků od hradu Rabí. Stylové ubytování až pro 4 nebo 6 osob.",
+    "defaultDescription": "Ubytování na Rabí přímo pod hradem – útulné studio a prostorný loft v Rabí v Pošumaví, jen pár kroků od hradu Rabí. Ubytování až pro 4 nebo 6 osob.",
     "ogSubtitle": "UBYTOVÁNÍ POD HRADEM RABÍ",
+    "keywords": ["ubytování Rabí", "ubytování na Rabí", "ubytování v Rabí", "apartmán Rabí", "ubytování Pošumaví", "ubytování Šumava", "hrad Rabí", "ubytování Sušice", "Spim na Rabí"],
     "home": {
-      "title": "Spim na Rabí | Stylové ubytování pod hradem Rabí",
-      "description": "Studio a prostorný loft v Rabí v Pošumaví. Ubytování až pro 4 nebo 6 osob jen pár kroků od hradu Rabí."
+      "title": "Spim na Rabí | Ubytování v Rabí pod hradem",
+      "description": "Ubytování na Rabí pod hradem – útulné studio a prostorný loft v Rabí v Pošumaví, až pro 4 nebo 6 osob. Klid, příroda a hrad Rabí na dosah."
     },
     "about": {
       "title": "O nás",

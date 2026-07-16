@@ -21,6 +21,7 @@ export async function generateMetadata({ params }) {
       template: t("titleTemplate")
     },
     description: t("home.description"),
+    keywords: t.raw("keywords"),
     authors: [{ name: "Spim na Rabí" }],
     creator: "Spim na Rabí",
     publisher: "Spim na Rabí",
