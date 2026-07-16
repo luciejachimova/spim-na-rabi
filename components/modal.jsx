@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { createPortal } from "react-dom"
 
 // Reusable dialog shell with smooth open/close animation (backdrop fade +
 // panel scale/translate), Escape to close, scroll lock, and click-outside.
@@ -33,9 +34,12 @@ export default function Modal({ open, onClose, labelledBy, className = "", child
     }
   }, [mounted, onClose])
 
-  if (!mounted) return null
+  // Rendered via a portal to <body> so it always covers the full viewport —
+  // an ancestor with a transform (e.g. a card's hover -translate-y) would
+  // otherwise become the containing block for this position: fixed overlay.
+  if (!mounted || typeof document === "undefined") return null
 
-  return (
+  return createPortal(
     <div
       className={`fixed inset-0 z-[190] flex items-center justify-center bg-dark/70 px-4 py-8 transition-opacity duration-200 ease-out ${
         visible ? "opacity-100" : "opacity-0"
@@ -54,6 +58,7 @@ export default function Modal({ open, onClose, labelledBy, className = "", child
       >
         {children}
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }

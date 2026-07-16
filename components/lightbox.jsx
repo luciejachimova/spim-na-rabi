@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
+import { createPortal } from "react-dom"
 
 // Full-screen photo lightbox, controlled via `index` (null = closed). Shared by
 // the gallery grid and the apartment cards. Arrow keys / on-screen arrows
@@ -36,10 +37,12 @@ export default function Lightbox({ photos, index, onClose, onIndexChange, labels
     }
   }, [open, index, show, onClose])
 
-  if (!open) return null
+  if (!open || typeof document === "undefined") return null
   const photo = photos[index]
 
-  return (
+  // Portal to <body> so the overlay covers the full viewport regardless of any
+  // transformed/overflow-hidden ancestor (e.g. the apartment card).
+  return createPortal(
     <div
       className={`fixed inset-0 z-[200] flex items-center justify-center bg-dark/90 px-4 py-6 transition-opacity duration-200 ${
         visible ? "opacity-100" : "opacity-0"
@@ -89,6 +92,7 @@ export default function Lightbox({ photos, index, onClose, onIndexChange, labels
           ›
         </button>
       )}
-    </div>
+    </div>,
+    document.body
   )
 }
