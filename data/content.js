@@ -42,7 +42,7 @@ export const apartments = [
   {
     slug: "studio-3",
     name: "Studio ³",
-    imageUrl: studioPhotos[0],
+    imageUrl: studioPhotos[17],
     photos: studioPhotos,
     hasDetail: true
   },

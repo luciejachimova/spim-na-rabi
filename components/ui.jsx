@@ -70,6 +70,8 @@ export function ApartmentCard({ apartment }) {
     ? apartment.photos.map((src, i) => ({ src, alt: t("gallery.photoAlt", { name: apartment.name, n: i + 1 }) }))
     : []
   const lightboxLabels = { close: t("gallery.close"), prev: t("gallery.prev"), next: t("gallery.next") }
+  // Open the lightbox on the photo shown in the card preview.
+  const previewIndex = hasPhotos ? Math.max(0, apartment.photos.indexOf(apartment.imageUrl)) : 0
 
   const detailButtonClass =
     "inline-block cursor-pointer rounded-[2px] border border-dark px-[1.6rem] py-[0.65rem] text-[0.72rem] font-medium uppercase tracking-[0.18em] text-dark transition-colors duration-200 hover:bg-dark hover:text-cream"
@@ -80,7 +82,7 @@ export function ApartmentCard({ apartment }) {
         {hasPhotos ? (
           <button
             type="button"
-            onClick={() => setLightboxIndex(0)}
+            onClick={() => setLightboxIndex(previewIndex)}
             aria-label={apartment.name}
             className="group/photo relative block w-full cursor-pointer overflow-hidden"
           >
