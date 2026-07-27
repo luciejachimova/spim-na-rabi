@@ -50,6 +50,14 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // Metadata images are extensionless routes, so they hit this matcher and the
+  // "as-needed" prefix rule would 307 /cs/opengraph-image → /opengraph-image.
+  // Next emits the prefixed URL in og:image, and social scrapers that don't
+  // follow redirects would drop the preview image — serve them directly.
+  if (pathname.endsWith("/opengraph-image") || pathname.endsWith("/twitter-image")) {
+    return NextResponse.next()
+  }
+
   // Public pages: locale detection + localized routing.
   return intlMiddleware(request)
 }
