@@ -21,3 +21,6 @@
 /generated/prisma
 .vercel
 .env*
+
+# Full-resolution photo originals (kept out of the deploy).
+/photo-originals
