@@ -34,7 +34,7 @@ export const studioPhotos = Array.from(
 // Loft photos (web-optimized, stored under public/images/loft). Shown in the
 // gallery and as the Loft ¹⁰ card image.
 export const loftPhotos = Array.from(
-  { length: 12 },
+  { length: 13 },
   (_, i) => `/images/loft/loft-${String(i + 1).padStart(2, "0")}.jpg`
 )
 
