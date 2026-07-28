@@ -53,7 +53,9 @@ export function PageHero({ label, title }) {
         className="pointer-events-none absolute bottom-8 left-1/2 w-[840px] max-w-[92vw] -translate-x-1/2 opacity-[0.08] md:bottom-10"
       />
       <div className="relative z-10">
-        <p className="mb-4 text-[0.72rem] uppercase tracking-[0.3em] text-mid">{label}</p>
+        {label ? (
+          <p className="mb-4 text-[0.72rem] uppercase tracking-[0.3em] text-mid">{label}</p>
+        ) : null}
         <h1 className="font-serif text-[clamp(2.8rem,7vw,5rem)] font-light leading-[1.08] text-dark">{title}</h1>
       </div>
     </section>

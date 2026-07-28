@@ -21,7 +21,7 @@ export default async function PricingPage({ params }) {
 
   return (
     <>
-      <PageHero label={t("heroLabel")} title={t("heroTitle")} />
+      <PageHero title={t("heroTitle")} />
 
       <section className="py-24 md:py-[100px]">
         <div className="mx-auto max-w-[1100px] px-8">
