@@ -14,12 +14,21 @@ enum ReservationSource {
   website
   booking
   airbnb
+  phone
+  email
   admin_block
 }
 
+// `inquiry` is a non-binding request that still holds the dates: letting it
+// not block would mean a second guest can book the same nights while the
+// first is being negotiated, and a real double booking is far worse than a
+// forgotten inquiry sitting in the list. See BLOCKING_STATUSES in
+// lib/reservations/validation.ts — no code compares status to a literal.
 enum ReservationStatus {
-  active
+  inquiry
+  confirmed
   cancelled
+  no_show
 }
 
 enum IcalProvider {
@@ -28,16 +37,70 @@ enum IcalProvider {
 }
 
 model Apartment {
-  id            Int           @id @default(autoincrement())
-  slug          String        @unique
+  id            Int      @id @default(autoincrement())
+  slug          String   @unique
   name          String
-  publicIcalUrl String?       @map("public_ical_url")
-  createdAt     DateTime      @default(now()) @map("created_at")
-  updatedAt     DateTime      @updatedAt @map("updated_at")
-  icalFeeds     IcalFeed[]
-  reservations  Reservation[]
+  publicIcalUrl String?  @map("public_ical_url")
+
+  shortLabel  String? @map("short_label")
+  description String?
+  areaM2      Int?    @map("area_m2")
+  maxAdults   Int     @default(2) @map("max_adults")
+  maxChildren Int     @default(0) @map("max_children")
+  petsAllowed Boolean @default(true) @map("pets_allowed")
+
+  // Drive the cleaning deadline and the same-day-turnover flag.
+  checkInFrom     String @default("15:00") @map("check_in_from")
+  checkOutUntil   String @default("10:00") @map("check_out_until")
+  cleaningMinutes Int    @default(90) @map("cleaning_minutes")
+
+  color     String  @default("#333333")
+  sortOrder Int     @default(0) @map("sort_order")
+  isActive  Boolean @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  icalFeeds    IcalFeed[]
+  reservations Reservation[]
 
   @@map("apartments")
+}
+
+// A guest is the person; a reservation keeps its own copy of the contact
+// details as a snapshot. That is deliberate, not accidental duplication:
+// an invoice issued last year has to keep the name it was issued under,
+// while the address book wants one merged person per human.
+model Guest {
+  id        String  @id @default(cuid())
+  name      String
+  email     String?
+  emailNorm String? @map("email_norm")
+  phone     String?
+  phoneNorm String? @map("phone_norm")
+  country   String?
+  note      String?
+  isBlocked Boolean @default(false) @map("is_blocked")
+
+  // Billing and the legally required guest register (domovní kniha).
+  // Nullable and unused until phase 9 — created now so that adding invoices
+  // later needs no structural change.
+  street     String?
+  city       String?
+  zip        String?
+  birthDate  String? @map("birth_date")
+  documentNo String? @map("document_no")
+  companyId  String? @map("company_id")
+  vatId      String? @map("vat_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  reservations Reservation[]
+
+  @@index([emailNorm])
+  @@index([phoneNorm])
+  @@map("guests")
 }
 
 model IcalFeed {
@@ -56,19 +119,56 @@ model IcalFeed {
 }
 
 model Reservation {
-  id                          Int               @id @default(autoincrement())
-  apartmentId                 Int               @map("apartment_id")
-  startDate                   String            @map("start_date")
-  endDate                     String            @map("end_date")
-  source                      ReservationSource @default(website)
-  status                      ReservationStatus @default(active)
-  externalUid                 String?           @map("external_uid")
-  name                        String?
-  email                       String?
-  phone                       String?
-  guests                      Int?
-  note                        String?
-  locale                      String            @default("cs")
+  id          Int               @id @default(autoincrement())
+  apartmentId Int               @map("apartment_id")
+  guestId     String?           @map("guest_id")
+  startDate   String            @map("start_date")
+  endDate     String            @map("end_date")
+  source      ReservationSource @default(website)
+  status      ReservationStatus @default(confirmed)
+  externalUid String?           @map("external_uid")
+
+  // Field ownership across syncs. For source booking/airbnb the importer
+  // may only ever write startDate, endDate, status and lastSyncedAt —
+  // everything below belongs to the owner and must survive the next sync,
+  // which runs every 15 minutes.
+  lastSyncedAt   DateTime? @map("last_synced_at")
+  manualEditedAt DateTime? @map("manual_edited_at")
+
+  // Contact snapshot as of the time of booking.
+  name  String?
+  email String?
+  phone String?
+
+  // Occupancy. `guests` is the legacy total, superseded by adults+children.
+  // It is kept (and written as their sum) because dropping a column on
+  // SQLite forces a table rebuild, and Prisma emits PRAGMA statements for
+  // that which Turso rejects — the production migration path is
+  // `turso db shell < migration.sql`. Remove it in phase 5 in its own
+  // maintenance window. No new code reads it.
+  guests       Int?
+  adults       Int     @default(2)
+  children     Int     @default(0)
+  childrenAges String? @map("children_ages")
+  hasDog       Boolean @default(false) @map("has_dog")
+  dogsCount    Int     @default(0) @map("dogs_count")
+
+  // Money as whole minor units (haléře), never Float.
+  priceCents   Int?    @map("price_cents")
+  currency     String  @default("CZK")
+  depositCents Int?    @map("deposit_cents")
+  isPaid       Boolean @default(false) @map("is_paid")
+  cityTaxCents Int?    @map("city_tax_cents")
+
+  note          String?
+  guestNote     String? @map("guest_note")
+  arrivalTime   String? @map("arrival_time")
+  departureTime String? @map("departure_time")
+
+  cancelledAt  DateTime? @map("cancelled_at")
+  cancelReason String?   @map("cancel_reason")
+
+  locale String @default("cs")
   reservationToken             String?          @unique @map("reservation_token")
   confirmationEmailedAt        DateTime?        @map("confirmation_emailed_at")
   confirmationEmailAttempts    Int              @default(0) @map("confirmation_email_attempts")
@@ -86,8 +186,12 @@ model Reservation {
   createdAt                   DateTime          @default(now()) @map("created_at")
   updatedAt                   DateTime          @updatedAt @map("updated_at")
   apartment                   Apartment         @relation(fields: [apartmentId], references: [id])
+  guest                       Guest?            @relation(fields: [guestId], references: [id])
 
   @@unique([apartmentId, source, externalUid])
   @@index([apartmentId, startDate, endDate])
+  @@index([startDate])
+  @@index([endDate])
+  @@index([status])
   @@map("reservations")
 }
