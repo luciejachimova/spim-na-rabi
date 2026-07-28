@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server"
 import { Link } from "@/i18n/navigation"
-import { PageHero, PhotoPlaceholder } from "@/components/ui"
+import { studioPhotos } from "@/data/content"
+import { PageHero } from "@/components/ui"
 import { buildAlternates } from "@/lib/seo"
 
 export async function generateMetadata({ params }) {
@@ -18,7 +19,6 @@ export default async function AboutPage({ params }) {
   const { locale } = await params
   setRequestLocale(locale)
   const t = await getTranslations("about")
-  const ui = await getTranslations("ui")
 
   return (
     <>
@@ -28,7 +28,11 @@ export default async function AboutPage({ params }) {
         <div className="mx-auto max-w-[1100px] px-8">
           <div className="grid grid-cols-1 items-center gap-20 md:grid-cols-2">
             <div className="js-fade-in">
-              <PhotoPlaceholder className="aspect-[3/4] w-full" label={ui("photoPlaceholder")} />
+              <img
+                src={studioPhotos[0]}
+                alt={t("photoAlt")}
+                className="aspect-[3/4] w-full object-cover"
+              />
             </div>
 
             <div className="js-fade-in">
