@@ -38,6 +38,50 @@ docker compose down          # zastavit
 docker compose down -v       # zastavit a smazat i uložená data
 ```
 
+## Ochrana produkční databáze
+
+Lokální vývoj **nesmí** psát do produkční Turso databáze. Dřív k tomu chyběl
+jen jeden vyplněný řádek v `.env`: `lib/db.ts` se ke vzdálené databázi
+připojoval, kdykoli bylo `TURSO_DATABASE_URL` nastavené, takže
+`npx tsx prisma/seed.ts` spuštěný na laptopu upsertoval apartmány
+v produkci.
+
+Vzdálená databáze je proto od teď **výslovná volba, ne výchozí stav**:
+
+| Prostředí | Chování |
+| --- | --- |
+| Vercel (`VERCEL=1` nastavuje platforma) | vzdálená databáze povolena |
+| Kdekoli jinde s `DB_ALLOW_REMOTE=1` | vzdálená databáze povolena |
+| Kdekoli jinde bez toho příznaku | připojení **odmítnuto s chybou** |
+
+Kontrola je v `lib/db-target.ts` a používají ji obě cesty do databáze:
+běhové prostředí aplikace (`lib/db.ts`) i Prisma CLI (`prisma.config.ts`),
+tedy `prisma migrate` a `prisma db seed` — to je nejdestruktivnější věc,
+kterou tento repozitář umí spustit.
+
+**Běžný lokální vývoj:** `TURSO_DATABASE_URL` a `TURSO_AUTH_TOKEN` nechte
+v `.env` zakomentované. Aplikace použije `storage/development.sqlite3`.
+
+**Vlastní vývojová Turso databáze** (oddělená od produkční):
+
+```sh
+turso db create spimnarabi-dev
+# do .env: TURSO_DATABASE_URL=<url dev databáze>, TURSO_AUTH_TOKEN=<token>
+# a navíc DB_ALLOW_REMOTE=1
+```
+
+**Záměrný jednorázový zásah do produkce** — příznak uveďte na začátku
+příkazu, ať je v historii shellu vidět, že to bylo úmyslné:
+
+```sh
+DB_ALLOW_REMOTE=1 TURSO_DATABASE_URL="libsql://…" TURSO_AUTH_TOKEN="…" \
+  npx tsx prisma/seed.ts
+```
+
+**Samohostovaný deploy** (Docker/VPS) proti Turso potřebuje
+`DB_ALLOW_REMOTE=1` mezi proměnnými prostředí — jinak se aplikace při startu
+odmítne připojit.
+
 ## Nasazení na Vercel
 
 Vercel funkce běží na efemérním, needitovatelném disku (kromě `/tmp`, který
@@ -73,7 +117,11 @@ turso db shell spimnarabi < prisma/migrations/20260701134637_init/migration.sql
 Seed skript používá stejného Prisma klienta jako aplikace (`lib/db.ts`), takže
 stačí ho spustit lokálně s Turso proměnnými nastavenými pro tento jeden příkaz:
 
+`DB_ALLOW_REMOTE=1` je povinné — bez něj se seed ke vzdálené databázi
+odmítne připojit (viz „Ochrana produkční databáze“ výše).
+
 ```sh
+DB_ALLOW_REMOTE=1 \
 TURSO_DATABASE_URL="libsql://spimnarabi-xxxx.turso.io" \
 TURSO_AUTH_TOKEN="..." \
 npx tsx prisma/seed.ts
