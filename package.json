@@ -16,6 +16,7 @@
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
     "db:seed:remote": "DB_ALLOW_REMOTE=1 tsx prisma/seed.ts",
+    "db:demo": "TURSO_DATABASE_URL= TURSO_AUTH_TOKEN= tsx scripts/demo-data.ts",
     "check:sync": "TURSO_DATABASE_URL= TURSO_AUTH_TOKEN= tsx scripts/sync-check.ts",
     "check:reservations": "TURSO_DATABASE_URL= TURSO_AUTH_TOKEN= tsx scripts/reservations-check.ts",
     "check": "npm run typecheck && npm run check:sync && npm run check:reservations"

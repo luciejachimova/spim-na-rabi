@@ -106,6 +106,7 @@ export interface GuestStay {
   adults: number
   children: number
   hasDog: boolean
+  dogsCount: number
 }
 
 export interface GuestSummary {
@@ -167,6 +168,7 @@ function toStay(reservation: {
   adults: number
   children: number
   hasDog: boolean
+  dogsCount: number
   apartment: { name: string }
 }): GuestStay {
   return {
@@ -181,7 +183,8 @@ function toStay(reservation: {
     currency: reservation.currency,
     adults: reservation.adults,
     children: reservation.children,
-    hasDog: reservation.hasDog
+    hasDog: reservation.hasDog,
+    dogsCount: reservation.dogsCount
   }
 }
 
@@ -196,6 +199,7 @@ const STAY_SELECT = {
   adults: true,
   children: true,
   hasDog: true,
+  dogsCount: true,
   apartment: { select: { name: true } }
 } as const
 

@@ -8,6 +8,9 @@
   --color-light: #C8C4BC;
   --color-pale: #F7F5F2;
   --color-accent: #8B7355;
+  /* Surface of the internal manager app. Requested explicitly alongside
+     #333333; sits between the public site's cream and pale. */
+  --color-sand: #EFECE7;
   --font-jost: "Jost", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-script: "Dancing Script", cursive;

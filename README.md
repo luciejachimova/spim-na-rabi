@@ -38,6 +38,52 @@ docker compose down          # zastavit
 docker compose down -v       # zastavit a smazat i uložená data
 ```
 
+## Spim Manager (interní aplikace)
+
+Interní správa apartmánů běží na `/manager` jako instalovatelná PWA. Sdílí
+databázi i doménovou vrstvu s veřejným webem, takže rezervace z Booking.com
+a Airbnb do ní padají automaticky přes stávající synchronizaci.
+
+Obrazovky: přehled rezervací s filtry, detail, vytvoření a editace rezervace
+s okamžitou kontrolou kolizí termínů, adresář hostů.
+
+Přihlášení zatím sdílí session s `/admin` (jedno `ADMIN_PASSWORD`). Vlastní
+uživatelské účty a role — včetně omezeného přístupu pro uklízečku — přijdou
+ve fázi 3.
+
+### Přidání na plochu telefonu
+
+1. Otevřete `https://…/manager` v prohlížeči telefonu a přihlaste se.
+2. **iPhone (Safari):** tlačítko Sdílet → *Přidat na plochu*.
+   **Android (Chrome):** menu ⋮ → *Přidat na plochu* / *Instalovat aplikaci*.
+3. Aplikace se otevře na celou obrazovku bez adresního řádku.
+
+Na iPhonu je instalace na plochu navíc podmínkou pro pozdější push
+notifikace — v samotném Safari nefungují.
+
+### Ukázková data pro lokální vývoj
+
+```sh
+npm run db:demo     # naplní LOKÁLNÍ databázi jednou sezónou rezervací
+```
+
+Opakované spuštění ukázková data nahradí, nekupí. Poznají se podle `[demo]`
+v interní poznámce.
+
+### Automatické kontroly
+
+Projekt nemá testovací framework; místo něj jsou dva spustitelné scénáře
+nad lokální databází:
+
+```sh
+npm run check               # typecheck + obojí níže
+npm run check:sync          # chování iCal importu (41 kontrol)
+npm run check:reservations  # doménová vrstva rezervací a hostů (55 kontrol)
+```
+
+Obě běží proti `storage/development.sqlite3`, po sobě uklidí a ukázkových
+ani skutečných dat se nedotknou.
+
 ## Ochrana produkční databáze
 
 Lokální vývoj **nesmí** psát do produkční Turso databáze. Dřív k tomu chyběl

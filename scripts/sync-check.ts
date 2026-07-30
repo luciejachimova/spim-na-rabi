@@ -33,6 +33,8 @@ interface Event {
   cancelled?: boolean
 }
 
+const TEST_APARTMENT_SLUG = "__sync_check__"
+
 let currentEvents: Event[] = []
 
 function toIcsDate(value: string) {
@@ -66,11 +68,18 @@ async function main() {
   const port = (server.address() as { port: number }).port
   const feedUrl = `http://127.0.0.1:${port}/booking.ics`
 
-  const apartment = await prisma.apartment.findUniqueOrThrow({ where: { slug: "studio-3" } })
+  // A throwaway apartment of its own, removed at the end. Running against a
+  // real one meant the importer's stale-row handling cancelled whatever else
+  // lived there — the demo data, or worse, a genuine booking on a database
+  // someone was using.
+  const apartment = await prisma.apartment.upsert({
+    where: { slug: TEST_APARTMENT_SLUG },
+    update: {},
+    create: { slug: TEST_APARTMENT_SLUG, name: "Testovací apartmán (sync-check)", isActive: false }
+  })
 
-  // Clean slate for this apartment's booking rows.
-  await prisma.reservation.deleteMany({ where: { apartmentId: apartment.id, source: "booking" } })
-  await prisma.icalFeed.deleteMany({ where: { apartmentId: apartment.id, provider: "booking" } })
+  await prisma.reservation.deleteMany({ where: { apartmentId: apartment.id } })
+  await prisma.icalFeed.deleteMany({ where: { apartmentId: apartment.id } })
   const feedRow = await prisma.icalFeed.create({
     data: { apartmentId: apartment.id, provider: "booking", url: feedUrl }
   })
@@ -173,32 +182,33 @@ async function main() {
   // filter on status, so the confirmed/inquiry rename had to leave them
   // returning the same nights as before.
   console.log("\n9. Veřejné výstupy — obsazenost a iCal export")
-  await prisma.reservation.deleteMany({ where: { apartmentId: apartment.id, source: "booking" } })
+  await prisma.reservation.deleteMany({ where: { apartmentId: apartment.id } })
   await prisma.reservation.createMany({
     data: [
-      { apartmentId: apartment.id, source: "booking", externalUid: "pub-conf", startDate: "2026-09-01", endDate: "2026-09-05", status: "confirmed", adults: 2 },
-      { apartmentId: apartment.id, source: "booking", externalUid: "pub-inq", startDate: "2026-09-10", endDate: "2026-09-12", status: "inquiry", adults: 2 },
-      { apartmentId: apartment.id, source: "booking", externalUid: "pub-canc", startDate: "2026-09-20", endDate: "2026-09-22", status: "cancelled", adults: 2 },
-      { apartmentId: apartment.id, source: "booking", externalUid: "pub-nosh", startDate: "2026-09-25", endDate: "2026-09-27", status: "no_show", adults: 2 }
+      { apartmentId: apartment.id, source: "booking", externalUid: "pub-conf", startDate: "2029-09-01", endDate: "2029-09-05", status: "confirmed", adults: 2 },
+      { apartmentId: apartment.id, source: "booking", externalUid: "pub-inq", startDate: "2029-09-10", endDate: "2029-09-12", status: "inquiry", adults: 2 },
+      { apartmentId: apartment.id, source: "booking", externalUid: "pub-canc", startDate: "2029-09-20", endDate: "2029-09-22", status: "cancelled", adults: 2 },
+      { apartmentId: apartment.id, source: "booking", externalUid: "pub-nosh", startDate: "2029-09-25", endDate: "2029-09-27", status: "no_show", adults: 2 }
     ]
   })
 
   const busy = (await listReservationsForApartment(apartment.id))
-    .filter((reservation) => isBlocking(reservation.status))
+    .filter((reservation) => isBlocking(reservation.status) && reservation.startDate.startsWith("2029-"))
     .map((reservation) => `${reservation.startDate}..${reservation.endDate}`)
     .sort()
-  check("obsazeno = potvrzené + poptávky", busy, ["2026-09-01..2026-09-05", "2026-09-10..2026-09-12"])
+  check("obsazeno = potvrzené + poptávky", busy, ["2029-09-01..2029-09-05", "2029-09-10..2029-09-12"])
 
   const ics = (await buildApartmentIcal(apartment)).toString()
-  const eventCount = (ics.match(/BEGIN:VEVENT/g) || []).length
-  check("iCal export: počet událostí", eventCount, 2)
-  check("iCal export neobsahuje zrušenou", ics.includes("20260920"), false)
-  check("iCal export neobsahuje nedorazil", ics.includes("20260925"), false)
+  const eventCount2029 = (ics.match(/DTSTART[^:]*:2029\d{4}/g) || []).length
+  check("iCal export: počet událostí", eventCount2029, 2)
+  check("iCal export neobsahuje zrušenou", ics.includes("20290920"), false)
+  check("iCal export neobsahuje nedorazil", ics.includes("20290925"), false)
   check("iCal export neprozrazuje jméno hosta", /SUMMARY:Obsazeno/.test(ics), true)
 
-  // Tidy up so the dev database isn't left with test rows.
-  await prisma.reservation.deleteMany({ where: { apartmentId: apartment.id, source: "booking" } })
-  await prisma.icalFeed.delete({ where: { id: feed.id } })
+  // Tidy up so the dev database isn't left with the test apartment.
+  await prisma.reservation.deleteMany({ where: { apartmentId: apartment.id } })
+  await prisma.icalFeed.deleteMany({ where: { apartmentId: apartment.id } })
+  await prisma.apartment.delete({ where: { id: apartment.id } })
   server.close()
 
   console.log(`\n${failures === 0 ? "VŠE PROŠLO" : "SELHALO"} — ${checks - failures}/${checks} kontrol`)
