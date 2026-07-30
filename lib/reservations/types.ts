@@ -35,6 +35,7 @@ export interface ApartmentWithFeeds extends ApartmentRecord {
 export interface ReservationRecord {
   id: number
   apartmentId: number
+  guestId: string | null
   startDate: string
   endDate: string
   source: ReservationSource
@@ -43,8 +44,26 @@ export interface ReservationRecord {
   name: string | null
   email: string | null
   phone: string | null
+  /** @deprecated Legacy total, kept in sync as adults + children. Use those. */
   guests: number | null
+  adults: number
+  children: number
+  childrenAges: string | null
+  hasDog: boolean
+  dogsCount: number
+  priceCents: number | null
+  currency: string
+  depositCents: number | null
+  isPaid: boolean
+  cityTaxCents: number | null
   note: string | null
+  guestNote: string | null
+  arrivalTime: string | null
+  departureTime: string | null
+  cancelledAt: string | null
+  cancelReason: string | null
+  lastSyncedAt: string | null
+  manualEditedAt: string | null
   locale: string
   reservationToken: string | null
   confirmationEmailedAt: string | null
@@ -84,10 +103,41 @@ export interface AdminBlockInput {
   note?: string
 }
 
+/** Everything the manager form collects. Shared by create and edit. */
+export interface ManualReservationInput {
+  apartmentId: number
+  startDate: string
+  endDate: string
+  source: ReservationSource
+  status: ReservationStatus
+  name?: string | null
+  email?: string | null
+  phone?: string | null
+  adults: number
+  children: number
+  childrenAges?: string | null
+  hasDog: boolean
+  dogsCount: number
+  priceCents?: number | null
+  currency?: string
+  depositCents?: number | null
+  isPaid?: boolean
+  note?: string | null
+  guestNote?: string | null
+  arrivalTime?: string | null
+  departureTime?: string | null
+  locale?: string
+}
+
+// Every field is optional except the apartment and the dates: an absent field
+// means "leave what is stored", which is what lets the older admin API keep
+// sending its four fields while the manager form sends all of them.
 export interface UpdateReservationInput {
   apartmentId: number
   startDate: string
   endDate: string
+  source?: ReservationSource
+  status?: ReservationStatus
   name?: string | null
   email?: string | null
   phone?: string | null
@@ -96,7 +146,18 @@ export interface UpdateReservationInput {
   guests?: number | null
   adults?: number | null
   children?: number | null
+  childrenAges?: string | null
+  hasDog?: boolean
+  dogsCount?: number
+  priceCents?: number | null
+  currency?: string
+  depositCents?: number | null
+  isPaid?: boolean
   note?: string | null
+  guestNote?: string | null
+  arrivalTime?: string | null
+  departureTime?: string | null
+  cancelReason?: string | null
 }
 
 export interface IcalImportResult {
@@ -124,6 +185,7 @@ export type IcalFeedWithApartment = PrismaIcalFeed & { apartment: PrismaApartmen
 export interface RawReservationRow {
   id: number | bigint
   apartment_id: number | bigint
+  guest_id: string | null
   start_date: string
   end_date: string
   source: ReservationSource
@@ -133,6 +195,23 @@ export interface RawReservationRow {
   email: string | null
   phone: string | null
   guests: number | bigint | null
+  adults: number | bigint
+  children: number | bigint
+  children_ages: string | null
+  has_dog: number | bigint | boolean
+  dogs_count: number | bigint
+  price_cents: number | bigint | null
+  currency: string
+  deposit_cents: number | bigint | null
+  is_paid: number | bigint | boolean
+  city_tax_cents: number | bigint | null
+  guest_note: string | null
+  arrival_time: string | null
+  departure_time: string | null
+  cancelled_at: Date | string | null
+  cancel_reason: string | null
+  last_synced_at: Date | string | null
+  manual_edited_at: Date | string | null
   note: string | null
   locale: string
   reservation_token: string | null

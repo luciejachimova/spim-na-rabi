@@ -39,6 +39,56 @@ export function validateGuestsCount(guests: number) {
   }
 }
 
+export interface OccupancyInput {
+  adults: number
+  children: number
+  hasDog: boolean
+  dogsCount: number
+  /** An owner's block has no occupants, so the "at least one adult" rule
+   * doesn't apply to it. */
+  isBlock?: boolean
+}
+
+// Deliberately does not enforce the apartment's capacity. The owner sometimes
+// knowingly takes a fifth guest or an extra cot, and a domain layer that
+// refuses the booking would just get worked around. Capacity is surfaced as a
+// warning in the form instead.
+export function validateOccupancy(input: OccupancyInput) {
+  const adults = Math.trunc(Number(input.adults))
+  const children = Math.trunc(Number(input.children))
+  const dogsCount = Math.trunc(Number(input.dogsCount))
+
+  if (!Number.isFinite(adults) || adults < 0) {
+    throw new ReservationValidationError("Počet dospělých nesmí být negativní.", "adultsInvalid")
+  }
+  if (!Number.isFinite(children) || children < 0) {
+    throw new ReservationValidationError("Počet dětí nesmí být negativní.", "childrenInvalid")
+  }
+  if (!input.isBlock && adults + children < 1) {
+    throw new ReservationValidationError("Rezervace musí mít aspoň jednoho hosta.", "guestsRequired")
+  }
+
+  const hasDog = Boolean(input.hasDog)
+  if (hasDog && dogsCount < 1) {
+    throw new ReservationValidationError("U pobytu se psem uveďte počet psů.", "dogsCountRequired")
+  }
+
+  return { adults, children, hasDog, dogsCount: hasDog ? dogsCount : 0 }
+}
+
+// Money arrives from the form as whole haléře. Guard against the two ways that
+// goes wrong: a negative amount, and a non-integer that would have come from
+// multiplying a float by 100 somewhere upstream.
+export function validatePrice(priceCents: number | null | undefined) {
+  if (priceCents === null || priceCents === undefined) return null
+
+  if (!Number.isInteger(priceCents) || priceCents < 0) {
+    throw new ReservationValidationError("Cena musí být nezáporné číslo.", "priceInvalid")
+  }
+
+  return priceCents
+}
+
 export function validateIcalFeedUrl(provider: IcalProvider, url: string) {
   if (!/^https?:\/\//i.test(url)) {
     throw new ReservationValidationError("URL musí začínat http:// nebo https://.")

@@ -16,7 +16,9 @@
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
     "db:seed:remote": "DB_ALLOW_REMOTE=1 tsx prisma/seed.ts",
-    "check:sync": "TURSO_DATABASE_URL= TURSO_AUTH_TOKEN= tsx scripts/sync-check.ts"
+    "check:sync": "TURSO_DATABASE_URL= TURSO_AUTH_TOKEN= tsx scripts/sync-check.ts",
+    "check:reservations": "TURSO_DATABASE_URL= TURSO_AUTH_TOKEN= tsx scripts/reservations-check.ts",
+    "check": "npm run typecheck && npm run check:sync && npm run check:reservations"
   },
   "dependencies": {
     "@libsql/client": "^0.17.4",
