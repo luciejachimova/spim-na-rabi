@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import { getTranslations, setRequestLocale } from "next-intl/server"
-import { getReservationByToken } from "@/lib/reservations"
+import { getReservationByToken, isBlocking } from "@/lib/reservations"
 import { formatReservationDate, toUtcDate } from "@/lib/prague-date"
 import { getGuestInfo, businessInfo } from "@/data/guest-info"
 import { PageHero } from "@/components/ui"
@@ -34,7 +34,7 @@ export default async function ReservationTokenPage({ params }: PageProps) {
   setRequestLocale(locale)
   const reservation = await getReservationByToken(token)
 
-  if (!reservation || reservation.status !== "active") {
+  if (!reservation || !isBlocking(reservation.status)) {
     notFound()
   }
 

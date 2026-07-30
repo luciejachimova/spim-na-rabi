@@ -14,7 +14,8 @@
     "postinstall": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "check:sync": "TURSO_DATABASE_URL= TURSO_AUTH_TOKEN= tsx scripts/sync-check.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.17.4",

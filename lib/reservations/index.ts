@@ -9,6 +9,7 @@
 
 export * from "./types"
 export * from "./errors"
+export * from "./status"
 export * from "./validation"
 export * from "./mappers"
 export * from "./queries"

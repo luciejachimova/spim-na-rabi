@@ -1,7 +1,9 @@
+import { Prisma } from "@prisma/client"
 import { prisma } from "../db"
 import { ReservationConflictError, ReservationValidationError } from "./errors"
 import { mapRawReservationRow } from "./mappers"
 import { getApartmentById, getApartmentBySelection, listApartments } from "./queries"
+import { BLOCKING_STATUSES } from "./status"
 import type { AdminBlockInput, ApartmentRecord, RawReservationRow, ReservationSource, WebsiteReservationInput } from "./types"
 import { areDatesValid, parseDateOnly, validateEmailFormat, validateGuestsCount } from "./validation"
 import type { ReservationWithApartment } from "./types"
@@ -15,7 +17,8 @@ interface AtomicInsertPayload {
   name: string | null
   email: string | null
   phone: string | null
-  guests: number | null
+  adults: number
+  children: number
   note: string | null
   locale: string
 }
@@ -28,18 +31,23 @@ async function insertReservationAtomic(
   payload: AtomicInsertPayload,
   apartment: Pick<ApartmentRecord, "slug" | "name">
 ): Promise<ReservationWithApartment | null> {
+  // `guests` is the legacy total column, kept in sync as adults + children
+  // until it can be dropped (see the note on the model in schema.prisma).
+  // This is the only place that writes it.
+  const legacyGuestTotal = payload.adults + payload.children
+
   const rows = await prisma.$queryRaw<RawReservationRow[]>`
     INSERT INTO reservations (
       apartment_id, start_date, end_date, source, status, external_uid,
-      name, email, phone, guests, note, locale, reservation_token, created_at, updated_at
+      name, email, phone, guests, adults, children, note, locale, reservation_token, created_at, updated_at
     )
     SELECT
-      ${payload.apartmentId}, ${payload.startDate}, ${payload.endDate}, ${payload.source}, 'active', ${payload.externalUid},
-      ${payload.name}, ${payload.email}, ${payload.phone}, ${payload.guests}, ${payload.note}, ${payload.locale}, ${crypto.randomUUID()}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+      ${payload.apartmentId}, ${payload.startDate}, ${payload.endDate}, ${payload.source}, 'confirmed', ${payload.externalUid},
+      ${payload.name}, ${payload.email}, ${payload.phone}, ${legacyGuestTotal}, ${payload.adults}, ${payload.children}, ${payload.note}, ${payload.locale}, ${crypto.randomUUID()}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
     WHERE NOT EXISTS (
       SELECT 1 FROM reservations
       WHERE apartment_id = ${payload.apartmentId}
-        AND status = 'active'
+        AND status IN (${Prisma.join(BLOCKING_STATUSES)})
         AND start_date < ${payload.endDate}
         AND end_date > ${payload.startDate}
     )
@@ -93,7 +101,10 @@ export async function createWebsiteReservation(input: WebsiteReservationInput) {
         name,
         email,
         phone,
-        guests,
+        // The public booking form still asks for a single guest total; it is
+        // recorded as adults until that form learns the adults/children split.
+        adults: guests,
+        children: 0,
         note,
         locale
       },
@@ -134,7 +145,8 @@ export async function createAdminBlock(input: AdminBlockInput) {
       name: null,
       email: null,
       phone: null,
-      guests: null,
+      adults: 0,
+      children: 0,
       note: input.note?.trim() || null,
       locale: "cs"
     },

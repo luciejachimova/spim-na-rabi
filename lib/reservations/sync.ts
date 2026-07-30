@@ -53,7 +53,7 @@ async function runFeedSync(feeds: IcalFeedWithApartment[]): Promise<IcalImportRe
         fetchedEvents: 0,
         created: 0,
         updated: 0,
-        deleted: 0,
+        cancelled: 0,
         error: message
       })
     }

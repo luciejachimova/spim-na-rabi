@@ -1,7 +1,9 @@
+import { Prisma } from "@prisma/client"
 import { prisma } from "../db"
 import { ReservationConflictError, ReservationNotFoundError, ReservationValidationError } from "./errors"
 import { mapRawReservationRow } from "./mappers"
 import { getApartmentById } from "./queries"
+import { BLOCKING_STATUSES } from "./status"
 import type { RawReservationRow, ReservationWithApartment, UpdateReservationInput } from "./types"
 import { areDatesValid, parseDateOnly, validateEmailFormat, validateGuestsCount } from "./validation"
 
@@ -28,15 +30,20 @@ export async function updateReservation(
   const email = input.email?.trim() || null
   const phone = input.phone?.trim() || null
   const note = input.note?.trim() || null
-  const guests = input.guests ?? null
+
+  const adults = input.adults ?? input.guests ?? null
+  const children = input.children ?? 0
 
   if (email) {
     validateEmailFormat(email)
   }
-  if (guests !== null) {
-    validateGuestsCount(guests)
+  if (adults !== null) {
+    validateGuestsCount(adults)
   }
 
+  // Stamping manual_edited_at is what makes an owner's edit visible to the
+  // importer: for a Booking/Airbnb row the next sync must leave everything
+  // typed here alone (see lib/ical/import.ts).
   const rows = await prisma.$queryRaw<RawReservationRow[]>`
     UPDATE reservations
     SET
@@ -46,14 +53,17 @@ export async function updateReservation(
       name = ${name},
       email = ${email},
       phone = ${phone},
-      guests = ${guests},
+      guests = ${adults === null ? null : adults + children},
+      adults = ${adults ?? 0},
+      children = ${children},
       note = ${note},
+      manual_edited_at = CURRENT_TIMESTAMP,
       updated_at = CURRENT_TIMESTAMP
     WHERE id = ${reservationId}
       AND NOT EXISTS (
         SELECT 1 FROM reservations
         WHERE apartment_id = ${apartment.id}
-          AND status = 'active'
+          AND status IN (${Prisma.join(BLOCKING_STATUSES)})
           AND id != ${reservationId}
           AND start_date < ${endDate}
           AND end_date > ${startDate}

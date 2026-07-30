@@ -120,7 +120,7 @@ async function handleSync(request: Request) {
         fetchedEvents: feed.fetchedEvents,
         created: feed.created,
         updated: feed.updated,
-        deleted: feed.deleted
+        cancelled: feed.cancelled
       })
     }
   }

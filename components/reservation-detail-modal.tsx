@@ -1,13 +1,18 @@
 "use client"
 
 import { useState } from "react"
-import type { ReservationWithApartment } from "@/lib/reservations"
+import { describeReservationStatus } from "@/lib/reservations/status"
+import type { ReservationSource, ReservationWithApartment } from "@/lib/reservations"
 import type { EmailKind } from "@/lib/guest-emails"
 
-export const SOURCE_LABELS: Record<string, string> = {
+// Typed against ReservationSource rather than string so adding a source to
+// the enum fails the build here instead of silently rendering the raw value.
+export const SOURCE_LABELS: Record<ReservationSource, string> = {
   website: "Web",
   booking: "Booking.com",
   airbnb: "Airbnb",
+  phone: "Telefon",
+  email: "E-mail",
   admin_block: "Blokováno majitelem"
 }
 
@@ -63,7 +68,7 @@ export function ReservationDetailModal({
           <Row label="Telefon" value={reservation.phone || "-"} />
           <Row label="Počet hostů" value={reservation.guests !== null ? String(reservation.guests) : "-"} />
           <Row label="Zdroj" value={SOURCE_LABELS[reservation.source] || reservation.source} />
-          <Row label="Stav" value={reservation.status === "active" ? "Aktivní" : "Zrušená"} />
+          <Row label="Stav" value={describeReservationStatus(reservation.status)} />
           <Row label="Poznámka" value={reservation.note || "-"} />
           <Row label="Vytvořeno" value={new Date(reservation.createdAt).toLocaleString("cs-CZ")} />
           <Row label="Upraveno" value={new Date(reservation.updatedAt).toLocaleString("cs-CZ")} />

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
+import { describeReservationStatus, isBlocking, RESERVATION_STATUS_LABELS } from "@/lib/reservations/status"
 import type { ApartmentRecord, ReservationWithApartment } from "@/lib/reservations"
 import { useToast } from "./admin-toast"
 import { useConfirm } from "./confirm-dialog"
@@ -28,7 +29,7 @@ function buildCsv(rows: ReservationWithApartment[]): string {
         reservation.endDate,
         reservation.guests !== null ? String(reservation.guests) : "",
         SOURCE_LABELS[reservation.source] || reservation.source,
-        reservation.status === "active" ? "Aktivní" : "Zrušená",
+        describeReservationStatus(reservation.status),
         reservation.note || ""
       ]
         .map(toCsvValue)
@@ -186,7 +187,7 @@ export default function AdminReservations({ reservations, apartments }: Props) {
                 </td>
                 <td className="py-2 pr-4">{reservation.guests ?? "-"}</td>
                 <td className="py-2 pr-4">{SOURCE_LABELS[reservation.source] || reservation.source}</td>
-                <td className="py-2 pr-4">{reservation.status === "active" ? "Aktivní" : "Zrušená"}</td>
+                <td className="py-2 pr-4">{describeReservationStatus(reservation.status)}</td>
                 <td className="py-2 pr-4">{reservation.note || "-"}</td>
                 <td className="space-x-2 py-2 pr-4 whitespace-nowrap text-xs">
                   <button type="button" onClick={() => setDetailReservation(reservation)} className="cursor-pointer underline hover:text-dark">
@@ -199,7 +200,7 @@ export default function AdminReservations({ reservations, apartments }: Props) {
                   >
                     Editace
                   </button>
-                  {reservation.status === "active" && (
+                  {isBlocking(reservation.status) && (
                     <button
                       type="button"
                       onClick={() => handleCancel(reservation)}
@@ -297,8 +298,11 @@ function FiltersBar({
       </select>
       <select value={filters.status} onChange={(event) => setFilters({ ...filters, status: event.target.value })} className={inputClass}>
         <option value="all">Všechny stavy</option>
-        <option value="active">Aktivní</option>
-        <option value="cancelled">Zrušená</option>
+        {Object.entries(RESERVATION_STATUS_LABELS).map(([value, label]) => (
+          <option key={value} value={value}>
+            {label}
+          </option>
+        ))}
       </select>
       <input
         type="text"

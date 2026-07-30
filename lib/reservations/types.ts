@@ -1,8 +1,16 @@
 import type { Apartment as PrismaApartment, IcalFeed as PrismaIcalFeed } from "@prisma/client"
 
-export type ReservationSource = "website" | "booking" | "airbnb" | "admin_block"
-export type ReservationStatus = "active" | "cancelled"
+export type ReservationSource = "website" | "booking" | "airbnb" | "phone" | "email" | "admin_block"
+export type ReservationStatus = "inquiry" | "confirmed" | "cancelled" | "no_show"
 export type IcalProvider = "booking" | "airbnb"
+
+// Sources whose rows are owned by the remote channel. For these the importer
+// may only write startDate/endDate/status/lastSyncedAt — see lib/ical/import.ts.
+export const EXTERNAL_SOURCES = ["booking", "airbnb"] as const satisfies readonly ReservationSource[]
+
+export function isExternalSource(source: ReservationSource) {
+  return (EXTERNAL_SOURCES as readonly ReservationSource[]).includes(source)
+}
 
 export interface ApartmentRecord {
   id: number
@@ -83,7 +91,11 @@ export interface UpdateReservationInput {
   name?: string | null
   email?: string | null
   phone?: string | null
+  /** @deprecated Superseded by `adults` + `children`; still accepted so the
+   * existing admin API keeps working. Used only when `adults` is absent. */
   guests?: number | null
+  adults?: number | null
+  children?: number | null
   note?: string | null
 }
 
@@ -95,7 +107,7 @@ export interface IcalImportResult {
   fetchedEvents: number
   created: number
   updated: number
-  deleted: number
+  cancelled: number
   error: string | null
 }
 

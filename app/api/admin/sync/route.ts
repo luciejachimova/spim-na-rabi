@@ -30,7 +30,7 @@ export async function POST(request: Request) {
       durationMs,
       created: result.feeds.reduce((sum, feed) => sum + feed.created, 0),
       updated: result.feeds.reduce((sum, feed) => sum + feed.updated, 0),
-      deleted: result.feeds.reduce((sum, feed) => sum + feed.deleted, 0),
+      cancelled: result.feeds.reduce((sum, feed) => sum + feed.cancelled, 0),
       feeds: result.feeds,
       error: failed.length > 0 ? failed.map((feed) => `${feed.provider}: ${feed.error}`).join("; ") : null
     })

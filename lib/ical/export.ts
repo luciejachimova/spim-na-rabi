@@ -1,6 +1,7 @@
 import ical from "ical-generator"
 import { toUtcDate } from "../prague-date"
 import { listReservationsForApartment } from "../reservations/queries"
+import { isBlocking } from "../reservations/status"
 import type { ApartmentRecord, ReservationSource } from "../reservations/types"
 
 function describeReservationSource(source: ReservationSource) {
@@ -25,7 +26,7 @@ export async function buildApartmentIcal(apartment: ApartmentRecord) {
   const reservations = await listReservationsForApartment(apartment.id)
 
   for (const reservation of reservations) {
-    if (reservation.status !== "active") {
+    if (!isBlocking(reservation.status)) {
       continue
     }
 

@@ -81,7 +81,7 @@ export default function AdminSync({ apartments }: Props) {
       } else {
         showToast(
           "success",
-          `Synchronizace dokončena. Nové: ${payload.created}, aktualizované: ${payload.updated}, odstraněné: ${payload.deleted}.`
+          `Synchronizace dokončena. Nové: ${payload.created}, aktualizované: ${payload.updated}, zrušené: ${payload.cancelled}.`
         )
       }
 
@@ -363,7 +363,7 @@ function ApartmentSyncCard({
       } else {
         showToast(
           "success",
-          `Synchronizace dokončena. Nové: ${payload.created}, aktualizované: ${payload.updated}, odstraněné: ${payload.deleted}.`
+          `Synchronizace dokončena. Nové: ${payload.created}, aktualizované: ${payload.updated}, zrušené: ${payload.cancelled}.`
         )
       }
 
