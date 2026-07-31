@@ -70,6 +70,22 @@ sqlite3 "$ZALOHA" "SELECT COUNT(*) FROM apartments;"
 - [ ] Apartmány jsou 2
 - [ ] Zálohu máte i mimo notebook (Disk, e-mail sám sobě — cokoli)
 
+**Nepovinné, ale doporučené: vyzkoušet obnovu dřív, než ji budete
+potřebovat.** Vytvoří dočasnou databázi vedle produkce, nic nepřepíše.
+
+```sh
+turso db create spim-restore-test --from-file "$ZALOHA"
+turso db shell spim-restore-test "SELECT id, start_date, source, name FROM reservations ORDER BY id;"
+turso db shell spimnarabi        "SELECT id, start_date, source, name FROM reservations ORDER BY id;"
+turso db destroy spim-restore-test --yes
+```
+
+- [ ] Oba výpisy jsou shodné → rollback ze zálohy prokazatelně funguje
+
+**Provedeno 31. 7. 2026:** obnova ze zálohy `spimnarabi-20260731-1248.db`
+vrátila všechny 3 rezervace i oba apartmány shodné s produkcí. Testovací
+databáze smazána.
+
 > Bez ověřené zálohy nepokračujte. Krok 5 obsahuje `DROP TABLE`.
 
 ## 3. Kontrola stavu před zásahem
@@ -82,9 +98,33 @@ turso db shell spimnarabi "SELECT name FROM sqlite_master WHERE type='table';"
 
 Zapište si čísla — po migraci musí sedět.
 
-- [ ] Počet rezervací: ________
-- [ ] Z toho `active`: ________, `cancelled`: ________
-- [ ] Tabulka `guests` **neexistuje** (jinak už něco proběhlo)
+**Naměřeno 31. 7. 2026 12:48** (kroky 1–3 provedeny předem, migrace odložena
+na pondělí ráno). Pokud se v pondělí čísla liší, mezitím přibyla rezervace —
+udělejte novou zálohu a čísla přepište.
+
+| | |
+| --- | --- |
+| Rezervace celkem | **3** |
+| Z toho `active` | **3** (žádná `cancelled`) |
+| Podle zdroje | `website` 2, `admin_block` 1 |
+| Apartmány | **2** |
+| `ical_feeds` | **0 — žádný Booking/Airbnb feed nastavený** |
+| Tabulka `guests` | neexistuje ✓ |
+| Schéma | odpovídá migraci `20260710084337_add_reservation_locale` |
+
+Konkrétní rezervace, podle kterých jde po migraci ověřit, že se nic
+neztratilo:
+
+```
+3   2026-07-18 → 2026-07-25   admin_block   (bez jména)
+6   2026-07-07 → 2026-07-09   website       Lucie Myslík
+7   2026-07-14 → 2026-07-17   website       Pavel Myslík
+```
+
+> **Pozor na smoke test:** protože žádný iCal feed nastavený není, oddíl
+> „Ochrana ručních úprav“ v kroku 6 **nelze na produkci provést** — není
+> žádná rezervace z Booking.com. Ověřeno jen lokálně (`npm run check:sync`,
+> 41 kontrol). Až feedy zapojíte, projděte ten oddíl znovu.
 
 ## 4. Migrace
 
