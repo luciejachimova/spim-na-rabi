@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
+import { isBlocking } from "@/lib/reservations/status"
 import type { ApartmentRecord, ReservationSource, ReservationWithApartment } from "@/lib/reservations"
 import { ReservationDetailModal } from "./reservation-detail-modal"
 import { useToast } from "./admin-toast"
@@ -16,6 +17,8 @@ const SOURCE_COLORS: Record<ReservationSource, string> = {
   booking: "bg-blue-200 text-blue-900",
   airbnb: "bg-green-200 text-green-900",
   website: "bg-orange-200 text-orange-900",
+  phone: "bg-amber-200 text-amber-900",
+  email: "bg-purple-200 text-purple-900",
   admin_block: "bg-red-200 text-red-900"
 }
 
@@ -58,7 +61,7 @@ export default function AdminCalendar({ apartments, reservations }: Props) {
     if (apartmentId === "") return map
 
     for (const reservation of reservations) {
-      if (reservation.apartmentId !== apartmentId || reservation.status !== "active") continue
+      if (reservation.apartmentId !== apartmentId || !isBlocking(reservation.status)) continue
       for (let cursor = reservation.startDate; cursor < reservation.endDate; cursor = addDays(cursor, 1)) {
         map.set(cursor, reservation)
       }

@@ -1,16 +1,7 @@
-import path from "node:path"
 import { PrismaClient } from "@prisma/client"
 import { PrismaLibSQL } from "@prisma/adapter-libsql"
 import type { Config } from "@libsql/client"
-
-// SQLite `file:` URLs in DATABASE_URL are relative, but Prisma resolves
-// relative paths inconsistently between the CLI and the generated client.
-// Anchoring to process.cwd() here (and in prisma.config.ts) keeps both consistent.
-function resolveLocalFileUrl() {
-  const raw = process.env.DATABASE_URL || "file:./storage/development.sqlite3"
-  const filePath = raw.replace(/^file:/, "")
-  return path.isAbsolute(filePath) ? raw : `file:${path.resolve(/* turbopackIgnore: true */ process.cwd(), filePath)}`
-}
+import { resolveDbTarget } from "./db-target"
 
 function createPrismaClient() {
   // A plain file-based SQLite database has no persistent, shared disk on
@@ -18,8 +9,11 @@ function createPrismaClient() {
   // When TURSO_DATABASE_URL is set, connect to a remote libSQL (Turso)
   // database instead — same SQLite semantics, but a real persistent,
   // network-accessible database. Local dev keeps using a plain local file.
-  const tursoUrl = process.env.TURSO_DATABASE_URL
-  const isRemote = Boolean(tursoUrl)
+  //
+  // resolveDbTarget() refuses a remote database outside production rather
+  // than connecting to it silently — see lib/db-target.ts for why.
+  const target = resolveDbTarget()
+  const isRemote = target.kind === "remote-libsql"
 
   if (!isRemote) {
     // Not necessarily wrong (local dev and the Docker/VPS deployment both
@@ -28,13 +22,13 @@ function createPrismaClient() {
     // "Failed to connect to database: .../storage/....sqlite3" — logged so
     // it's visible instead of only surfacing as a downstream connection error.
     console.warn("TURSO_DATABASE_URL is not set — falling back to a local SQLite file.", {
-      resolvedUrl: resolveLocalFileUrl()
+      resolvedUrl: target.url
     })
   }
 
-  const config: Config = tursoUrl
-    ? { url: tursoUrl, authToken: process.env.TURSO_AUTH_TOKEN }
-    : { url: resolveLocalFileUrl() }
+  const config: Config = isRemote
+    ? { url: target.url, authToken: process.env.TURSO_AUTH_TOKEN }
+    : { url: target.url }
 
   const adapter = new PrismaLibSQL(config)
   const client = new PrismaClient({ adapter })

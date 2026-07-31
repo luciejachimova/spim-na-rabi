@@ -38,6 +38,96 @@ docker compose down          # zastavit
 docker compose down -v       # zastavit a smazat i uložená data
 ```
 
+## Spim Manager (interní aplikace)
+
+Interní správa apartmánů běží na `/manager` jako instalovatelná PWA. Sdílí
+databázi i doménovou vrstvu s veřejným webem, takže rezervace z Booking.com
+a Airbnb do ní padají automaticky přes stávající synchronizaci.
+
+Obrazovky: přehled rezervací s filtry, detail, vytvoření a editace rezervace
+s okamžitou kontrolou kolizí termínů, adresář hostů.
+
+Přihlášení zatím sdílí session s `/admin` (jedno `ADMIN_PASSWORD`). Vlastní
+uživatelské účty a role — včetně omezeného přístupu pro uklízečku — přijdou
+ve fázi 3.
+
+### Přidání na plochu telefonu
+
+1. Otevřete `https://…/manager` v prohlížeči telefonu a přihlaste se.
+2. **iPhone (Safari):** tlačítko Sdílet → *Přidat na plochu*.
+   **Android (Chrome):** menu ⋮ → *Přidat na plochu* / *Instalovat aplikaci*.
+3. Aplikace se otevře na celou obrazovku bez adresního řádku.
+
+Na iPhonu je instalace na plochu navíc podmínkou pro pozdější push
+notifikace — v samotném Safari nefungují.
+
+### Ukázková data pro lokální vývoj
+
+```sh
+npm run db:demo     # naplní LOKÁLNÍ databázi jednou sezónou rezervací
+```
+
+Opakované spuštění ukázková data nahradí, nekupí. Poznají se podle `[demo]`
+v interní poznámce.
+
+### Automatické kontroly
+
+Projekt nemá testovací framework; místo něj jsou dva spustitelné scénáře
+nad lokální databází:
+
+```sh
+npm run check               # typecheck + obojí níže
+npm run check:sync          # chování iCal importu (41 kontrol)
+npm run check:reservations  # doménová vrstva rezervací a hostů (55 kontrol)
+```
+
+Obě běží proti `storage/development.sqlite3`, po sobě uklidí a ukázkových
+ani skutečných dat se nedotknou.
+
+## Ochrana produkční databáze
+
+Lokální vývoj **nesmí** psát do produkční Turso databáze. Dřív k tomu chyběl
+jen jeden vyplněný řádek v `.env`: `lib/db.ts` se ke vzdálené databázi
+připojoval, kdykoli bylo `TURSO_DATABASE_URL` nastavené, takže
+`npx tsx prisma/seed.ts` spuštěný na laptopu upsertoval apartmány
+v produkci.
+
+Vzdálená databáze je proto od teď **výslovná volba, ne výchozí stav**:
+
+| Prostředí | Chování |
+| --- | --- |
+| Vercel (`VERCEL=1` nastavuje platforma) | vzdálená databáze povolena |
+| Kdekoli jinde s `DB_ALLOW_REMOTE=1` | vzdálená databáze povolena |
+| Kdekoli jinde bez toho příznaku | připojení **odmítnuto s chybou** |
+
+Kontrola je v `lib/db-target.ts` a používají ji obě cesty do databáze:
+běhové prostředí aplikace (`lib/db.ts`) i Prisma CLI (`prisma.config.ts`),
+tedy `prisma migrate` a `prisma db seed` — to je nejdestruktivnější věc,
+kterou tento repozitář umí spustit.
+
+**Běžný lokální vývoj:** `TURSO_DATABASE_URL` a `TURSO_AUTH_TOKEN` nechte
+v `.env` zakomentované. Aplikace použije `storage/development.sqlite3`.
+
+**Vlastní vývojová Turso databáze** (oddělená od produkční):
+
+```sh
+turso db create spimnarabi-dev
+# do .env: TURSO_DATABASE_URL=<url dev databáze>, TURSO_AUTH_TOKEN=<token>
+# a navíc DB_ALLOW_REMOTE=1
+```
+
+**Záměrný jednorázový zásah do produkce** — příznak uveďte na začátku
+příkazu, ať je v historii shellu vidět, že to bylo úmyslné:
+
+```sh
+DB_ALLOW_REMOTE=1 TURSO_DATABASE_URL="libsql://…" TURSO_AUTH_TOKEN="…" \
+  npx tsx prisma/seed.ts
+```
+
+**Samohostovaný deploy** (Docker/VPS) proti Turso potřebuje
+`DB_ALLOW_REMOTE=1` mezi proměnnými prostředí — jinak se aplikace při startu
+odmítne připojit.
+
 ## Nasazení na Vercel
 
 Vercel funkce běží na efemérním, needitovatelném disku (kromě `/tmp`, který
@@ -73,7 +163,11 @@ turso db shell spimnarabi < prisma/migrations/20260701134637_init/migration.sql
 Seed skript používá stejného Prisma klienta jako aplikace (`lib/db.ts`), takže
 stačí ho spustit lokálně s Turso proměnnými nastavenými pro tento jeden příkaz:
 
+`DB_ALLOW_REMOTE=1` je povinné — bez něj se seed ke vzdálené databázi
+odmítne připojit (viz „Ochrana produkční databáze“ výše).
+
 ```sh
+DB_ALLOW_REMOTE=1 \
 TURSO_DATABASE_URL="libsql://spimnarabi-xxxx.turso.io" \
 TURSO_AUTH_TOKEN="..." \
 npx tsx prisma/seed.ts

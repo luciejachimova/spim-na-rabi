@@ -23,6 +23,12 @@ async function requireAdminSession(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // The manifest has to be readable before sign-in, otherwise the browser
+  // cannot offer "add to home screen" and the PWA never gets installed.
+  if (pathname === "/manager/manifest.webmanifest" || pathname.startsWith("/manager/icons/")) {
+    return NextResponse.next()
+  }
+
   const cookie = request.cookies.get(ADMIN_SESSION_COOKIE)?.value
   const valid = await verifySessionCookieValue(cookie)
 
@@ -34,14 +40,20 @@ async function requireAdminSession(request: NextRequest) {
     return NextResponse.json({ error: "Neoprávněný přístup." }, { status: 401 })
   }
 
-  return NextResponse.redirect(new URL("/admin/login", request.url))
+  // Carry the target along so an installed PWA opened at /manager lands back
+  // on /manager after signing in, not on the public admin dashboard.
+  const loginUrl = new URL("/admin/login", request.url)
+  loginUrl.searchParams.set("next", pathname)
+  return NextResponse.redirect(loginUrl)
 }
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Admin surfaces: authenticate, keep in Czech, skip localization.
-  if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
+  // Internal surfaces: authenticate, keep in Czech, skip localization.
+  // /manager is the Spim Manager PWA; it shares the admin session for now and
+  // gets its own accounts and roles in phase 3.
+  if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin") || pathname.startsWith("/manager")) {
     return requireAdminSession(request)
   }
 

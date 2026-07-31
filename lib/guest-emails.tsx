@@ -1,7 +1,7 @@
 import { createTranslator } from "next-intl"
 import { prisma } from "./db"
 import { sendMail, logMailError } from "./mail"
-import { getBaseUrl, toReservationWithApartment, type ReservationWithApartment } from "./reservations"
+import { EMAILABLE_STATUSES_FOR_READ, getBaseUrl, toReservationWithApartment, type ReservationWithApartment } from "./reservations"
 import { addDaysToKey, formatDateForPrague, getPragueHour, toUtcDate } from "./prague-date"
 import { loadMessages, normalizeLocale } from "./i18n-messages"
 import { getPathname } from "@/i18n/navigation"
@@ -204,7 +204,7 @@ async function markEmailedAt(reservationId: number, kind: EmailKind) {
 async function findPendingConfirmationRetries(): Promise<ReservationWithApartment[]> {
   const candidates = await prisma.reservation.findMany({
     where: {
-      status: "active",
+      status: { in: [...EMAILABLE_STATUSES_FOR_READ] },
       email: { not: null },
       confirmationEmailedAt: null,
       confirmationEmailAttempts: { gt: 0, lt: MAX_ATTEMPTS }
@@ -222,7 +222,7 @@ async function findDueReservations(kind: ScheduledKind): Promise<ReservationWith
   const onScheduleDateKey = addDaysToKey(todayKey, -rule.offsetDays)
   const earliestCatchUpDateKey = addDaysToKey(onScheduleDateKey, -(CATCH_UP_WINDOW_DAYS - 1))
   const dateRange = { gte: earliestCatchUpDateKey, lte: onScheduleDateKey }
-  const baseWhere = { status: "active" as const, email: { not: null } }
+  const baseWhere = { status: { in: [...EMAILABLE_STATUSES_FOR_READ] }, email: { not: null } }
 
   const candidates = await prisma.reservation.findMany({
     where:

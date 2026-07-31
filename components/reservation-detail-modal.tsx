@@ -1,15 +1,12 @@
 "use client"
 
 import { useState } from "react"
+import { describeReservationStatus, SOURCE_LABELS } from "@/lib/reservations/status"
 import type { ReservationWithApartment } from "@/lib/reservations"
-import type { EmailKind } from "@/lib/guest-emails"
 
-export const SOURCE_LABELS: Record<string, string> = {
-  website: "Web",
-  booking: "Booking.com",
-  airbnb: "Airbnb",
-  admin_block: "Blokováno majitelem"
-}
+// Re-exported for the admin components that already import it from here.
+export { SOURCE_LABELS }
+import type { EmailKind } from "@/lib/guest-emails"
 
 const EMAIL_KINDS: {
   kind: EmailKind
@@ -63,7 +60,7 @@ export function ReservationDetailModal({
           <Row label="Telefon" value={reservation.phone || "-"} />
           <Row label="Počet hostů" value={reservation.guests !== null ? String(reservation.guests) : "-"} />
           <Row label="Zdroj" value={SOURCE_LABELS[reservation.source] || reservation.source} />
-          <Row label="Stav" value={reservation.status === "active" ? "Aktivní" : "Zrušená"} />
+          <Row label="Stav" value={describeReservationStatus(reservation.status)} />
           <Row label="Poznámka" value={reservation.note || "-"} />
           <Row label="Vytvořeno" value={new Date(reservation.createdAt).toLocaleString("cs-CZ")} />
           <Row label="Upraveno" value={new Date(reservation.updatedAt).toLocaleString("cs-CZ")} />

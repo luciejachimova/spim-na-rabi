@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { listApartments, listReservationsForApartment } from "@/lib/reservations"
+import { isBlocking, listApartments, listReservationsForApartment } from "@/lib/reservations"
 
 export const runtime = "nodejs"
 
@@ -14,7 +14,7 @@ export async function GET() {
       return {
         slug: apartment.slug,
         busyRanges: reservations
-          .filter((reservation) => reservation.status === "active")
+          .filter((reservation) => isBlocking(reservation.status))
           .map((reservation) => ({ start: reservation.startDate, end: reservation.endDate }))
       }
     })

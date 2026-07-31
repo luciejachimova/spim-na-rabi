@@ -8,6 +8,17 @@
   --color-light: #C8C4BC;
   --color-pale: #F7F5F2;
   --color-accent: #8B7355;
+  /* Surface of the internal manager app. Requested explicitly alongside
+     #333333; sits between the public site's cream and pale. */
+  --color-sand: #EFECE7;
+  /* Manager-only text colours. The public site's --color-mid (#888880) and
+     --color-accent (#8B7355) measure 3.03:1 and 3.81:1 against sand, under the
+     4.5:1 WCAG AA needs. On the marketing site they carry decoration; here the
+     same grey carries dates, guest counts and prices, read one-handed on a
+     phone in daylight. Darkened to 4.90:1 and 4.81:1, same hue family.
+     The public site keeps its own values. */
+  --color-muted: #666660;
+  --color-alert: #7A6349;
   --font-jost: "Jost", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-script: "Dancing Script", cursive;
