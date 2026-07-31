@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import ReservationList from "@/components/manager/reservation-list"
-import { formatDateForPrague } from "@/lib/prague-date"
+import { addDaysToKey, formatDateForPrague } from "@/lib/prague-date"
 import { listApartmentFilters } from "@/lib/reservations/manager-data"
 import { listAllReservations } from "@/lib/reservations/queries"
 
@@ -18,6 +18,7 @@ export default async function ReservationsPage() {
 
   // Newest first: the list opens on "Nadcházející", where the next arrival
   // matters more than one in six months.
+  const today = formatDateForPrague(new Date())
   const sorted = [...reservations].sort((a, b) => a.startDate.localeCompare(b.startDate) || a.id - b.id)
 
   return (
@@ -32,7 +33,12 @@ export default async function ReservationsPage() {
         </Link>
       </div>
 
-      <ReservationList reservations={sorted} apartments={apartments} today={formatDateForPrague(new Date())} />
+      <ReservationList
+        reservations={sorted}
+        apartments={apartments}
+        today={today}
+        tomorrow={addDaysToKey(today, 1)}
+      />
     </div>
   )
 }

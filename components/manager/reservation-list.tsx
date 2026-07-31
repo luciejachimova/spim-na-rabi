@@ -4,10 +4,9 @@ import { useMemo, useState } from "react"
 import Link from "next/link"
 import { formatDateRange, formatDogs, formatGuests, formatMoney, formatNights } from "@/lib/format"
 import { countNights } from "@/lib/reservations/overlap"
-import { RESERVATION_STATUS_LABELS, SELECTABLE_STATUSES } from "@/lib/reservations/status"
+import { RESERVATION_STATUS_LABELS, SELECTABLE_STATUSES, SOURCE_LABELS } from "@/lib/reservations/status"
 import type { ReservationSource, ReservationStatus, ReservationWithApartment } from "@/lib/reservations/types"
 import type { ApartmentFilterOption } from "@/lib/reservations/manager-data"
-import { SOURCE_LABELS } from "@/lib/reservations/status"
 
 type PeriodFilter = "upcoming" | "current" | "past" | "all"
 
@@ -37,11 +36,13 @@ export function StatusBadge({ status }: { status: ReservationStatus }) {
 export default function ReservationList({
   reservations,
   apartments,
-  today
+  today,
+  tomorrow
 }: {
   reservations: ReservationWithApartment[]
   apartments: ApartmentFilterOption[]
   today: string
+  tomorrow: string
 }) {
   const [apartmentId, setApartmentId] = useState<number | "all">("all")
   const [status, setStatus] = useState<ReservationStatus | "all">("all")
@@ -148,6 +149,10 @@ export default function ReservationList({
           const dogs = formatDogs(reservation.hasDog, reservation.dogsCount)
           const price = formatMoney(reservation.priceCents, reservation.currency)
           const isBlock = reservation.source === "admin_block"
+          const when = reservation.startDate === today ? "today" : reservation.startDate === tomorrow ? "tomorrow" : "later"
+          const leavesToday = reservation.endDate === today
+          const isExternal = reservation.source === "booking" || reservation.source === "airbnb"
+          const needsContact = isExternal && !reservation.phone && reservation.endDate >= today
 
           return (
             <li key={reservation.id}>
@@ -173,16 +178,32 @@ export default function ReservationList({
                     {apartment?.shortLabel || reservation.apartmentName} · {formatDateRange(reservation.startDate, reservation.endDate)}
                     {nights > 0 && ` · ${formatNights(nights)}`}
                   </p>
+                  {/* A date on its own still has to be read and compared with
+                      today. These two words are the ones being looked for. */}
+                  {(when === "today" || when === "tomorrow") && (
+                    <p className="text-sm font-medium text-dark">
+                      {when === "today" ? "Přijíždí dnes" : "Přijíždí zítra"}
+                      {reservation.arrivalTime && ` v ${reservation.arrivalTime}`}
+                    </p>
+                  )}
+                  {leavesToday && <p className="text-sm font-medium text-dark">Odjíždí dnes</p>}
                   {!isBlock && (
                     <p className="text-sm text-muted">
                       {formatGuests(reservation.adults, reservation.children)}
                       {dogs && ` · ${dogs}`}
                       {price && ` · ${price}`}
-                      {reservation.isPaid && price && " · zaplaceno"}
+                      {/* Unpaid used to render as nothing at all, which reads
+                          the same as "no price recorded". It is the state worth
+                          seeing before the guest is standing at the door. */}
+                      {price && (reservation.isPaid ? " · zaplaceno" : null)}
+                      {price && !reservation.isPaid && <span className="text-alert"> · nezaplaceno</span>}
                     </p>
                   )}
-                  {(reservation.source === "booking" || reservation.source === "airbnb") && (
-                    <p className="text-xs text-muted">{SOURCE_LABELS[reservation.source]}</p>
+                  {(needsContact || isExternal) && (
+                    <p className="text-xs text-muted">
+                      {SOURCE_LABELS[reservation.source]}
+                      {needsContact && <span className="text-alert"> · chybí kontakt</span>}
+                    </p>
                   )}
                 </div>
               </Link>

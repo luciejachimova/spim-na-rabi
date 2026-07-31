@@ -221,63 +221,6 @@ export default function ReservationForm({ apartments, blockedRanges, reservation
         </div>
       </Section>
 
-      <Section title="Stav a zdroj">
-        <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-1">
-            <label className={label} htmlFor="status">
-              Stav
-            </label>
-            <select
-              id="status"
-              name="status"
-              value={status}
-              onChange={(event) => setStatus(event.target.value as ReservationStatus)}
-              className={field}
-            >
-              {SELECTABLE_STATUSES.map((value) => (
-                <option key={value} value={value}>
-                  {RESERVATION_STATUS_LABELS[value]}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="space-y-1">
-            <label className={label} htmlFor="source">
-              Zdroj
-            </label>
-            <select
-              id="source"
-              name="source"
-              value={source}
-              onChange={(event) => setSource(event.target.value as ReservationSource)}
-              className={field}
-            >
-              {SOURCE_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        {status === "cancelled" && (
-          <div className="space-y-1">
-            <label className={label} htmlFor="cancelReason">
-              Důvod storna
-            </label>
-            <input
-              id="cancelReason"
-              name="cancelReason"
-              type="text"
-              defaultValue={reservation?.cancelReason ?? ""}
-              placeholder="např. host zrušil telefonicky"
-              className={field}
-            />
-          </div>
-        )}
-      </Section>
-
       {!isBlock && (
         <Section title="Host">
           <div className="space-y-3">
@@ -438,6 +381,67 @@ export default function ReservationForm({ apartments, blockedRanges, reservation
           </label>
         </Section>
       )}
+
+      {/* Below the guest and the price on purpose. Status and source are
+          almost always left at their defaults — a phone booking that is
+          confirmed — so putting them third pushed the fields that actually
+          get typed further down the screen. */}
+      <Section title="Stav a zdroj">
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1">
+            <label className={label} htmlFor="status">
+              Stav
+            </label>
+            <select
+              id="status"
+              name="status"
+              value={status}
+              onChange={(event) => setStatus(event.target.value as ReservationStatus)}
+              className={field}
+            >
+              {SELECTABLE_STATUSES.map((value) => (
+                <option key={value} value={value}>
+                  {RESERVATION_STATUS_LABELS[value]}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="space-y-1">
+            <label className={label} htmlFor="source">
+              Zdroj
+            </label>
+            <select
+              id="source"
+              name="source"
+              value={source}
+              onChange={(event) => setSource(event.target.value as ReservationSource)}
+              className={field}
+            >
+              {SOURCE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {status === "cancelled" && (
+          <div className="space-y-1">
+            <label className={label} htmlFor="cancelReason">
+              Důvod storna
+            </label>
+            <input
+              id="cancelReason"
+              name="cancelReason"
+              type="text"
+              defaultValue={reservation?.cancelReason ?? ""}
+              placeholder="např. host zrušil telefonicky"
+              className={field}
+            />
+          </div>
+        )}
+      </Section>
 
       <Section title="Doplňující údaje">
         {!isBlock && (

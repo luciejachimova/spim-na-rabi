@@ -7,9 +7,19 @@ import { usePathname, useRouter } from "next/navigation"
 // because this is used one-handed while standing in a doorway — the top of a
 // 6" screen is out of thumb reach.
 const NAV_ITEMS = [
+  { href: "/manager", label: "Dnes", icon: SunIcon },
   { href: "/manager/rezervace", label: "Rezervace", icon: CalendarIcon },
   { href: "/manager/hoste", label: "Hosté", icon: UsersIcon }
 ]
+
+function SunIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4" />
+    </svg>
+  )
+}
 
 function CalendarIcon({ className }: { className?: string }) {
   return (
@@ -38,7 +48,10 @@ function PlusIcon({ size = 18 }: { size?: number }) {
   )
 }
 
+// "/manager" is a prefix of every other route, so it only counts as active on
+// an exact match — otherwise Dnes would stay lit the whole time.
 function isActive(pathname: string, href: string) {
+  if (href === "/manager") return pathname === "/manager"
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
@@ -104,7 +117,7 @@ export default function ManagerShell({ children }: { children: React.ReactNode }
         </main>
       </div>
 
-      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-3 items-center border-t border-dark/10 bg-sand/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-sm md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-4 items-center border-t border-dark/10 bg-sand/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-sm md:hidden">
         {NAV_ITEMS.map((item) => (
           <Link
             key={item.href}

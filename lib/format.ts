@@ -47,6 +47,11 @@ export function formatDateShort(dateKey: string) {
   return new Intl.DateTimeFormat("cs-CZ", { timeZone: "UTC", day: "numeric", month: "numeric" }).format(toUtcDate(dateKey))
 }
 
+/** "2026-08-10" → "pondělí" — pro záhlaví denního přehledu. */
+export function formatWeekdayLong(dateKey: string) {
+  return new Intl.DateTimeFormat("cs-CZ", { timeZone: "UTC", weekday: "long" }).format(toUtcDate(dateKey))
+}
+
 /** Collapses a stay into "10.–14. 8. 2026", dropping the repeated month/year. */
 export function formatDateRange(startDate: string, endDate: string) {
   const sameYear = startDate.slice(0, 4) === endDate.slice(0, 4)
