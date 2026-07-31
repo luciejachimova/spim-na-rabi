@@ -1,9 +1,21 @@
 import { prisma } from "../db"
-import type { ApartmentOption } from "@/components/manager/reservation-form"
 
 // The manager form needs more of an apartment than ApartmentRecord exposes
 // (capacity, check-in times, pet rule), but not the whole model — and what it
 // does need has to be serialisable across the server/client boundary.
+// Declared here, next to the query that produces it: lib must not import from
+// components, or the dependency runs backwards.
+export interface ApartmentOption {
+  id: number
+  name: string
+  shortLabel: string | null
+  maxAdults: number
+  maxChildren: number
+  petsAllowed: boolean
+  checkInFrom: string
+  checkOutUntil: string
+}
+
 export async function listApartmentOptions(): Promise<ApartmentOption[]> {
   const apartments = await prisma.apartment.findMany({
     where: { isActive: true },

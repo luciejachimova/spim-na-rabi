@@ -3,7 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { updateGuestNoteAction } from "@/app/manager/actions"
 import { StatusBadge } from "@/components/manager/reservation-list"
-import { SOURCE_LABELS } from "@/components/reservation-detail-modal"
+import { SOURCE_LABELS } from "@/lib/reservations/status"
 import { formatDate, formatDateRange, formatDogs, formatGuests, formatMoney, formatNights } from "@/lib/format"
 import { getGuestDetail } from "@/lib/reservations/guests"
 
@@ -21,11 +21,11 @@ export default async function GuestDetailPage({ params }: PageProps) {
   return (
     <div className="mx-auto max-w-xl space-y-5">
       <div>
-        <Link href="/manager/hoste" className="text-sm text-mid underline hover:text-dark">
+        <Link href="/manager/hoste" className="text-sm text-muted underline hover:text-dark">
           ← Zpět na hosty
         </Link>
         <h1 className="mt-2 font-serif text-2xl">{guest.name}</h1>
-        <p className="mt-1 text-mid">
+        <p className="mt-1 text-muted">
           {guest.stayCount === 0
             ? "zatím bez dokončeného pobytu"
             : `${guest.stayCount}× u nás · ${guest.nightCount} nocí${
@@ -39,7 +39,7 @@ export default async function GuestDetailPage({ params }: PageProps) {
           {guest.phone && (
             <a
               href={`tel:${guest.phone.replace(/\s/g, "")}`}
-              className="flex-1 cursor-pointer rounded-[2px] bg-dark px-4 py-3 text-center text-sm uppercase tracking-wide text-sand transition-colors hover:bg-accent"
+              className="flex-1 cursor-pointer rounded-[2px] bg-dark px-4 py-3 text-center text-sm uppercase tracking-wide text-sand transition-colors hover:bg-alert"
             >
               Zavolat
             </a>
@@ -58,19 +58,19 @@ export default async function GuestDetailPage({ params }: PageProps) {
       <dl className="rounded-[2px] border border-dark/10 bg-white px-3 py-1">
         {guest.phone && (
           <div className="flex justify-between gap-4 border-b border-dark/8 py-2">
-            <dt className="text-sm text-mid">Telefon</dt>
+            <dt className="text-sm text-muted">Telefon</dt>
             <dd className="text-sm">{guest.phone}</dd>
           </div>
         )}
         {guest.email && (
           <div className="flex justify-between gap-4 border-b border-dark/8 py-2">
-            <dt className="text-sm text-mid">E-mail</dt>
+            <dt className="text-sm text-muted">E-mail</dt>
             <dd className="text-sm break-all">{guest.email}</dd>
           </div>
         )}
         {guest.firstStayDate && (
           <div className="flex justify-between gap-4 py-2">
-            <dt className="text-sm text-mid">První pobyt</dt>
+            <dt className="text-sm text-muted">První pobyt</dt>
             <dd className="text-sm">{formatDate(guest.firstStayDate)}</dd>
           </div>
         )}
@@ -78,7 +78,7 @@ export default async function GuestDetailPage({ params }: PageProps) {
 
       <form action={updateGuestNoteAction} className="space-y-2">
         <input type="hidden" name="guestId" value={guest.id} />
-        <label className="block text-xs uppercase tracking-wide text-mid" htmlFor="note">
+        <label className="block text-xs uppercase tracking-wide text-muted" htmlFor="note">
           Interní poznámka
         </label>
         {/* Never shown to the guest — this is the place for "tichý, vrací se"
@@ -93,14 +93,14 @@ export default async function GuestDetailPage({ params }: PageProps) {
         />
         <button
           type="submit"
-          className="cursor-pointer rounded-[2px] border border-dark/20 px-4 py-2 text-sm uppercase tracking-wide text-mid transition-colors hover:border-dark hover:text-dark"
+          className="cursor-pointer rounded-[2px] border border-dark/20 px-4 py-2 text-sm uppercase tracking-wide text-muted transition-colors hover:border-dark hover:text-dark"
         >
           Uložit poznámku
         </button>
       </form>
 
       <section className="space-y-2">
-        <h2 className="text-xs uppercase tracking-[0.14em] text-mid">Pobyty</h2>
+        <h2 className="text-xs uppercase tracking-[0.14em] text-muted">Pobyty</h2>
         <ul className="space-y-2">
           {guest.stays.map((stay) => {
             const dogs = formatDogs(stay.hasDog, stay.dogsCount)
@@ -116,7 +116,7 @@ export default async function GuestDetailPage({ params }: PageProps) {
                     </span>
                     <StatusBadge status={stay.status} />
                   </div>
-                  <p className="text-sm text-mid">
+                  <p className="text-sm text-muted">
                     {formatNights(stay.nights)} · {formatGuests(stay.adults, stay.children)}
                     {dogs && ` · ${dogs}`}
                     {formatMoney(stay.priceCents, stay.currency) && ` · ${formatMoney(stay.priceCents, stay.currency)}`}

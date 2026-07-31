@@ -26,7 +26,7 @@ export default async function ReservationsPage() {
         <h1 className="font-serif text-2xl">Rezervace</h1>
         <Link
           href="/manager/rezervace/nova"
-          className="hidden cursor-pointer rounded-[2px] border border-dark/20 px-3 py-2 text-xs uppercase tracking-wide text-mid transition-colors hover:border-dark hover:text-dark md:block"
+          className="hidden cursor-pointer rounded-[2px] border border-dark/20 px-3 py-2 text-xs uppercase tracking-wide text-muted transition-colors hover:border-dark hover:text-dark md:block"
         >
           Nová
         </Link>

@@ -41,7 +41,7 @@ export default function GuestList({ guests }: { guests: GuestSummary[] }) {
       </div>
 
       {filtered.length === 0 ? (
-        <p className="text-sm text-mid">
+        <p className="text-sm text-muted">
           {guests.length === 0
             ? "Adresář je zatím prázdný. Host se do něj přidá sám, jakmile u rezervace vyplníte e-mail nebo telefon."
             : "Žádný host neodpovídá filtru."}
@@ -61,12 +61,12 @@ export default function GuestList({ guests }: { guests: GuestSummary[] }) {
                       <span className="rounded-[2px] bg-dark px-1.5 py-0.5 text-[11px] tracking-wide text-sand">Přijede</span>
                     )}
                     {guest.isReturning && (
-                      <span className="rounded-[2px] bg-accent/20 px-1.5 py-0.5 text-[11px] tracking-wide">Vrací se</span>
+                      <span className="rounded-[2px] bg-alert/20 px-1.5 py-0.5 text-[11px] tracking-wide">Vrací se</span>
                     )}
                   </span>
                 </div>
-                <p className="text-sm text-mid">{[guest.phone, guest.email].filter(Boolean).join(" · ") || "bez kontaktu"}</p>
-                <p className="text-sm text-mid">
+                <p className="text-sm text-muted">{[guest.phone, guest.email].filter(Boolean).join(" · ") || "bez kontaktu"}</p>
+                <p className="text-sm text-muted">
                   {guest.stayCount === 0
                     ? "zatím bez pobytu"
                     : `${guest.stayCount}× · ${guest.nightCount} nocí${
@@ -74,7 +74,7 @@ export default function GuestList({ guests }: { guests: GuestSummary[] }) {
                       }`}
                   {guest.lastStayDate && ` · naposledy ${formatDate(guest.lastStayDate)}`}
                 </p>
-                {guest.note && <p className="mt-1 truncate text-sm text-mid italic">{guest.note}</p>}
+                {guest.note && <p className="mt-1 truncate text-sm text-muted italic">{guest.note}</p>}
               </Link>
             </li>
           ))}

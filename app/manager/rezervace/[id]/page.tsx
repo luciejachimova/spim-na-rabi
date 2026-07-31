@@ -3,7 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { cancelReservationAction } from "@/app/manager/actions"
 import { StatusBadge } from "@/components/manager/reservation-list"
-import { SOURCE_LABELS } from "@/components/reservation-detail-modal"
+import { SOURCE_LABELS } from "@/lib/reservations/status"
 import { prisma } from "@/lib/db"
 import { formatDate, formatDateRange, formatDateTime, formatDogs, formatGuests, formatMoney, formatNights } from "@/lib/format"
 import { toReservationWithApartment } from "@/lib/reservations/mappers"
@@ -20,7 +20,7 @@ function Row({ label, value }: { label: string; value: React.ReactNode }) {
   if (value === null || value === undefined || value === "") return null
   return (
     <div className="flex flex-wrap justify-between gap-x-4 gap-y-0.5 border-b border-dark/8 py-2 last:border-0">
-      <dt className="text-sm text-mid">{label}</dt>
+      <dt className="text-sm text-muted">{label}</dt>
       <dd className="text-right text-sm">{value}</dd>
     </div>
   )
@@ -54,7 +54,7 @@ export default async function ReservationDetailPage({ params }: PageProps) {
   return (
     <div className="mx-auto max-w-xl space-y-5">
       <div>
-        <Link href="/manager/rezervace" className="text-sm text-mid underline hover:text-dark">
+        <Link href="/manager/rezervace" className="text-sm text-muted underline hover:text-dark">
           ← Zpět na rezervace
         </Link>
         <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
@@ -63,7 +63,7 @@ export default async function ReservationDetailPage({ params }: PageProps) {
           </h1>
           <StatusBadge status={reservation.status} />
         </div>
-        <p className="mt-1 text-mid">
+        <p className="mt-1 text-muted">
           <span style={{ color: record.apartment.color }}>■</span> {reservation.apartmentName} ·{" "}
           {formatDateRange(reservation.startDate, reservation.endDate)}
           {nights > 0 && ` · ${formatNights(nights)}`}
@@ -71,7 +71,7 @@ export default async function ReservationDetailPage({ params }: PageProps) {
       </div>
 
       {needsDetails && (
-        <p className="rounded-[2px] border border-accent/50 bg-accent/10 px-3 py-2.5 text-sm">
+        <p className="rounded-[2px] border border-alert/50 bg-alert/10 px-3 py-2.5 text-sm">
           Rezervace přišla z {SOURCE_LABELS[reservation.source]} — kanál neposílá kontakt ani cenu.{" "}
           <Link href={`/manager/rezervace/${reservation.id}/upravit`} className="underline">
             Doplnit údaje
@@ -84,7 +84,7 @@ export default async function ReservationDetailPage({ params }: PageProps) {
           {reservation.phone && (
             <a
               href={`tel:${reservation.phone.replace(/\s/g, "")}`}
-              className="flex-1 cursor-pointer rounded-[2px] bg-dark px-4 py-3 text-center text-sm uppercase tracking-wide text-sand transition-colors hover:bg-accent"
+              className="flex-1 cursor-pointer rounded-[2px] bg-dark px-4 py-3 text-center text-sm uppercase tracking-wide text-sand transition-colors hover:bg-alert"
             >
               Zavolat
             </a>
@@ -126,7 +126,7 @@ export default async function ReservationDetailPage({ params }: PageProps) {
                 formatMoney(reservation.priceCents, reservation.currency) && (
                   <>
                     {formatMoney(reservation.priceCents, reservation.currency)}
-                    <span className={reservation.isPaid ? "text-mid" : "text-accent"}>
+                    <span className={reservation.isPaid ? "text-muted" : "text-alert"}>
                       {reservation.isPaid ? " · zaplaceno" : " · nezaplaceno"}
                     </span>
                   </>
@@ -158,14 +158,14 @@ export default async function ReservationDetailPage({ params }: PageProps) {
 
       {!isBlock && reservation.email && (
         <div className="rounded-[2px] border border-dark/10 bg-white px-3 py-1">
-          <p className="border-b border-dark/8 py-2 text-xs uppercase tracking-[0.14em] text-mid">E-maily hostovi</p>
+          <p className="border-b border-dark/8 py-2 text-xs uppercase tracking-[0.14em] text-muted">E-maily hostovi</p>
           {EMAIL_STEPS.map((step) => {
             const sentAt = reservation[step.key]
             return (
               <Row
                 key={step.key}
                 label={step.label}
-                value={sentAt ? formatDateTime(sentAt) : <span className="text-mid">neodesláno</span>}
+                value={sentAt ? formatDateTime(sentAt) : <span className="text-muted">neodesláno</span>}
               />
             )
           })}
@@ -182,7 +182,7 @@ export default async function ReservationDetailPage({ params }: PageProps) {
       <div className="flex flex-wrap gap-2">
         <Link
           href={`/manager/rezervace/${reservation.id}/upravit`}
-          className="flex-1 cursor-pointer rounded-[2px] bg-dark px-4 py-3 text-center text-sm uppercase tracking-wide text-sand transition-colors hover:bg-accent"
+          className="flex-1 cursor-pointer rounded-[2px] bg-dark px-4 py-3 text-center text-sm uppercase tracking-wide text-sand transition-colors hover:bg-alert"
         >
           Upravit
         </Link>
@@ -192,7 +192,7 @@ export default async function ReservationDetailPage({ params }: PageProps) {
             <input type="hidden" name="reason" value="manual" />
             <button
               type="submit"
-              className="w-full cursor-pointer rounded-[2px] border border-accent/50 px-4 py-3 text-sm uppercase tracking-wide text-accent transition-colors hover:bg-accent/10"
+              className="w-full cursor-pointer rounded-[2px] border border-alert/50 px-4 py-3 text-sm uppercase tracking-wide text-alert transition-colors hover:bg-alert/10"
             >
               Stornovat
             </button>

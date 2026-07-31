@@ -8,7 +8,8 @@
 //   npm run check:reservations
 
 import { prisma } from "@/lib/db"
-import { findConflicts, listBlockedRanges } from "@/lib/reservations/availability"
+import { listBlockedRanges } from "@/lib/reservations/availability"
+import { findConflicts } from "@/lib/reservations/overlap"
 import { createManualReservation } from "@/lib/reservations/create"
 import { ReservationConflictError } from "@/lib/reservations/errors"
 import { getGuestDetail, listGuestsWithStats, normalizePhone } from "@/lib/reservations/guests"

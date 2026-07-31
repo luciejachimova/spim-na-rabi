@@ -1,20 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { describeReservationStatus } from "@/lib/reservations/status"
-import type { ReservationSource, ReservationWithApartment } from "@/lib/reservations"
-import type { EmailKind } from "@/lib/guest-emails"
+import { describeReservationStatus, SOURCE_LABELS } from "@/lib/reservations/status"
+import type { ReservationWithApartment } from "@/lib/reservations"
 
-// Typed against ReservationSource rather than string so adding a source to
-// the enum fails the build here instead of silently rendering the raw value.
-export const SOURCE_LABELS: Record<ReservationSource, string> = {
-  website: "Web",
-  booking: "Booking.com",
-  airbnb: "Airbnb",
-  phone: "Telefon",
-  email: "E-mail",
-  admin_block: "Blokováno majitelem"
-}
+// Re-exported for the admin components that already import it from here.
+export { SOURCE_LABELS }
+import type { EmailKind } from "@/lib/guest-emails"
 
 const EMAIL_KINDS: {
   kind: EmailKind

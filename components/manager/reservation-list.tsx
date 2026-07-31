@@ -7,7 +7,7 @@ import { countNights } from "@/lib/reservations/overlap"
 import { RESERVATION_STATUS_LABELS } from "@/lib/reservations/status"
 import type { ReservationSource, ReservationStatus, ReservationWithApartment } from "@/lib/reservations/types"
 import type { ApartmentFilterOption } from "@/lib/reservations/manager-data"
-import { SOURCE_LABELS } from "@/components/reservation-detail-modal"
+import { SOURCE_LABELS } from "@/lib/reservations/status"
 
 type PeriodFilter = "upcoming" | "current" | "past" | "all"
 
@@ -20,9 +20,9 @@ const PERIOD_LABELS: Record<PeriodFilter, string> = {
 
 const STATUS_STYLES: Record<ReservationStatus, string> = {
   confirmed: "bg-dark text-sand",
-  inquiry: "bg-accent/20 text-dark",
-  cancelled: "bg-transparent text-mid border border-mid/40",
-  no_show: "bg-transparent text-accent border border-accent/40"
+  inquiry: "bg-alert/20 text-dark",
+  cancelled: "bg-transparent text-muted border border-muted/40",
+  no_show: "bg-transparent text-alert border border-alert/40"
 }
 
 export function StatusBadge({ status }: { status: ReservationStatus }) {
@@ -88,7 +88,7 @@ export default function ReservationList({
             onClick={() => setPeriod(value)}
             aria-pressed={period === value}
             className={`cursor-pointer rounded-[2px] px-3 py-1.5 text-sm transition-colors ${
-              period === value ? "bg-dark text-sand" : "border border-dark/15 bg-white text-mid hover:text-dark"
+              period === value ? "bg-dark text-sand" : "border border-dark/15 bg-white text-muted hover:text-dark"
             }`}
           >
             {PERIOD_LABELS[value]}
@@ -134,7 +134,7 @@ export default function ReservationList({
         </label>
       </div>
 
-      <p className="text-sm text-mid">
+      <p className="text-sm text-muted">
         {filtered.length === 0
           ? "Žádná rezervace neodpovídá filtru."
           : `${filtered.length} ${filtered.length === 1 ? "rezervace" : filtered.length <= 4 ? "rezervace" : "rezervací"}`}
@@ -164,16 +164,16 @@ export default function ReservationList({
                 <div className="min-w-0 flex-1 space-y-1">
                   <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                     <span className="truncate text-base">
-                      {isBlock ? <span className="text-mid">Blokace</span> : reservation.name || <span className="text-mid">Bez jména</span>}
+                      {isBlock ? <span className="text-muted">Blokace</span> : reservation.name || <span className="text-muted">Bez jména</span>}
                     </span>
                     <StatusBadge status={reservation.status} />
                   </div>
-                  <p className="text-sm text-mid">
+                  <p className="text-sm text-muted">
                     {apartment?.shortLabel || reservation.apartmentName} · {formatDateRange(reservation.startDate, reservation.endDate)}
                     {nights > 0 && ` · ${formatNights(nights)}`}
                   </p>
                   {!isBlock && (
-                    <p className="text-sm text-mid">
+                    <p className="text-sm text-muted">
                       {formatGuests(reservation.adults, reservation.children)}
                       {dogs && ` · ${dogs}`}
                       {price && ` · ${price}`}
@@ -181,7 +181,7 @@ export default function ReservationList({
                     </p>
                   )}
                   {(reservation.source === "booking" || reservation.source === "airbnb") && (
-                    <p className="text-xs text-mid">{SOURCE_LABELS[reservation.source]}</p>
+                    <p className="text-xs text-muted">{SOURCE_LABELS[reservation.source]}</p>
                   )}
                 </div>
               </Link>

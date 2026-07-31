@@ -19,7 +19,8 @@
     "db:demo": "TURSO_DATABASE_URL= TURSO_AUTH_TOKEN= tsx scripts/demo-data.ts",
     "check:sync": "TURSO_DATABASE_URL= TURSO_AUTH_TOKEN= tsx scripts/sync-check.ts",
     "check:reservations": "TURSO_DATABASE_URL= TURSO_AUTH_TOKEN= tsx scripts/reservations-check.ts",
-    "check": "npm run typecheck && npm run check:sync && npm run check:reservations"
+    "check:flow": "TURSO_DATABASE_URL= TURSO_AUTH_TOKEN= tsx scripts/manager-flow-check.ts",
+    "check": "npm run typecheck && npm run check:sync && npm run check:reservations && npm run check:flow"
   },
   "dependencies": {
     "@libsql/client": "^0.17.4",

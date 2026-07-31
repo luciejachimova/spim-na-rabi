@@ -1,4 +1,4 @@
-import type { ReservationStatus } from "./types"
+import type { ReservationSource, ReservationStatus } from "./types"
 
 // Pure, dependency-free so client components can import it without pulling
 // Prisma or node-ical into the browser bundle (same reasoning as
@@ -36,4 +36,20 @@ export const RESERVATION_STATUS_LABELS: Record<ReservationStatus, string> = {
 
 export function describeReservationStatus(status: ReservationStatus) {
   return RESERVATION_STATUS_LABELS[status] ?? status
+}
+
+// Lives here rather than in a component so both the admin UI and the manager
+// read the same list, and so adding a source to the enum fails the build in one
+// place instead of silently rendering a raw value like "admin_block".
+export const SOURCE_LABELS: Record<ReservationSource, string> = {
+  website: "Web",
+  booking: "Booking.com",
+  airbnb: "Airbnb",
+  phone: "Telefon",
+  email: "E-mail",
+  admin_block: "Blokováno majitelem"
+}
+
+export function describeReservationSource(source: ReservationSource) {
+  return SOURCE_LABELS[source] ?? source
 }

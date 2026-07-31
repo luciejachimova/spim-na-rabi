@@ -6,7 +6,7 @@ import { findOrCreateGuest } from "./guests"
 import { mapRawReservationRow } from "./mappers"
 import { getApartmentById } from "./queries"
 import { BLOCKING_STATUSES } from "./status"
-import type { ManualReservationInput, RawReservationRow, ReservationWithApartment, UpdateReservationInput } from "./types"
+import type { RawReservationRow, ReservationWithApartment, UpdateReservationInput } from "./types"
 import { areDatesValid, parseDateOnly, validateEmailFormat, validateGuestsCount, validateOccupancy, validatePrice } from "./validation"
 
 // Same atomic-statement pattern as insertReservationAtomic — folds the "no
@@ -151,9 +151,4 @@ export async function updateReservation(
   }
 
   return mapRawReservationRow(row, apartment)
-}
-
-/** Convenience wrapper so the manager form can send one full object. */
-export function updateReservationFromForm(reservationId: number, input: ManualReservationInput) {
-  return updateReservation(reservationId, input)
 }

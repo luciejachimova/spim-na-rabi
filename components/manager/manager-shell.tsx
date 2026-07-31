@@ -69,12 +69,12 @@ export default function ManagerShell({ children }: { children: React.ReactNode }
         <div className="flex items-center gap-4 pt-[env(safe-area-inset-top)]">
           <Link
             href="/manager/rezervace/nova"
-            className="hidden cursor-pointer items-center gap-1.5 rounded-[2px] bg-dark px-3 py-2 text-xs uppercase tracking-wide text-sand transition-colors hover:bg-accent md:flex"
+            className="hidden cursor-pointer items-center gap-1.5 rounded-[2px] bg-dark px-3 py-2 text-xs uppercase tracking-wide text-sand transition-colors hover:bg-alert md:flex"
           >
             <PlusIcon size={16} />
             Nová rezervace
           </Link>
-          <button type="button" onClick={handleLogout} className="cursor-pointer text-sm text-mid underline hover:text-dark">
+          <button type="button" onClick={handleLogout} className="cursor-pointer text-sm text-muted underline hover:text-dark">
             Odhlásit
           </button>
         </div>
@@ -88,7 +88,7 @@ export default function ManagerShell({ children }: { children: React.ReactNode }
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-2.5 rounded-[2px] px-3 py-2 text-sm transition-colors ${
-                  isActive(pathname, item.href) ? "bg-dark text-sand" : "text-mid hover:bg-dark/5 hover:text-dark"
+                  isActive(pathname, item.href) ? "bg-dark text-sand" : "text-muted hover:bg-dark/5 hover:text-dark"
                 }`}
               >
                 <item.icon />
@@ -110,7 +110,7 @@ export default function ManagerShell({ children }: { children: React.ReactNode }
             key={item.href}
             href={item.href}
             className={`flex flex-col items-center gap-0.5 py-2.5 text-[11px] tracking-wide transition-colors ${
-              isActive(pathname, item.href) ? "text-dark" : "text-mid"
+              isActive(pathname, item.href) ? "text-dark" : "text-muted"
             }`}
           >
             <item.icon />
@@ -120,7 +120,7 @@ export default function ManagerShell({ children }: { children: React.ReactNode }
         <Link
           href="/manager/rezervace/nova"
           aria-label="Nová rezervace"
-          className="flex flex-col items-center gap-0.5 py-2.5 text-[11px] tracking-wide text-mid transition-colors hover:text-dark"
+          className="flex flex-col items-center gap-0.5 py-2.5 text-[11px] tracking-wide text-muted transition-colors hover:text-dark"
         >
           <span className="grid h-[22px] w-[22px] place-items-center rounded-full bg-dark text-sand">
             <PlusIcon size={14} />

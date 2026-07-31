@@ -4,14 +4,6 @@ export type ReservationSource = "website" | "booking" | "airbnb" | "phone" | "em
 export type ReservationStatus = "inquiry" | "confirmed" | "cancelled" | "no_show"
 export type IcalProvider = "booking" | "airbnb"
 
-// Sources whose rows are owned by the remote channel. For these the importer
-// may only write startDate/endDate/status/lastSyncedAt — see lib/ical/import.ts.
-export const EXTERNAL_SOURCES = ["booking", "airbnb"] as const satisfies readonly ReservationSource[]
-
-export function isExternalSource(source: ReservationSource) {
-  return (EXTERNAL_SOURCES as readonly ReservationSource[]).includes(source)
-}
-
 export interface ApartmentRecord {
   id: number
   slug: string

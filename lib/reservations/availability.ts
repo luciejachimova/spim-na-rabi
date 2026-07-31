@@ -3,9 +3,6 @@ import type { BlockedRange } from "./overlap"
 import { BLOCKING_STATUSES } from "./status"
 import type { ReservationSource, ReservationStatus } from "./types"
 
-export type { BlockedRange } from "./overlap"
-export { countNights, findConflicts, rangesOverlap } from "./overlap"
-
 export async function listBlockedRanges(options?: { fromDate?: string }): Promise<BlockedRange[]> {
   const reservations = await prisma.reservation.findMany({
     where: {

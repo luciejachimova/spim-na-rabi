@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { inputToCents } from "@/lib/format"
-import { cancelReservation, deleteReservationPermanently } from "@/lib/reservations/cancel"
+import { cancelReservation } from "@/lib/reservations/cancel"
 import { createManualReservation } from "@/lib/reservations/create"
 import { ReservationError, ReservationNotFoundError } from "@/lib/reservations/errors"
 import { updateGuestNote } from "@/lib/reservations/guests"
@@ -140,20 +140,6 @@ export async function cancelReservationAction(formData: FormData): Promise<void>
 
   revalidatePath("/manager/rezervace")
   revalidatePath(`/manager/rezervace/${reservationId}`)
-}
-
-export async function deleteReservationAction(formData: FormData): Promise<void> {
-  const reservationId = readInt(formData, "reservationId", 0)
-  if (!reservationId) return
-
-  try {
-    await deleteReservationPermanently(reservationId)
-  } catch (error) {
-    if (!(error instanceof ReservationNotFoundError)) throw error
-  }
-
-  revalidatePath("/manager/rezervace")
-  redirect("/manager/rezervace")
 }
 
 export async function updateGuestNoteAction(formData: FormData): Promise<void> {

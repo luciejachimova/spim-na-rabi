@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import { updateReservationAction } from "@/app/manager/actions"
 import ReservationForm from "@/components/manager/reservation-form"
 import { prisma } from "@/lib/db"
+import { addDaysToKey } from "@/lib/prague-date"
 import { listBlockedRanges } from "@/lib/reservations/availability"
 import { listApartmentOptions } from "@/lib/reservations/manager-data"
 import { toReservationWithApartment } from "@/lib/reservations/mappers"
@@ -29,15 +30,17 @@ export default async function EditReservationPage({ params }: PageProps) {
 
   const [apartments, blockedRanges] = await Promise.all([
     listApartmentOptions(),
-    // No fromDate here: an existing stay may sit in the past, and the form
-    // still has to see neighbouring bookings to warn about a clash.
-    listBlockedRanges()
+    // Bounded, not unbounded. The stay being edited may sit in the past, so
+    // "from today" is wrong here — but loading every reservation ever made to
+    // warn about one clash grows without limit. A year back from this arrival
+    // covers any date the form can realistically be moved to.
+    listBlockedRanges({ fromDate: addDaysToKey(record.startDate, -365) })
   ])
 
   return (
     <div className="space-y-5">
       <div className="mx-auto max-w-xl">
-        <Link href={`/manager/rezervace/${reservation.id}`} className="text-sm text-mid underline hover:text-dark">
+        <Link href={`/manager/rezervace/${reservation.id}`} className="text-sm text-muted underline hover:text-dark">
           ← Zpět na detail
         </Link>
         <h1 className="mt-2 font-serif text-2xl">Úprava rezervace</h1>

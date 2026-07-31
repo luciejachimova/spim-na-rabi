@@ -25,7 +25,7 @@ export default async function NewReservationPage() {
   return (
     <div className="space-y-5">
       <div className="mx-auto max-w-xl">
-        <Link href="/manager/rezervace" className="text-sm text-mid underline hover:text-dark">
+        <Link href="/manager/rezervace" className="text-sm text-muted underline hover:text-dark">
           ← Zpět na rezervace
         </Link>
         <h1 className="mt-2 font-serif text-2xl">Nová rezervace</h1>

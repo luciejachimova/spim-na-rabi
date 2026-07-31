@@ -7,17 +7,7 @@ import { centsToInput, formatDateRange, formatNights } from "@/lib/format"
 import { countNights, findConflicts, type BlockedRange } from "@/lib/reservations/overlap"
 import { RESERVATION_STATUS_LABELS } from "@/lib/reservations/status"
 import type { ReservationSource, ReservationStatus, ReservationWithApartment } from "@/lib/reservations/types"
-
-export interface ApartmentOption {
-  id: number
-  name: string
-  shortLabel: string | null
-  maxAdults: number
-  maxChildren: number
-  petsAllowed: boolean
-  checkInFrom: string
-  checkOutUntil: string
-}
+import type { ApartmentOption } from "@/lib/reservations/manager-data"
 
 const SOURCE_OPTIONS: { value: ReservationSource; label: string }[] = [
   { value: "phone", label: "Telefon" },
@@ -28,14 +18,21 @@ const SOURCE_OPTIONS: { value: ReservationSource; label: string }[] = [
   { value: "admin_block", label: "Blokace" }
 ]
 
+// text-base, not text-sm: iOS Safari zooms the whole page when a focused input
+// has a font smaller than 16px, and the form is used mostly on a phone.
+//
+// focus-visible:ring rather than only a border colour change. `outline-none`
+// removes the browser's focus ring, and swapping a 1px border from dark/15 to
+// dark is close to invisible — someone tabbing through the form would lose
+// track of where they are.
 const field =
-  "w-full rounded-[2px] border border-dark/15 bg-white px-3 py-2.5 text-base text-dark outline-none transition-colors focus:border-dark"
-const label = "block text-xs uppercase tracking-wide text-mid"
+  "w-full rounded-[2px] border border-dark/15 bg-white px-3 py-2.5 text-base text-dark outline-none transition-colors focus:border-dark focus-visible:ring-2 focus-visible:ring-dark/40"
+const label = "block text-xs uppercase tracking-wide text-muted"
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="space-y-3 border-t border-dark/10 pt-5 first:border-0 first:pt-0">
-      <h2 className="text-xs uppercase tracking-[0.14em] text-mid">{title}</h2>
+      <h2 className="text-xs uppercase tracking-[0.14em] text-muted">{title}</h2>
       {children}
     </section>
   )
@@ -61,13 +58,15 @@ function Stepper({
       <span className="text-sm">{labelText}</span>
       <div className="flex items-center gap-1">
         {/* Steppers rather than a number input: on a phone this is one thumb tap
-            instead of summoning the numeric keypad for a value that is 1–4. */}
+            instead of summoning the numeric keypad for a value that is 1–4.
+            44px square — the smallest target a thumb hits reliably, and below
+            what h-10 (40px) gave. */}
         <button
           type="button"
           onClick={() => onChange(Math.max(min, value - 1))}
           disabled={value <= min}
           aria-label={`${labelText} − 1`}
-          className="grid h-10 w-10 cursor-pointer place-items-center rounded-[2px] border border-dark/15 bg-white text-lg leading-none disabled:cursor-not-allowed disabled:opacity-40"
+          className="grid h-11 w-11 cursor-pointer place-items-center rounded-[2px] border border-dark/15 bg-white text-lg leading-none disabled:cursor-not-allowed disabled:opacity-40"
         >
           −
         </button>
@@ -77,7 +76,7 @@ function Stepper({
           onClick={() => onChange(Math.min(max, value + 1))}
           disabled={value >= max}
           aria-label={`${labelText} + 1`}
-          className="grid h-10 w-10 cursor-pointer place-items-center rounded-[2px] border border-dark/15 bg-white text-lg leading-none disabled:cursor-not-allowed disabled:opacity-40"
+          className="grid h-11 w-11 cursor-pointer place-items-center rounded-[2px] border border-dark/15 bg-white text-lg leading-none disabled:cursor-not-allowed disabled:opacity-40"
         >
           +
         </button>
@@ -136,7 +135,7 @@ export default function ReservationForm({ apartments, blockedRanges, reservation
       {reservation && <input type="hidden" name="reservationId" value={reservation.id} />}
 
       {isExternal && (
-        <p className="rounded-[2px] border border-dark/15 bg-white px-3 py-2.5 text-sm text-mid">
+        <p className="rounded-[2px] border border-dark/15 bg-white px-3 py-2.5 text-sm text-muted">
           Rezervace pochází z <strong className="text-dark">{reservation?.source === "booking" ? "Booking.com" : "Airbnb"}</strong>.
           Termín přepisuje synchronizace, ostatní údaje zůstanou tak, jak je uložíte.
         </p>
@@ -155,7 +154,7 @@ export default function ReservationForm({ apartments, blockedRanges, reservation
               }`}
             >
               <span className="block text-sm">{item.shortLabel || item.name}</span>
-              <span className={`block text-xs ${apartmentId === item.id ? "text-sand/70" : "text-mid"}`}>{item.name}</span>
+              <span className={`block text-xs ${apartmentId === item.id ? "text-sand/70" : "text-muted"}`}>{item.name}</span>
             </button>
           ))}
         </div>
@@ -195,18 +194,21 @@ export default function ReservationForm({ apartments, blockedRanges, reservation
         </div>
 
         {nights > 0 && (
-          <p className="text-sm text-mid">
+          <p className="text-sm text-muted">
             {formatNights(nights)}
             {apartment && ` · příjezd od ${apartment.checkInFrom}, odjezd do ${apartment.checkOutUntil}`}
           </p>
         )}
 
-        {datesInverted && <p className="text-sm text-accent">Odjezd musí být po příjezdu.</p>}
+        {/* aria-live so the warning is announced when it appears, rather than
+            only being visible to someone looking at that part of the screen. */}
+        <div role="status" aria-live="polite" className="space-y-3 empty:hidden">
+          {datesInverted && <p className="text-sm text-alert">Odjezd musí být po příjezdu.</p>}
 
-        {conflicts.length > 0 && (
-          <div className="rounded-[2px] border border-accent bg-accent/10 px-3 py-2.5 text-sm">
+          {conflicts.length > 0 && (
+          <div className="rounded-[2px] border border-alert bg-alert/10 px-3 py-2.5 text-sm">
             <p className="font-medium text-dark">Termín je už obsazený</p>
-            <ul className="mt-1 space-y-0.5 text-mid">
+            <ul className="mt-1 space-y-0.5 text-muted">
               {conflicts.map((conflict) => (
                 <li key={conflict.id}>
                   {conflict.label} · {formatDateRange(conflict.startDate, conflict.endDate)}
@@ -215,7 +217,8 @@ export default function ReservationForm({ apartments, blockedRanges, reservation
               ))}
             </ul>
           </div>
-        )}
+          )}
+        </div>
       </Section>
 
       <Section title="Stav a zdroj">
@@ -358,7 +361,7 @@ export default function ReservationForm({ apartments, blockedRanges, reservation
                     onClick={() => setDogsCount(Math.max(1, dogsCount - 1))}
                     disabled={dogsCount <= 1}
                     aria-label="Méně psů"
-                    className="grid h-10 w-10 cursor-pointer place-items-center rounded-[2px] border border-dark/15 bg-white text-lg leading-none disabled:opacity-40"
+                    className="grid h-11 w-11 cursor-pointer place-items-center rounded-[2px] border border-dark/15 bg-white text-lg leading-none disabled:opacity-40"
                   >
                     −
                   </button>
@@ -367,7 +370,7 @@ export default function ReservationForm({ apartments, blockedRanges, reservation
                     type="button"
                     onClick={() => setDogsCount(Math.min(5, dogsCount + 1))}
                     aria-label="Více psů"
-                    className="grid h-10 w-10 cursor-pointer place-items-center rounded-[2px] border border-dark/15 bg-white text-lg leading-none"
+                    className="grid h-11 w-11 cursor-pointer place-items-center rounded-[2px] border border-dark/15 bg-white text-lg leading-none"
                   >
                     +
                   </button>
@@ -377,15 +380,17 @@ export default function ReservationForm({ apartments, blockedRanges, reservation
             </div>
           </div>
 
-          {overCapacity && apartment && (
-            <p className="text-sm text-accent">
-              {apartment.name} je uvedený pro {apartment.maxAdults} dospělé
-              {apartment.maxChildren > 0 && ` a ${apartment.maxChildren} děti`}. Uložit to lze, jen si to ověřte.
-            </p>
-          )}
-          {dogNotAllowed && apartment && (
-            <p className="text-sm text-accent">{apartment.name} nemá povolené psy. Uložit to lze, jen si to ověřte.</p>
-          )}
+          <div role="status" aria-live="polite" className="space-y-3 empty:hidden">
+            {overCapacity && apartment && (
+              <p className="text-sm text-alert">
+                {apartment.name} je uvedený pro {apartment.maxAdults} dospělé
+                {apartment.maxChildren > 0 && ` a ${apartment.maxChildren} děti`}. Uložit to lze, jen si to ověřte.
+              </p>
+            )}
+            {dogNotAllowed && apartment && (
+              <p className="text-sm text-alert">{apartment.name} nemá povolené psy. Uložit to lze, jen si to ověřte.</p>
+            )}
+          </div>
         </Section>
       )}
 
@@ -488,7 +493,7 @@ export default function ReservationForm({ apartments, blockedRanges, reservation
       </Section>
 
       {state.error && (
-        <p role="alert" className="rounded-[2px] border border-accent bg-accent/10 px-3 py-2.5 text-sm text-dark">
+        <p role="alert" className="rounded-[2px] border border-alert bg-alert/10 px-3 py-2.5 text-sm text-dark">
           {state.error}
         </p>
       )}
@@ -498,13 +503,13 @@ export default function ReservationForm({ apartments, blockedRanges, reservation
         <button
           type="submit"
           disabled={pending || datesInverted}
-          className="flex-1 cursor-pointer rounded-[2px] bg-dark px-4 py-3 text-sm uppercase tracking-wide text-sand transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex-1 cursor-pointer rounded-[2px] bg-dark px-4 py-3 text-sm uppercase tracking-wide text-sand transition-colors hover:bg-alert disabled:cursor-not-allowed disabled:opacity-60"
         >
           {pending ? "Ukládám…" : submitLabel}
         </button>
         <Link
           href={reservation ? `/manager/rezervace/${reservation.id}` : "/manager/rezervace"}
-          className="cursor-pointer rounded-[2px] border border-dark/20 px-4 py-3 text-sm uppercase tracking-wide text-mid transition-colors hover:border-dark hover:text-dark"
+          className="cursor-pointer rounded-[2px] border border-dark/20 px-4 py-3 text-sm uppercase tracking-wide text-muted transition-colors hover:border-dark hover:text-dark"
         >
           Zrušit
         </Link>
