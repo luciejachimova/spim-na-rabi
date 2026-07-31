@@ -4,7 +4,7 @@ import { ReservationConflictError, ReservationValidationError } from "./errors"
 import { findOrCreateGuest } from "./guests"
 import { mapRawReservationRow } from "./mappers"
 import { getApartmentById, getApartmentBySelection, listApartments } from "./queries"
-import { BLOCKING_STATUSES } from "./status"
+import { BLOCKING_STATUSES_FOR_READ } from "./status"
 import type {
   AdminBlockInput,
   ApartmentRecord,
@@ -75,7 +75,7 @@ async function insertReservationAtomic(
     WHERE NOT EXISTS (
       SELECT 1 FROM reservations
       WHERE apartment_id = ${payload.apartmentId}
-        AND status IN (${Prisma.join(BLOCKING_STATUSES)})
+        AND status IN (${Prisma.join(BLOCKING_STATUSES_FOR_READ)})
         AND start_date < ${payload.endDate}
         AND end_date > ${payload.startDate}
     )

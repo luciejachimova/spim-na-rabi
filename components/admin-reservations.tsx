@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
-import { describeReservationStatus, isBlocking, RESERVATION_STATUS_LABELS } from "@/lib/reservations/status"
+import { describeReservationStatus, isBlocking, RESERVATION_STATUS_LABELS, SELECTABLE_STATUSES } from "@/lib/reservations/status"
 import type { ApartmentRecord, ReservationWithApartment } from "@/lib/reservations"
 import { useToast } from "./admin-toast"
 import { useConfirm } from "./confirm-dialog"
@@ -298,9 +298,9 @@ function FiltersBar({
       </select>
       <select value={filters.status} onChange={(event) => setFilters({ ...filters, status: event.target.value })} className={inputClass}>
         <option value="all">Všechny stavy</option>
-        {Object.entries(RESERVATION_STATUS_LABELS).map(([value, label]) => (
+        {SELECTABLE_STATUSES.map((value) => (
           <option key={value} value={value}>
-            {label}
+            {RESERVATION_STATUS_LABELS[value]}
           </option>
         ))}
       </select>

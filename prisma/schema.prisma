@@ -29,6 +29,15 @@ enum ReservationStatus {
   confirmed
   cancelled
   no_show
+
+  // Transition value — remove once the production migration has run and been
+  // verified (see docs/RELEASE.md). M1 renames 'active' to 'confirmed', but
+  // code and data cannot change in the same instant. Prisma validates enum
+  // values before sending a query, so without this member the new code cannot
+  // even ask about pre-migration rows: every night would read as free and
+  // /api/availability would offer an occupied apartment to a guest.
+  // Nothing writes it — create hardcodes 'confirmed'.
+  active
 }
 
 enum IcalProvider {

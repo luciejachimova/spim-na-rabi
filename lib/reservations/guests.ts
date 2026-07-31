@@ -1,7 +1,7 @@
 import { prisma } from "../db"
 import { formatDateForPrague } from "../prague-date"
 import { countNights } from "./overlap"
-import { BLOCKING_STATUSES } from "./status"
+import { isBlocking } from "./status"
 import type { ReservationSource, ReservationStatus } from "./types"
 
 // Normalised copies exist so "Novák@Email.cz " and "+420 777 123 456" match
@@ -141,7 +141,7 @@ function summarize(
   stays: GuestStay[]
 ): GuestSummary {
   const today = formatDateForPrague(new Date())
-  const counted = stays.filter((stay) => (BLOCKING_STATUSES as readonly ReservationStatus[]).includes(stay.status))
+  const counted = stays.filter((stay) => isBlocking(stay.status))
   const dates = counted.map((stay) => stay.startDate).sort()
 
   return {

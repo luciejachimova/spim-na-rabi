@@ -1,7 +1,10 @@
 import type { Apartment as PrismaApartment, IcalFeed as PrismaIcalFeed } from "@prisma/client"
 
 export type ReservationSource = "website" | "booking" | "airbnb" | "phone" | "email" | "admin_block"
-export type ReservationStatus = "inquiry" | "confirmed" | "cancelled" | "no_show"
+// "active" is the pre-migration value, kept only until the production
+// migration has run — see the enum in schema.prisma and docs/RELEASE.md.
+// Nothing writes it; SELECTABLE_STATUSES keeps it out of the UI.
+export type ReservationStatus = "inquiry" | "confirmed" | "cancelled" | "no_show" | "active"
 export type IcalProvider = "booking" | "airbnb"
 
 export interface ApartmentRecord {

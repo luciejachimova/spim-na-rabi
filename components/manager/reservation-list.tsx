@@ -4,7 +4,7 @@ import { useMemo, useState } from "react"
 import Link from "next/link"
 import { formatDateRange, formatDogs, formatGuests, formatMoney, formatNights } from "@/lib/format"
 import { countNights } from "@/lib/reservations/overlap"
-import { RESERVATION_STATUS_LABELS } from "@/lib/reservations/status"
+import { RESERVATION_STATUS_LABELS, SELECTABLE_STATUSES } from "@/lib/reservations/status"
 import type { ReservationSource, ReservationStatus, ReservationWithApartment } from "@/lib/reservations/types"
 import type { ApartmentFilterOption } from "@/lib/reservations/manager-data"
 import { SOURCE_LABELS } from "@/lib/reservations/status"
@@ -22,7 +22,8 @@ const STATUS_STYLES: Record<ReservationStatus, string> = {
   confirmed: "bg-dark text-sand",
   inquiry: "bg-alert/20 text-dark",
   cancelled: "bg-transparent text-muted border border-muted/40",
-  no_show: "bg-transparent text-alert border border-alert/40"
+  no_show: "bg-transparent text-alert border border-alert/40",
+  active: "bg-dark text-sand"
 }
 
 export function StatusBadge({ status }: { status: ReservationStatus }) {
@@ -114,9 +115,9 @@ export default function ReservationList({
         </select>
         <select value={status} onChange={(event) => setStatus(event.target.value as ReservationStatus | "all")} className={selectClass}>
           <option value="all">Všechny stavy</option>
-          {Object.entries(RESERVATION_STATUS_LABELS).map(([value, text]) => (
+          {SELECTABLE_STATUSES.map((value) => (
             <option key={value} value={value}>
-              {text}
+              {RESERVATION_STATUS_LABELS[value]}
             </option>
           ))}
         </select>

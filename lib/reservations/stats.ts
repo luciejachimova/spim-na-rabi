@@ -5,7 +5,7 @@ import { buildApartmentIcal } from "../ical/export"
 import { addDaysToKey, formatDateForPrague, toUtcDate } from "../prague-date"
 import { mapIcalFeed } from "./mappers"
 import { listAllReservations, listApartments } from "./queries"
-import { BLOCKING_STATUSES, isBlocking } from "./status"
+import { BLOCKING_STATUSES_FOR_READ, isBlocking } from "./status"
 import type { ApartmentRecord, IcalProvider, ReservationWithApartment } from "./types"
 
 function pad2(value: number) {
@@ -30,7 +30,7 @@ async function computeOccupancyForMonth(
 
   const reservations = await prisma.reservation.findMany({
     where: {
-      status: { in: [...BLOCKING_STATUSES] },
+      status: { in: [...BLOCKING_STATUSES_FOR_READ] },
       startDate: { lt: monthEndExclusive },
       endDate: { gt: monthStart }
     },
@@ -67,9 +67,9 @@ export async function getDashboardStats(): Promise<DashboardStats> {
 
   const [totalReservations, futureStays, checkInsToday, checkOutsToday, feeds] = await Promise.all([
     prisma.reservation.count(),
-    prisma.reservation.count({ where: { status: { in: [...BLOCKING_STATUSES] }, startDate: { gte: todayKey } } }),
-    prisma.reservation.count({ where: { status: { in: [...BLOCKING_STATUSES] }, startDate: todayKey } }),
-    prisma.reservation.count({ where: { status: { in: [...BLOCKING_STATUSES] }, endDate: todayKey } }),
+    prisma.reservation.count({ where: { status: { in: [...BLOCKING_STATUSES_FOR_READ] }, startDate: { gte: todayKey } } }),
+    prisma.reservation.count({ where: { status: { in: [...BLOCKING_STATUSES_FOR_READ] }, startDate: todayKey } }),
+    prisma.reservation.count({ where: { status: { in: [...BLOCKING_STATUSES_FOR_READ] }, endDate: todayKey } }),
     prisma.icalFeed.findMany()
   ])
 

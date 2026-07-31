@@ -5,7 +5,7 @@ import { ReservationConflictError, ReservationNotFoundError, ReservationValidati
 import { findOrCreateGuest } from "./guests"
 import { mapRawReservationRow } from "./mappers"
 import { getApartmentById } from "./queries"
-import { BLOCKING_STATUSES } from "./status"
+import { BLOCKING_STATUSES_FOR_READ } from "./status"
 import type { RawReservationRow, ReservationWithApartment, UpdateReservationInput } from "./types"
 import { areDatesValid, parseDateOnly, validateEmailFormat, validateGuestsCount, validateOccupancy, validatePrice } from "./validation"
 
@@ -115,7 +115,7 @@ export async function updateReservation(
       AND NOT EXISTS (
         SELECT 1 FROM reservations
         WHERE apartment_id = ${apartment.id}
-          AND status IN (${Prisma.join(BLOCKING_STATUSES)})
+          AND status IN (${Prisma.join(BLOCKING_STATUSES_FOR_READ)})
           AND id != ${reservationId}
           AND start_date < ${endDate}
           AND end_date > ${startDate}

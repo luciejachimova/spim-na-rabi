@@ -5,7 +5,7 @@ import Link from "next/link"
 import { EMPTY_FORM_STATE, type ManagerFormState } from "@/app/manager/form-state"
 import { centsToInput, formatDateRange, formatNights } from "@/lib/format"
 import { countNights, findConflicts, type BlockedRange } from "@/lib/reservations/overlap"
-import { RESERVATION_STATUS_LABELS } from "@/lib/reservations/status"
+import { RESERVATION_STATUS_LABELS, SELECTABLE_STATUSES } from "@/lib/reservations/status"
 import type { ReservationSource, ReservationStatus, ReservationWithApartment } from "@/lib/reservations/types"
 import type { ApartmentOption } from "@/lib/reservations/manager-data"
 
@@ -234,9 +234,9 @@ export default function ReservationForm({ apartments, blockedRanges, reservation
               onChange={(event) => setStatus(event.target.value as ReservationStatus)}
               className={field}
             >
-              {Object.entries(RESERVATION_STATUS_LABELS).map(([value, text]) => (
+              {SELECTABLE_STATUSES.map((value) => (
                 <option key={value} value={value}>
-                  {text}
+                  {RESERVATION_STATUS_LABELS[value]}
                 </option>
               ))}
             </select>

@@ -1,12 +1,12 @@
 import { prisma } from "../db"
 import type { BlockedRange } from "./overlap"
-import { BLOCKING_STATUSES } from "./status"
+import { BLOCKING_STATUSES_FOR_READ } from "./status"
 import type { ReservationSource, ReservationStatus } from "./types"
 
 export async function listBlockedRanges(options?: { fromDate?: string }): Promise<BlockedRange[]> {
   const reservations = await prisma.reservation.findMany({
     where: {
-      status: { in: [...BLOCKING_STATUSES] },
+      status: { in: [...BLOCKING_STATUSES_FOR_READ] },
       ...(options?.fromDate ? { endDate: { gte: options.fromDate } } : {})
     },
     select: {
