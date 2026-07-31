@@ -28,24 +28,51 @@ termínů, atomická kontrola překryvu při zápisu a iCal export do Bookingu.
 
 ---
 
-## 1. Záloha databáze
+## 1. Přihlášení k Turso
+
+Všechny následující příkazy potřebují platformové přihlášení. Turso CLI nemá
+přepínač pro token — `TURSO_AUTH_TOKEN` z `.env` slouží aplikaci, ne CLI.
+
+```sh
+turso auth login          # otevře prohlížeč
+turso auth whoami         # ověření
+turso db list             # musí vypsat spimnarabi
+```
+
+- [ ] `turso auth whoami` vypíše účet
+- [ ] `turso db list` obsahuje `spimnarabi`
+
+## 2. Záloha databáze
+
+`turso db export` stáhne skutečný SQLite soubor, ne SQL dump. To je lepší:
+zálohu jde rovnou otevřít a přepočítat lokálně, takže „mám zálohu“ není
+domněnka.
 
 ```sh
 mkdir -p ~/spim-zalohy
-turso db dump spimnarabi > ~/spim-zalohy/spimnarabi-$(date +%Y%m%d-%H%M).sql
+turso db export spimnarabi \
+  --output-file ~/spim-zalohy/spimnarabi-$(date +%Y%m%d-%H%M).db
 ls -lh ~/spim-zalohy/
 ```
 
-**Musí platit, než pokračujete:**
+**Ověření zálohy — nejen že soubor existuje, ale že v něm jsou data:**
 
-- [ ] Soubor existuje a má víc než pár kilobajtů (prázdný dump = neproběhlo).
-- [ ] `grep -c "INSERT INTO reservations" ~/spim-zalohy/…sql` vrátí zhruba
-      počet rezervací, které v adminu vidíte.
-- [ ] Zálohu máte i mimo notebook (Disk, e-mail sám sobě — cokoli).
+```sh
+ZALOHA=$(ls -t ~/spim-zalohy/*.db | head -1)
+sqlite3 "$ZALOHA" "PRAGMA integrity_check;"
+sqlite3 "$ZALOHA" "SELECT COUNT(*) FROM reservations;"
+sqlite3 "$ZALOHA" "SELECT status, COUNT(*) FROM reservations GROUP BY status;"
+sqlite3 "$ZALOHA" "SELECT COUNT(*) FROM apartments;"
+```
 
-> Bez ověřené zálohy nepokračujte. Krok 3 obsahuje `DROP TABLE`.
+- [ ] `integrity_check` vrátí `ok`
+- [ ] Počet rezervací odpovídá tomu, co vidíte v adminu: ________
+- [ ] Apartmány jsou 2
+- [ ] Zálohu máte i mimo notebook (Disk, e-mail sám sobě — cokoli)
 
-## 2. Kontrola stavu před zásahem
+> Bez ověřené zálohy nepokračujte. Krok 5 obsahuje `DROP TABLE`.
+
+## 3. Kontrola stavu před zásahem
 
 ```sh
 turso db shell spimnarabi "SELECT status, COUNT(*) FROM reservations GROUP BY status;"
@@ -53,17 +80,17 @@ turso db shell spimnarabi "SELECT COUNT(*) FROM reservations;"
 turso db shell spimnarabi "SELECT name FROM sqlite_master WHERE type='table';"
 ```
 
-Zapište si čísla — po migraci se musí sedět.
+Zapište si čísla — po migraci musí sedět.
 
 - [ ] Počet rezervací: ________
 - [ ] Z toho `active`: ________, `cancelled`: ________
 - [ ] Tabulka `guests` **neexistuje** (jinak už něco proběhlo)
 
-## 3. Migrace
+## 4. Migrace
 
 Dvě migrace, **v tomto pořadí a s ověřením mezi nimi**.
 
-### 3a. Aditivní část — nemůže ztratit data
+### 4a. Aditivní část — nemůže ztratit data
 
 ```sh
 turso db shell spimnarabi < prisma/migrations/20260728112605_manager_foundation/migration.sql
@@ -82,20 +109,20 @@ turso db shell spimnarabi "SELECT COUNT(*) FROM guests;"
 turso db shell spimnarabi "SELECT id, adults, children, price_cents, currency FROM reservations LIMIT 5;"
 ```
 
-- [ ] Celkový počet rezervací je **stejný** jako v kroku 2
+- [ ] Celkový počet rezervací je **stejný** jako v kroku 3
 - [ ] Žádný řádek už nemá `active`, všechny jsou `confirmed`
 - [ ] `adults` je vyplněné (převzalo se z původního `guests`), `children` = 0
 - [ ] `currency` = `CZK`
 - [ ] Tabulka `guests` existuje a je prázdná
 
-### 3b. Přestavbová část — jediný krok s `DROP TABLE`
+### 4b. Přestavbová část — jediný krok s `DROP TABLE`
 
 ```sh
 turso db shell spimnarabi < prisma/migrations/20260728113500_align_reservation_defaults/migration.sql
 ```
 
 Srovnává výchozí hodnotu sloupce `status`, což SQLite neumí změnit na místě.
-Kdyby selhala, **aplikace i tak funguje** — 3a už dodala všechno potřebné.
+Kdyby selhala, **aplikace i tak funguje** — 4a už dodala všechno potřebné.
 V takovém případě migraci nezkoušejte znovu naslepo, ozvěte se.
 
 **Ověření:**
@@ -108,7 +135,7 @@ turso db shell spimnarabi "SELECT sql FROM sqlite_master WHERE name='reservation
 - [ ] Počet rezervací je pořád stejný
 - [ ] Výchozí hodnota sloupce `status` je `confirmed`
 
-## 4. Nasazení kódu
+## 5. Nasazení kódu
 
 ```sh
 git push origin feat/manager-foundation
@@ -125,7 +152,7 @@ Vercel nasadí sám. Počkejte, až bude deployment ve stavu **Ready**.
 - [ ] `DB_ALLOW_REMOTE` na Vercelu nastavovat **netřeba** — platforma sama
       nastavuje `VERCEL=1`
 
-## 5. Smoke test
+## 6. Smoke test
 
 ### Veřejný web — nejdřív to, co vidí hosté
 
@@ -183,7 +210,7 @@ Vercel nasadí sám. Počkejte, až bude deployment ve stavu **Ready**.
 
 ---
 
-## 6. Rollback
+## 7. Rollback
 
 ### Kdy rollovat okamžitě
 
@@ -213,31 +240,45 @@ Nové sloupce starému kódu nevadí, ten je prostě ignoruje.
 
 ### B) Kód i data (migrace dopadla špatně)
 
+Dvě cesty, obě do **nové** databáze — živá zůstane nedotčená pro dohledání,
+co se pokazilo, a přepnutí zpět je jedna proměnná prostředí.
+
+**Lepší: obnova k okamžiku před migrací.** Turso drží historii, takže nemusíte
+spoléhat na zálohu a neztratíte rezervace, které mezitím přišly. Čas zadejte
+v RFC3339 a zvolte okamžik těsně před krokem 4.
+
 ```sh
-# 1. Vrátit deployment ve Vercelu (viz A)
-
-# 2. Obnovit databázi ze zálohy do NOVÉ databáze, ne přes živou
-turso db create spimnarabi-rollback --from-dump ~/spim-zalohy/spimnarabi-….sql
-turso db show spimnarabi-rollback --url
-
-# 3. Přepnout TURSO_DATABASE_URL ve Vercelu na obnovenou databázi
-#    (Settings → Environment Variables → Production) a spustit redeploy
+turso db create spimnarabi-rollback \
+  --from-db spimnarabi --timestamp 2026-07-31T07:45:00+02:00
 ```
 
-Obnova do nové databáze místo přepisu živé je záměr: původní zůstane
-nedotčená pro dohledání toho, co se pokazilo, a přepnutí je jedna proměnná
-prostředí tam i zpět.
+**Náhradní: ze zálohy z kroku 2.**
 
-**Ztráta dat:** rezervace vzniklé mezi zálohou a rollbackem. Proto se
-nasazuje ráno a proto se hned po kroku 5 kontroluje, že cron a web fungují —
-čím dřív se problém najde, tím menší okno.
+```sh
+ZALOHA=$(ls -t ~/spim-zalohy/*.db | head -1)
+turso db create spimnarabi-rollback --from-file "$ZALOHA"
+```
 
-- [ ] Po obnově zkontrolujte počet rezervací proti kroku 2
+Potom u obou:
+
+```sh
+turso db show spimnarabi-rollback --url
+# Vercel → Settings → Environment Variables → Production:
+#   TURSO_DATABASE_URL přepsat na vypsanou adresu
+# Vercel → Deployments → Redeploy
+```
+
+**Ztráta dat:** u obnovy k času žádná až po zvolený okamžik. U obnovy ze
+zálohy rezervace vzniklé mezi zálohou a rollbackem. Proto se nasazuje ráno
+a proto se hned po kroku 6 kontroluje, že web a cron fungují — čím dřív se
+problém najde, tím menší okno.
+
+- [ ] Po obnově zkontrolujte počet rezervací proti kroku 3
 - [ ] Spusťte ruční sync, aby se dotáhlo, co mezitím přišlo z Bookingu
 
 ---
 
-## 7. Úklid po úspěšném nasazení
+## 8. Úklid po úspěšném nasazení
 
 Nechte běžet **aspoň týden**, ať je jisté, že se nic nevrací.
 
