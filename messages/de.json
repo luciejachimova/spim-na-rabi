@@ -51,7 +51,7 @@
   },
   "pricing": {
     "heroTitle": "Preise",
-    "intro": "Die Mindestaufenthaltsdauer beträgt 2 Nächte. Auf Wunsch bereiten wir gerne ein Frühstück für 229 Kč pro Person und Nacht zu. Haustiere sind gegen eine Gebühr von 250 Kč / Nacht willkommen.",
+    "intro": "Die Mindestaufenthaltsdauer beträgt 1 Nacht. Auf Wunsch bereiten wir gerne ein Frühstück für 229 Kč pro Person und Nacht zu. Haustiere sind gegen eine Gebühr von 250 Kč / Nacht willkommen.",
     "cards": {
       "studio-3": {
         "subtitle": "Gemütliches Studio – bis zu 4 Personen",
@@ -250,7 +250,7 @@
       "sections": [
         {
           "heading": "Reservierung",
-          "body": "Die Reservierung kommt durch das Absenden des Reservierungsformulars und dessen Bestätigung unsererseits per E-Mail zustande. Die Mindestaufenthaltsdauer beträgt 2 Nächte. Bitte geben Sie wahrheitsgemäße und vollständige Angaben an."
+          "body": "Die Reservierung kommt durch das Absenden des Reservierungsformulars und dessen Bestätigung unsererseits per E-Mail zustande. Die Mindestaufenthaltsdauer beträgt 1 Nacht. Bitte geben Sie wahrheitsgemäße und vollständige Angaben an."
         },
         {
           "heading": "Preise und Zahlung",
