@@ -203,6 +203,9 @@ export function PriceCard({ apartment }) {
         <strong className="font-serif text-[1.9rem] font-normal leading-none text-dark">
           {t(`pricing.cards.${apartment.slug}.price`)}
         </strong>
+        <p className="mt-3 text-[0.8rem] leading-relaxed text-mid">
+          {t(`pricing.cards.${apartment.slug}.singleNight`)}
+        </p>
       </div>
     </div>
   )

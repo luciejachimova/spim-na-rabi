@@ -12,8 +12,6 @@
   "home": {
     "heroEyebrow": "Ubytování v srdci Šumavy",
     "heroSubtitle": "Ubytování, kde se čas zpomalí",
-    "heroStatusReservations": "Rezervace spuštěny",
-    "heroStatusOpening": "Otevíráme v polovině července",
     "heroCta": "Rezervovat pobyt",
     "scroll": "Scroll",
     "quote": "Hrad Rabí na dosah, klid šumavské přírody a vzduch, který zpomalí každou myšlenku.",
@@ -53,15 +51,17 @@
   },
   "pricing": {
     "heroTitle": "Ceník",
-    "intro": "Minimální délka pobytu jsou 2 noci. Na přání pro vás rádi připravíme snídani. Domácí mazlíčci jsou vítáni za poplatek 250 Kč / noc.",
+    "intro": "Minimální délka pobytu jsou 2 noci. Na přání pro vás rádi připravíme snídani za 229 Kč / osoba a noc. Domácí mazlíčci jsou vítáni za poplatek 250 Kč / noc.",
     "cards": {
       "studio-3": {
         "subtitle": "Útulné studio – až 4 osoby",
-        "price": "2 000 Kč / noc"
+        "price": "2 000 Kč / noc",
+        "singleNight": "Pobyt na jednu noc 2 400 Kč"
       },
       "loft-10": {
         "subtitle": "Prostorný loft – až 6 osob",
-        "price": "2 300 Kč / noc"
+        "price": "2 300 Kč / noc",
+        "singleNight": "Pobyt na jednu noc 2 800 Kč"
       }
     }
   },

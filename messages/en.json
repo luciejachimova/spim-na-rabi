@@ -12,8 +12,6 @@
   "home": {
     "heroEyebrow": "A stay in the heart of Šumava",
     "heroSubtitle": "A stay where time slows down",
-    "heroStatusReservations": "Reservations open",
-    "heroStatusOpening": "Opening in mid-July",
     "heroCta": "Book your stay",
     "scroll": "Scroll",
     "quote": "Rabí Castle within reach, the calm of the Šumava countryside, and air that slows every thought.",
@@ -53,15 +51,17 @@
   },
   "pricing": {
     "heroTitle": "Pricing",
-    "intro": "The minimum length of stay is 2 nights. On request, we will happily prepare breakfast for you. Pets are welcome for a fee of 250 CZK / night.",
+    "intro": "The minimum length of stay is 2 nights. On request, we will happily prepare breakfast for CZK 229 per person and night. Pets are welcome for a fee of 250 CZK / night.",
     "cards": {
       "studio-3": {
         "subtitle": "Cosy studio – up to 4 guests",
-        "price": "CZK 2,000 / night"
+        "price": "CZK 2,000 / night",
+        "singleNight": "Single-night stay CZK 2,400"
       },
       "loft-10": {
         "subtitle": "Spacious loft – up to 6 guests",
-        "price": "CZK 2,300 / night"
+        "price": "CZK 2,300 / night",
+        "singleNight": "Single-night stay CZK 2,800"
       }
     }
   },
