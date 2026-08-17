@@ -9,6 +9,18 @@ export const businessContact = {
   bookingUrl: "https://www.booking.com/hotel/cz/spim-na-rabi-studio-3.cs.html"
 }
 
+// Guest reviews, quoted verbatim from where they were left. Not part of the
+// message catalogs on purpose: a review is someone else's words, so it stays in
+// the language it was written in on every locale of the site.
+export const reviews = [
+  {
+    text: "Nádherné, čisté, fantastické ubytování. Krásná lokalita s úžasnou kavárnou hned vedle ubytování. Rádi se vrátíme.",
+    author: "Radka H.",
+    source: "Google",
+    rating: 5
+  }
+]
+
 export const navLinks = [
   { key: "home", href: "/" },
   { key: "about", href: "/o-nas" },

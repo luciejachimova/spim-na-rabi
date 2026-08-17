@@ -142,13 +142,18 @@ export function ApartmentCard({ apartment }) {
   )
 }
 
-export function ReviewCard({ text, author }) {
+export function ReviewCard({ text, author, source, rating = 5 }) {
   return (
     <div className="relative border border-mid/15 bg-pale p-9 js-fade-in">
       <span className="absolute left-6 top-5 font-serif text-[3.5rem] italic leading-none text-light">"</span>
       <p className="mt-6 font-serif text-[1.05rem] font-normal italic leading-[1.7] text-dark">{text}</p>
-      <div className="mt-5 text-[0.8rem] tracking-[0.1em] text-accent">★★★★★</div>
-      <p className="mt-2 text-[0.72rem] uppercase tracking-[0.14em] text-mid">{author}</p>
+      <div className="mt-5 text-[0.8rem] tracking-[0.1em] text-accent" aria-label={`${rating}/5`}>
+        {"★".repeat(rating)}
+        <span className="text-light">{"★".repeat(5 - rating)}</span>
+      </div>
+      <p className="mt-2 text-[0.72rem] uppercase tracking-[0.14em] text-mid">
+        {source ? `${author} · ${source}` : author}
+      </p>
     </div>
   )
 }

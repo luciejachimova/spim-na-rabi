@@ -2,8 +2,9 @@
 
 import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
-import { apartments } from "@/data/content"
-import { ApartmentCard, CtaBanner, MapEmbed, SectionHeader } from "@/components/ui"
+import { apartments, reviews } from "@/data/content"
+import { businessInfo } from "@/data/guest-info"
+import { ApartmentCard, CtaBanner, MapEmbed, ReviewCard, SectionHeader } from "@/components/ui"
 import { useReservation } from "@/components/ClientChrome"
 
 export default function HomePage() {
@@ -77,18 +78,33 @@ export default function HomePage() {
             <SectionHeader label={t("reviewsLabel")} title={t("reviewsTitle")} align="center" />
           </div>
 
-          <div className="mx-auto mt-16 max-w-[560px] text-center js-fade-in">
-            <div className="text-[0.9rem] tracking-[0.25em] text-accent">★★★★★</div>
-            <p className="mt-5 font-serif text-[clamp(1.2rem,2.4vw,1.6rem)] font-light italic leading-[1.5] text-dark">
-              {t("reviewsInvite")}
-            </p>
-            <Link
-              href="/kontakt"
-              className="mt-8 inline-block rounded-[2px] border border-dark px-[1.6rem] py-[0.65rem] text-[0.72rem] font-medium uppercase tracking-[0.18em] text-dark transition-colors duration-200 hover:bg-dark hover:text-cream"
-            >
-              {t("locationCta")}
-            </Link>
-          </div>
+          {reviews.length > 0 ? (
+            <div className="mx-auto mt-16 grid max-w-[620px] gap-8">
+              {reviews.map((review, i) => (
+                <ReviewCard key={i} {...review} />
+              ))}
+            </div>
+          ) : (
+            <div className="mx-auto mt-16 max-w-[560px] text-center js-fade-in">
+              <div className="text-[0.9rem] tracking-[0.25em] text-accent">★★★★★</div>
+              <p className="mt-5 font-serif text-[clamp(1.2rem,2.4vw,1.6rem)] font-light italic leading-[1.5] text-dark">
+                {t("reviewsInvite")}
+              </p>
+            </div>
+          )}
+
+          {businessInfo.googleReviewUrl ? (
+            <div className="mt-12 text-center js-fade-in">
+              <a
+                href={businessInfo.googleReviewUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block rounded-[2px] border border-dark px-[1.6rem] py-[0.65rem] text-[0.72rem] font-medium uppercase tracking-[0.18em] text-dark transition-colors duration-200 hover:bg-dark hover:text-cream"
+              >
+                {t("reviewsCta")}
+              </a>
+            </div>
+          ) : null}
         </div>
       </section>
 

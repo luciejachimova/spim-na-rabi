@@ -91,7 +91,8 @@ export default async function LocaleLayout({ children, params }) {
     },
     sameAs: [
       "https://www.facebook.com/profile.php?id=61579506120985",
-      "https://www.instagram.com/spimnarabi/"
+      "https://www.instagram.com/spimnarabi/",
+      "https://maps.google.com/?cid=7528429383720421857"
     ]
   }
 
