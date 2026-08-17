@@ -1,7 +1,6 @@
 import { getPathname } from "@/i18n/navigation"
 import { routing } from "@/i18n/routing"
-
-const baseUrl = "https://spimnarabi.cz"
+import { SITE_URL } from "@/lib/seo"
 
 // Internal (canonical) routes and their crawl priorities. Localized URLs and
 // hreflang alternates are derived per locale via next-intl.
@@ -17,7 +16,7 @@ const pages = [
 ]
 
 function absolute(href, locale) {
-  return `${baseUrl}${getPathname({ href, locale })}`
+  return `${SITE_URL}${getPathname({ href, locale })}`
 }
 
 export default function sitemap() {

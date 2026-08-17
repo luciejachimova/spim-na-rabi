@@ -1,3 +1,5 @@
+import { SITE_URL } from "@/lib/seo"
+
 export default function robots() {
   return {
     rules: {
@@ -5,7 +7,7 @@ export default function robots() {
       allow: "/",
       disallow: ["/api/"],
     },
-    sitemap: "https://spimnarabi.cz/sitemap.xml",
-    host: "https://spimnarabi.cz",
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   }
 }

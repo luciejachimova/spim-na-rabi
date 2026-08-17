@@ -2,6 +2,13 @@ import type { Metadata } from "next"
 import { getPathname } from "@/i18n/navigation"
 import { routing, type Locale } from "@/i18n/routing"
 
+// The canonical origin, and the single place it is written down. It must match
+// the host the site is actually served on: the apex 308-redirects to www, so
+// declaring the apex as canonical pointed every canonical, hreflang and sitemap
+// entry at a URL that redirects — which makes Google pick its own canonical and
+// makes hreflang annotations liable to be dropped.
+export const SITE_URL = "https://www.spimnarabi.cz"
+
 // OpenGraph locale codes per site locale.
 export const OG_LOCALE: Record<Locale, string> = {
   cs: "cs_CZ",

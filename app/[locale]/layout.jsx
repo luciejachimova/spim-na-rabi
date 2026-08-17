@@ -4,7 +4,7 @@ import { NextIntlClientProvider, hasLocale } from "next-intl"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 import ClientChrome from "@/components/ClientChrome"
 import { routing } from "@/i18n/routing"
-import { buildAlternates, OG_LOCALE } from "@/lib/seo"
+import { buildAlternates, OG_LOCALE, SITE_URL } from "@/lib/seo"
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -15,7 +15,7 @@ export async function generateMetadata({ params }) {
   const t = await getTranslations({ locale, namespace: "meta" })
 
   return {
-    metadataBase: new URL("https://spimnarabi.cz"),
+    metadataBase: new URL(SITE_URL),
     title: {
       default: t("home.title"),
       template: t("titleTemplate")
@@ -47,7 +47,7 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: t("home.title"),
       description: t("home.description"),
-      url: "https://spimnarabi.cz",
+      url: SITE_URL,
       siteName: "Spim na Rabí",
       locale: OG_LOCALE[locale],
       type: "website"
@@ -74,10 +74,10 @@ export default async function LocaleLayout({ children, params }) {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "LodgingBusiness",
-    "@id": "https://spimnarabi.cz/#ubytovani",
+    "@id": `${SITE_URL}/#ubytovani`,
     name: "Spim na Rabí",
     description: t("defaultDescription"),
-    url: "https://spimnarabi.cz",
+    url: SITE_URL,
     telephone: "+420723936426",
     email: "spimnarabi@seznam.cz",
     priceRange: "2 000–2 300 Kč",
