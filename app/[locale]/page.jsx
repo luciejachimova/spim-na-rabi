@@ -29,16 +29,13 @@ export default function HomePage() {
           <h1 className="mb-4 animate-fade-up font-script text-[clamp(3rem,8vw,6rem)] leading-[1.05] [animation-delay:550ms]">
             Spim na Rabí
           </h1>
-          <p className="mb-7 animate-fade-up font-serif text-[clamp(1.1rem,2.5vw,1.45rem)] font-light italic text-mid [animation-delay:750ms]">
+          <p className="mb-8 animate-fade-up font-serif text-[clamp(1.1rem,2.5vw,1.45rem)] font-light italic text-mid [animation-delay:750ms]">
             {t("heroSubtitle")}
-          </p>
-          <p className="mb-8 animate-fade-up text-[0.68rem] font-medium uppercase tracking-[0.2em] text-accent [animation-delay:900ms]">
-            {t("heroStatusReservations")} <span aria-hidden="true" className="mx-2 text-light">·</span> {t("heroStatusOpening")}
           </p>
           <button
             type="button"
             onClick={openReservation}
-            className="inline-block animate-fade-up cursor-pointer rounded-[2px] border-none bg-dark px-10 py-[0.9rem] text-[0.78rem] font-medium uppercase tracking-[0.2em] text-cream transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent [animation-delay:1050ms]"
+            className="inline-block animate-fade-up cursor-pointer rounded-[2px] border-none bg-dark px-10 py-[0.9rem] text-[0.78rem] font-medium uppercase tracking-[0.2em] text-cream transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent [animation-delay:900ms]"
           >
             {t("heroCta")}
           </button>
