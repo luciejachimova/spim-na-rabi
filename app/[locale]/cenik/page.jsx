@@ -25,9 +25,13 @@ export default async function PricingPage({ params }) {
 
       <section className="py-24 md:py-[100px]">
         <div className="mx-auto max-w-[1100px] px-8">
-          <div className="mb-16 max-w-xl js-fade-in">
-            <p className="text-[0.95rem] leading-relaxed text-mid">{t("intro")}</p>
-          </div>
+          <ul className="mb-16 max-w-xl divide-y divide-mid/10 border-y border-mid/10 text-[0.95rem] leading-relaxed text-mid js-fade-in">
+            {t.raw("notes").map((note) => (
+              <li key={note} className="py-3">
+                {note}
+              </li>
+            ))}
+          </ul>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             {apartments.map((apartment) => (

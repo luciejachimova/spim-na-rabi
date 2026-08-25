@@ -52,7 +52,11 @@
   },
   "pricing": {
     "heroTitle": "Ceník",
-    "intro": "Minimální délka pobytu je 1 noc. Na přání pro vás rádi připravíme snídani za 229 Kč / osoba a noc. Domácí mazlíčci jsou vítáni za poplatek 250 Kč / noc.",
+    "notes": [
+      "Minimální délka pobytu je 1 noc.",
+      "Na přání pro vás rádi připravíme snídani za 229 Kč / osoba a noc.",
+      "Domácí mazlíčci jsou vítáni za poplatek 250 Kč / noc."
+    ],
     "cards": {
       "studio-3": {
         "subtitle": "Útulné studio – až 4 osoby",

@@ -52,7 +52,11 @@
   },
   "pricing": {
     "heroTitle": "Pricing",
-    "intro": "The minimum length of stay is 1 night. On request, we will happily prepare breakfast for CZK 229 per person and night. Pets are welcome for a fee of 250 CZK / night.",
+    "notes": [
+      "The minimum length of stay is 1 night.",
+      "On request, we will happily prepare breakfast for CZK 229 per person and night.",
+      "Pets are welcome for a fee of 250 CZK / night."
+    ],
     "cards": {
       "studio-3": {
         "subtitle": "Cosy studio – up to 4 guests",
