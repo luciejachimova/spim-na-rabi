@@ -60,12 +60,12 @@
     "cards": {
       "studio-3": {
         "subtitle": "Cosy studio – up to 4 guests",
-        "price": "CZK 2,000 / night",
+        "price": "CZK 2,100 / night",
         "singleNight": "Single-night stay CZK 2,400"
       },
       "loft-10": {
         "subtitle": "Spacious loft – up to 6 guests",
-        "price": "CZK 2,300 / night",
+        "price": "CZK 2,400 / night",
         "singleNight": "Single-night stay CZK 2,800"
       }
     }
