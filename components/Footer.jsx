@@ -60,7 +60,8 @@ export default function Footer() {
         </div>
 
         <div className="mt-14 border-t border-mid/10 pt-6 text-center text-[0.75rem] tracking-wide text-light">
-          © {new Date().getFullYear()} {t("footer.copyright")}
+          <p>© {new Date().getFullYear()} {t("footer.copyright")}</p>
+          <p className="mt-1.5">{t("footer.credit")}</p>
         </div>
       </div>
     </footer>
