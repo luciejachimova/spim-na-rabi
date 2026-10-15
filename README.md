@@ -182,6 +182,41 @@ SMTP_* atd.). `DATABASE_URL` na Vercelu nastavovat nemusíte — jakmile je
 `TURSO_DATABASE_URL` vyplněné, aplikace se automaticky připojí k Turso místo
 k lokálnímu souboru (viz `lib/db.ts`).
 
+## Instagram na homepage
+
+Sekce nad patičkou ukazuje posledních 8 příspěvků z účtu
+[@spimnarabi](https://www.instagram.com/spimnarabi/). Čte se přes oficiální
+**Instagram API with Instagram Login** (staré Basic Display API Meta na konci
+roku 2024 vypnula). Potřebuje účet typu **Business nebo Creator** — osobní účty
+k API přístup nemají.
+
+Server si odpověď drží hodinu v cache (odkazy na fotky z Instagram CDN jsou
+podepsané a časově omezené, takže déle to nejde). Když token chybí, vyprší nebo
+je Meta nedostupná, endpoint vrátí prázdný seznam, **sekce se prostě nezobrazí**
+a zbytek webu vypadá nedotčeně. Důvod se vždy zaloguje do konzole funkce.
+
+### Získání tokenu
+
+1. V [Meta for Developers](https://developers.facebook.com/apps) založte aplikaci
+   a přidejte produkt **Instagram** → *API setup with Instagram login*.
+2. V *Generate access tokens* propojte účet @spimnarabi a nechte si vygenerovat
+   **dlouhodobý (long-lived) token**.
+3. Token vložte do Vercel Environment Variables jako `INSTAGRAM_ACCESS_TOKEN`
+   (prostředí Production) a udělejte nový deploy.
+
+### Obnova tokenu
+
+Dlouhodobý token platí **60 dní**. Obnovit ho lze kdykoliv poté, co je starší
+než 24 hodin — stačí zavolat:
+
+```bash
+curl -s "https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=STARY_TOKEN"
+```
+
+Odpověď obsahuje nový `access_token`, který nahradí ten původní ve Vercel
+Environment Variables (a je potřeba udělat nový deploy). Pomocnou funkci
+`refreshAccessToken()` má připravenou `lib/instagram.ts`.
+
 ## Pravidelná synchronizace s Booking.com/Airbnb (externí cron)
 
 Endpoint `/api/cron/reservations` stahuje iCal feedy nastavené v adminu

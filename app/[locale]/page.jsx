@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation"
 import { apartments, reviews } from "@/data/content"
 import { businessInfo } from "@/data/guest-info"
 import { ApartmentCard, CtaBanner, MapEmbed, ReviewCard, SectionHeader } from "@/components/ui"
+import InstagramFeed from "@/components/instagram-feed"
 import { useReservation } from "@/components/ClientChrome"
 
 export default function HomePage() {
@@ -134,6 +135,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <InstagramFeed />
 
       <CtaBanner label={t("ctaLabel")} title={t("ctaTitle")} ctaText={ui("ctaBannerCta")} />
     </>
