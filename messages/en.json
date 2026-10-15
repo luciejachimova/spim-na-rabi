@@ -61,11 +61,13 @@
       "studio-3": {
         "subtitle": "Cosy studio – up to 4 guests",
         "price": "CZK 2,100 / night",
+        "offSeason": "Off-season (November–April) CZK 2,000 / night",
         "singleNight": "Single-night stay CZK 2,400"
       },
       "loft-10": {
         "subtitle": "Spacious loft – up to 6 guests",
         "price": "CZK 2,400 / night",
+        "offSeason": "Off-season (November–April) CZK 2,300 / night",
         "singleNight": "Single-night stay CZK 2,800"
       }
     }
