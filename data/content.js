@@ -19,6 +19,18 @@ export const telHref = (phone) => `tel:${phone.replace(/\s/g, "")}`
 // the language it was written in on every locale of the site.
 export const reviews = [
   {
+    text: "Moc pěkné ubytování",
+    author: "Šimon P.",
+    source: "Google",
+    rating: 5
+  },
+  {
+    text: "Nádherný a čistý apartmán.",
+    author: "Pavel M.",
+    source: "Google",
+    rating: 5
+  },
+  {
     text: "Nádherné, čisté, fantastické ubytování. Krásná lokalita s úžasnou kavárnou hned vedle ubytování. Rádi se vrátíme.",
     author: "Radka H.",
     source: "Google",

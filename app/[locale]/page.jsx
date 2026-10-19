@@ -80,7 +80,13 @@ export default function HomePage() {
           </div>
 
           {reviews.length > 0 ? (
-            <div className="mx-auto mt-16 grid max-w-[620px] gap-8">
+            <div
+              className={
+                reviews.length === 1
+                  ? "mx-auto mt-16 grid max-w-[620px] gap-8"
+                  : "mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+              }
+            >
               {reviews.map((review, i) => (
                 <ReviewCard key={i} {...review} />
               ))}
