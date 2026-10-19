@@ -1,7 +1,7 @@
 "use client"
 
 import { useTranslations } from "next-intl"
-import { businessContact } from "@/data/content"
+import { businessContact, telHref } from "@/data/content"
 
 const rowClass =
   "flex items-center gap-4 rounded-[2px] border border-mid/20 bg-pale px-5 py-4 transition-colors duration-200 hover:border-dark"
@@ -30,7 +30,7 @@ export default function ReservationModal({ open, onClose }) {
 
   if (!open) return null
 
-  const telHref = `tel:${businessContact.phone.replace(/\s/g, "")}`
+  const phoneHref = telHref(businessContact.phone)
 
   return (
     <div
@@ -63,7 +63,7 @@ export default function ReservationModal({ open, onClose }) {
         <p className="mb-7 text-[0.92rem] leading-relaxed text-mid">{t("intro")}</p>
 
         <div className="space-y-3">
-          <a href={telHref} className={rowClass}>
+          <a href={phoneHref} className={rowClass}>
             <PhoneIcon />
             <span>
               <span className="block text-[0.62rem] uppercase tracking-[0.2em] text-mid">{labels("phone")}</span>

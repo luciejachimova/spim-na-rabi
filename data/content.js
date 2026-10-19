@@ -4,10 +4,15 @@
 // Contact / booking channels shown in the reservation dialog. Client-safe
 // (plain data), so client components can import it directly.
 export const businessContact = {
+  // Both numbers reach us; the first one is the one we answer first and the
+  // one that goes into emails and structured data.
   phone: "+420 723 936 426",
+  phoneSecondary: "+420 774 253 232",
   email: "spimnarabi@seznam.cz",
   bookingUrl: "https://www.booking.com/hotel/cz/spim-na-rabi-studio-3.cs.html"
 }
+
+export const telHref = (phone) => `tel:${phone.replace(/\s/g, "")}`
 
 // Guest reviews, quoted verbatim from where they were left. Not part of the
 // message catalogs on purpose: a review is someone else's words, so it stays in

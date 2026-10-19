@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
-import { apartments, legalLinks } from "@/data/content"
+import { apartments, businessContact, legalLinks, telHref } from "@/data/content"
 
 const footerLinkClass = "text-sm text-mid transition-colors duration-200 hover:text-dark"
 
@@ -53,7 +53,8 @@ export default function Footer() {
             <h4 className="mb-4 text-[0.68rem] font-medium uppercase tracking-[0.22em] text-dark">{t("footer.contactHeading")}</h4>
             <ul className="list-none space-y-2">
               <li><a href="mailto:spimnarabi@seznam.cz" className={footerLinkClass}>spimnarabi@seznam.cz</a></li>
-              <li><a href="tel:+420723936426" className={footerLinkClass}>+420 723 936 426</a></li>
+              <li><a href={telHref(businessContact.phone)} className={footerLinkClass}>{businessContact.phone}</a></li>
+              <li><a href={telHref(businessContact.phoneSecondary)} className={footerLinkClass}>{businessContact.phoneSecondary}</a></li>
               <li><span className="text-sm text-mid">Rabí 175, 342 01</span></li>
             </ul>
           </div>

@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server"
+import { businessContact, telHref } from "@/data/content"
 import { ContactForm } from "@/components/forms"
 import { MapEmbed, PageHero } from "@/components/ui"
 import { buildAlternates } from "@/lib/seo"
@@ -36,8 +37,14 @@ export default async function ContactPage({ params }) {
 
               <div>
                 <p className="mb-1 text-[0.65rem] uppercase tracking-[0.22em] text-mid">{t("phoneLabel")}</p>
-                <p className="font-serif text-xl text-dark">
-                  <a href="tel:+420723936426" className="transition-colors hover:text-accent">+420 723 936 426</a>
+                <p className="font-serif text-xl leading-snug text-dark">
+                  <a href={telHref(businessContact.phone)} className="transition-colors hover:text-accent">
+                    {businessContact.phone}
+                  </a>
+                  <br />
+                  <a href={telHref(businessContact.phoneSecondary)} className="transition-colors hover:text-accent">
+                    {businessContact.phoneSecondary}
+                  </a>
                 </p>
               </div>
 
